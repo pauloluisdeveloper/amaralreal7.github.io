@@ -119,9 +119,10 @@
 
             <p id="homeProfileBio" class="text-xs text-zinc-400 text-center font-medium px-2 mb-2.5">O maior chefe do 7</p>
 
-            <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900 px-3 py-1.5 rounded-xl border border-neutral-800 w-full shadow-inner">
-                <span>🛡️</span>
-                <span id="homeSecurityText">100% Seguro • Entrega Instantânea</span>
+            <!-- SELO DE SEGURANÇA 100% ALINHADO -->
+            <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900 px-3 py-2 rounded-xl border border-neutral-800 w-full shadow-inner">
+                <span class="text-sm shrink-0">🛡️</span>
+                <span id="homeSecurityText" class="truncate">100% Seguro • Entrega Instantânea</span>
             </div>
         </div>
 
@@ -298,7 +299,7 @@
                 <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[200px] h-11 bg-neutral-900 border border-neutral-700 rounded-xl px-4 text-white text-center tracking-[0.5em] text-base mb-2.5 focus:outline-none focus:border-white shadow-inner transition">
                 <div id="loginErrorMsg" class="text-[11px] font-semibold text-rose-400 mb-3 hidden h-4"></div>
                 
-                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[200px] h-11 bg-white hover:bg-neutral-200 active:scale-[0.98] text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">🔓 Desbloquear Painel</button>
+                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[200px] h-11 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">🔓 Desbloquear Painel</button>
             </div>
 
             <!-- DASHBOARD DE ELITE -->
