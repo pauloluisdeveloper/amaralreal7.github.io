@@ -8,11 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @keyframes eliteGlow {
-            0%, 100% { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 25px 60px rgba(0,0,0,0.95), 0 0 20px rgba(255,255,255,0.02); }
-            50% { border-color: rgba(255, 255, 255, 0.45); box-shadow: 0 25px 70px rgba(0,0,0,0.95), 0 0 35px rgba(255,255,255,0.06); }
+            0%, 100% { border-color: rgba(255, 255, 255, 0.25); box-shadow: 0 25px 60px rgba(0,0,0,0.95), 0 0 25px rgba(255,255,255,0.04); }
+            50% { border-color: rgba(255, 255, 255, 0.6); box-shadow: 0 25px 75px rgba(0,0,0,0.95), 0 0 45px rgba(255,255,255,0.1); }
         }
         .vip-card-box {
             animation: eliteGlow 4s infinite ease-in-out;
+        }
+
+        @keyframes floatEmoji {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
+            50% { transform: translateY(-3px) scale(1.08); filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); }
+        }
+        .animate-vip {
+            display: inline-block;
+            animation: floatEmoji 3s infinite ease-in-out;
         }
 
         @keyframes modalEnter {
@@ -55,7 +64,7 @@
             height: 3px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
             border-radius: 3px;
         }
 
@@ -70,58 +79,58 @@
 </head>
 <body class="bg-black text-white select-none">
 
-    <!-- TOAST DE NOTIFICAÇÃO -->
-    <div id="vipToast" class="fixed top-4 left-1/2 -translate-x-1/2 bg-neutral-900 border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2.5">
-        <span id="toastEmoji" class="text-sm">💎</span>
+    <!-- TOAST DE NOTIFICAÇÃO VIP -->
+    <div id="vipToast" class="fixed top-4 left-1/2 -translate-x-1/2 bg-neutral-900 border border-white/30 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2.5">
+        <span id="toastEmoji" class="text-sm animate-vip">💎</span>
         <span id="toastMessage" class="font-semibold tracking-wide">Sistema Operacional Ativo</span>
     </div>
 
     <!-- NOTIFICAÇÃO ESTILO APPLE PAY / PIX -->
-    <div id="appleNotification" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-neutral-900 border border-white/20 rounded-2xl p-3 shadow-2xl z-[9999] opacity-0 pointer-events-none flex items-center justify-between transition-all duration-300">
+    <div id="appleNotification" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-neutral-900 border border-white/25 rounded-2xl p-3 shadow-2xl z-[9999] opacity-0 pointer-events-none flex items-center justify-between transition-all duration-300">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center text-xs font-extrabold shadow-md shrink-0">
-                ⚡
+                <span class="animate-vip">⚡</span>
             </div>
             <div>
                 <div class="flex items-center gap-1.5">
                     <span class="text-[11px] font-bold text-white tracking-tight">💳 InfinitePay • Pix Recebido</span>
                     <span class="text-[9px] text-zinc-400 font-medium">Agora</span>
                 </div>
-                <p class="text-[11px] font-medium text-zinc-300 mt-0.5">Transferência de +R$ 5,99 confirmada ✨</p>
+                <p class="text-[11px] font-medium text-zinc-300 mt-0.5">Transferência de +R$ 5,99 confirmada <span class="animate-vip">✨</span></p>
             </div>
         </div>
-        <div class="w-2 h-2 rounded-full bg-white shrink-0"></div>
+        <div class="w-2 h-2 rounded-full bg-white shrink-0 animate-pulse"></div>
     </div>
 
     <!-- PAINEL PRINCIPAL (BIO LINK BLACK & WHITE) -->
     <div class="w-full max-w-[390px] bg-neutral-950 vip-card-box rounded-[28px] p-5 shadow-2xl relative flex flex-col gap-4 border border-neutral-800 mx-auto my-auto">
         
         <!-- Botão Admin -->
-        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition active:scale-95 cursor-pointer shadow-md" title="Painel do Proprietário">
-            ⚙️
+        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-zinc-300 hover:text-white hover:border-white transition active:scale-95 cursor-pointer shadow-md" title="Painel do Proprietário">
+            <span class="animate-vip text-xs">⚙️</span>
         </button>
 
         <!-- Perfil -->
         <div class="flex flex-col items-center w-full pt-1">
-            <div class="w-[72px] h-[72px] rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-500 to-neutral-900 shadow-xl mb-2.5">
+            <div class="w-[72px] h-[72px] rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-400 to-neutral-900 shadow-xl mb-2.5">
                 <img id="homeProfileImg" src="https://i.postimg.cc/9F5WcckY/IMG-1942.jpg" alt="Perfil" class="w-full h-full object-cover rounded-full border-2 border-black">
             </div>
 
             <div class="flex items-center gap-1.5 mb-1">
                 <h1 id="homeProfileName" class="text-sm font-extrabold tracking-tight text-white">amaralreal7</h1>
-                <span class="text-xs" title="Verificado">👑</span>
+                <span class="text-xs animate-vip" title="Verificado">👑</span>
             </div>
 
             <div class="flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 mb-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                <span id="homeSubBadge" class="text-[10px] font-semibold text-zinc-300">🔥 Status: VIP Elite • Online</span>
+                <span id="homeSubBadge" class="text-[10px] font-semibold text-zinc-300"><span class="animate-vip">🔥</span> Status: VIP Elite • Online</span>
             </div>
 
             <p id="homeProfileBio" class="text-xs text-zinc-400 text-center font-medium px-2 mb-2.5">O maior chefe do 7</p>
 
-            <!-- SELO DE SEGURANÇA 100% ALINHADO -->
+            <!-- SELO DE SEGURANÇA 100% ALINHADO COM EMOJI VIP -->
             <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900 px-3 py-2 rounded-xl border border-neutral-800 w-full shadow-inner">
-                <span class="text-sm shrink-0">🛡️</span>
+                <span class="text-sm shrink-0 animate-vip">🛡️</span>
                 <span id="homeSecurityText" class="truncate">100% Seguro • Entrega Instantânea</span>
             </div>
         </div>
@@ -131,7 +140,7 @@
             <button onclick="abrirCheckout()" class="w-full h-12 bg-white hover:bg-neutral-200 active:scale-[0.98] text-black font-extrabold px-4 rounded-xl flex items-center justify-between transition shadow-lg cursor-pointer">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center text-xs shadow">
-                        💎
+                        <span class="animate-vip">💎</span>
                     </div>
                     <div class="text-left">
                         <div class="flex items-center gap-1">
@@ -141,20 +150,20 @@
                         <p id="homeBtn1Sub" class="text-[9px] text-zinc-600 font-medium">Checkout Automatizado Instantâneo</p>
                     </div>
                 </div>
-                <span>➡️</span>
+                <span class="animate-vip">➡️</span>
             </button>
 
             <button onclick="abrirSuporteIA()" class="w-full h-12 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-4 rounded-xl flex items-center justify-between transition cursor-pointer shadow-md">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-neutral-950 border border-neutral-700 flex items-center justify-center text-xs text-white shadow">
-                        🤖
+                        <span class="animate-vip">🤖</span>
                     </div>
                     <div class="text-left">
                         <span id="homeBtn2Title" class="text-xs font-bold block">Suporte com IA Neural 24H</span>
                         <p id="homeBtn2Sub" class="text-[9px] text-zinc-400 font-medium">Atendimento Inteligente Online</p>
                     </div>
                 </div>
-                <span>➡️</span>
+                <span class="animate-vip">➡️</span>
             </button>
         </div>
 
@@ -167,21 +176,21 @@
     <div id="modalCheckout" class="fixed inset-0 bg-black/95 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
         <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[390px] rounded-[24px] p-5 shadow-2xl relative modal-anim max-h-[85vh] overflow-y-auto custom-scroll">
             <button onclick="fecharCheckout()" class="absolute top-4 right-4 text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
-                ❌
+                <span class="animate-vip">❌</span>
             </button>
 
             <!-- Passo 1 -->
             <div id="checkoutStep1" class="space-y-3.5">
                 <div class="text-center">
                     <div class="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-sm mx-auto mb-1.5">
-                        💳
+                        <span class="animate-vip">💳</span>
                     </div>
                     <h3 class="text-xs font-bold text-white">Pagamento Pix • InfinitePay</h3>
                     <p class="text-[11px] text-zinc-400">Escaneie o QR Code ou copie o código</p>
                 </div>
 
                 <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl text-center">
-                    <span class="text-[9px] text-zinc-400 font-semibold uppercase tracking-wider block mb-0.5">⏱️ Tempo Restante</span>
+                    <span class="text-[9px] text-zinc-400 font-semibold uppercase tracking-wider block mb-0.5"><span class="animate-vip">⏱️</span> Tempo Restante</span>
                     <span id="pixTimer" class="text-base font-extrabold text-white">04:59</span>
                 </div>
 
@@ -190,15 +199,15 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="block text-[10px] text-zinc-400">📋 Chave Pix Copia e Cola:</label>
+                    <label class="block text-[10px] text-zinc-400"><span class="animate-vip">📋</span> Chave Pix Copia e Cola:</label>
                     <input type="text" id="pixCopiaECola" readonly class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[10px] text-zinc-300 text-center select-all focus:outline-none">
                     <button onclick="copiarPix()" class="w-full h-10 bg-white hover:bg-neutral-200 text-black font-bold rounded-xl text-xs transition cursor-pointer shadow-md">
-                        📋 Copiar Código Pix
+                        <span class="animate-vip">📋</span> Copiar Código Pix
                     </button>
                 </div>
 
                 <button onclick="irParaPassoDados()" class="w-full h-11 bg-neutral-900 hover:bg-neutral-800 text-white font-extrabold rounded-xl text-xs transition border border-neutral-700 cursor-pointer">
-                    ✨ Já Realizei o Pagamento ➡️
+                    <span class="animate-vip">✨</span> Já Realizei o Pagamento <span class="animate-vip">➡️</span>
                 </button>
             </div>
 
@@ -206,7 +215,7 @@
             <div id="checkoutStep2" class="hidden space-y-3">
                 <div class="text-center mb-1">
                     <div class="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-sm mx-auto mb-1.5">
-                        📝
+                        <span class="animate-vip">📝</span>
                     </div>
                     <h3 class="text-xs font-bold text-white">Confirmação de Dados</h3>
                     <p class="text-[10px] text-zinc-400">Preencha exatamente para liberação</p>
@@ -214,25 +223,25 @@
 
                 <div class="space-y-2.5">
                     <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">👤 Nome Completo</label>
+                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5"><span class="animate-vip">👤</span> Nome Completo</label>
                         <input type="text" id="clientName" placeholder="Ex: Lucas Gabriel" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-white">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">📅 Data de Nascimento (DD/MM/AAAA)</label>
+                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5"><span class="animate-vip">📅</span> Data de Nascimento (DD/MM/AAAA)</label>
                         <input type="text" id="clientDob" placeholder="25/08/1998" maxlength="10" oninput="maskDate(this)" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-white">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">🆔 CPF</label>
+                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5"><span class="animate-vip">🆔</span> CPF</label>
                         <input type="text" id="clientCpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-white">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">✉️ E-mail para Entrega</label>
+                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5"><span class="animate-vip">✉️</span> E-mail para Entrega</label>
                         <input type="email" id="clientEmail" placeholder="seuemail@dominio.com" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-white">
                     </div>
 
                     <div class="flex gap-2 pt-1">
                         <button onclick="voltarPassoPix()" class="w-1/3 h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Voltar</button>
-                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-10 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">🚀 Enviar para Análise</button>
+                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-10 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer"><span class="animate-vip">🚀</span> Enviar para Análise</button>
                     </div>
                 </div>
             </div>
@@ -240,7 +249,7 @@
             <!-- Passo 3 -->
             <div id="checkoutStep3" class="hidden text-center py-5 space-y-3">
                 <div class="w-14 h-14 bg-neutral-900 border border-neutral-700 text-white rounded-2xl flex items-center justify-center mx-auto text-lg shadow-inner">
-                    🎉
+                    <span class="animate-vip text-xl">🎉</span>
                 </div>
                 <h3 class="text-xs font-bold text-white">Pedido Enviado com Sucesso!</h3>
                 <p class="text-[11px] text-zinc-400 leading-relaxed px-2">Seus dados estão sob monitoramento e aguardam aprovação no painel administrativo.</p>
@@ -255,7 +264,7 @@
             <div class="flex items-center justify-between border-b border-neutral-800 pb-2.5">
                 <div class="flex items-center gap-2">
                     <div class="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-700 flex items-center justify-center text-white text-[11px]">
-                        🤖
+                        <span class="animate-vip">🤖</span>
                     </div>
                     <div>
                         <h4 class="text-xs font-bold text-white">Suporte com IA Neural</h4>
@@ -263,13 +272,13 @@
                     </div>
                 </div>
                 <button onclick="fecharSuporteIA()" class="text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
-                    ❌
+                    <span class="animate-vip">❌</span>
                 </button>
             </div>
 
             <div id="chatMessages" class="flex-1 overflow-y-auto custom-scroll my-2.5 space-y-2 pr-1 text-[11px]">
                 <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl text-zinc-300 leading-relaxed">
-                    💬 Olá! Sistema IA Neural ativo monitorando transações. Como posso ajudar com seu pedido ou dúvidas?
+                    <span class="animate-vip">💬</span> Olá! Sistema IA Neural ativo monitorando transações. Como posso ajudar com seu pedido ou dúvidas?
                 </div>
             </div>
 
@@ -280,26 +289,26 @@
         </div>
     </div>
 
-    <!-- MODAL DE ADMINISTRAÇÃO ULTRARREALISTA COM EMOJIS PERSONALIZADOS -->
+    <!-- MODAL DE ADMINISTRAÇÃO ULTRARREALISTA COM EMOJIS VIPs ANIMADOS -->
     <div id="modalAdmin" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-3">
         <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[410px] rounded-[28px] p-5 shadow-2xl relative flex flex-col max-h-[85vh] overflow-hidden modal-anim">
             
             <button onclick="fecharAdminModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer z-50">
-                ❌
+                <span class="animate-vip">❌</span>
             </button>
 
             <!-- TELA DE LOGIN ADMIN -->
             <div id="adminLoginBox" class="py-8 text-center flex flex-col items-center justify-center">
                 <div class="w-14 h-14 bg-neutral-900 border border-neutral-700 rounded-2xl flex items-center justify-center text-white text-lg mx-auto mb-3 shadow-xl">
-                    🔐
+                    <span class="animate-vip text-2xl">🔐</span>
                 </div>
-                <h3 class="text-sm font-extrabold text-white mb-1">Área Restrita do Proprietário</h3>
-                <p class="text-[11px] text-zinc-400 mb-5 font-medium max-w-[260px]">⚠️ Acesso exclusivo do proprietário. Insira a senha numérica.</p>
+                <h3 class="text-sm font-extrabold text-white mb-1"><span class="animate-vip">👑</span> Área Restrita do Proprietário</h3>
+                <p class="text-[11px] text-zinc-400 mb-5 font-medium max-w-[260px]"><span class="animate-vip">⚠️</span> Acesso exclusivo do proprietário. Insira a senha numérica.</p>
                 
                 <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[200px] h-11 bg-neutral-900 border border-neutral-700 rounded-xl px-4 text-white text-center tracking-[0.5em] text-base mb-2.5 focus:outline-none focus:border-white shadow-inner transition">
                 <div id="loginErrorMsg" class="text-[11px] font-semibold text-rose-400 mb-3 hidden h-4"></div>
                 
-                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[200px] h-11 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">🔓 Desbloquear Painel</button>
+                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[200px] h-11 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer"><span class="animate-vip">🔓</span> Desbloquear Painel</button>
             </div>
 
             <!-- DASHBOARD DE ELITE -->
@@ -307,7 +316,7 @@
                 <div class="flex items-center justify-between border-b border-neutral-800 pb-2.5 mb-2.5 shrink-0 pr-8">
                     <div class="flex items-center gap-2">
                         <div class="w-7 h-7 bg-neutral-900 border border-neutral-800 rounded-lg flex items-center justify-center text-white text-[11px]">
-                            👑
+                            <span class="animate-vip">👑</span>
                         </div>
                         <div>
                             <h3 class="text-xs font-bold text-white">Painel do Proprietário</h3>
@@ -316,19 +325,19 @@
                     </div>
                 </div>
 
-                <!-- 4 Abas com Emojis Personalizados -->
+                <!-- 4 Abas com Emojis VIPs Animados -->
                 <div class="grid grid-cols-4 gap-1.5 mb-2.5 shrink-0">
                     <button onclick="mudarTabAdmin(0)" id="tabBtn0" class="h-8 bg-white text-black font-bold rounded-lg text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow">
-                        🛍️ Vendas
+                        <span class="animate-vip">💎</span> Vendas
                     </button>
                     <button onclick="mudarTabAdmin(1)" id="tabBtn1" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        ⏳ Pendentes
+                        <span class="animate-vip">⚡</span> Pendentes
                     </button>
                     <button onclick="mudarTabAdmin(2)" id="tabBtn2" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        🌐 Membros
+                        <span class="animate-vip">🔮</span> Membros
                     </button>
                     <button onclick="mudarTabAdmin(3)" id="tabBtn3" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        ⚙️ Ajustes
+                        <span class="animate-vip">⚙️</span> Ajustes
                     </button>
                 </div>
 
@@ -339,88 +348,88 @@
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/30 border border-neutral-800 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">💎 Histórico de Vendas</span>
-                                <button onclick="renderizarAdminData()" class="w-6 h-6 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-lg text-[10px] hover:text-white" title="Atualizar">🔄</button>
+                                <span class="text-[11px] font-bold text-white uppercase tracking-wider"><span class="animate-vip">💎</span> Histórico de Vendas</span>
+                                <button onclick="renderizarAdminData()" class="w-6 h-6 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-lg text-[10px] hover:text-white" title="Atualizar"><span class="animate-vip">🔄</span></button>
                             </div>
                             <div class="grid grid-cols-2 gap-2 mb-2">
                                 <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl">
-                                    <span class="text-[9px] text-zinc-400 block">📦 Total Aprovado</span>
+                                    <span class="text-[9px] text-zinc-400 block"><span class="animate-vip">📦</span> Total Aprovado</span>
                                     <span id="statVendasCount" class="text-sm font-extrabold text-white">0</span>
                                 </div>
                                 <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl">
-                                    <span class="text-[9px] text-zinc-400 block">💰 Faturamento</span>
+                                    <span class="text-[9px] text-zinc-400 block"><span class="animate-vip">💰</span> Faturamento</span>
                                     <span id="statFaturamento" class="text-sm font-extrabold text-white">R$ 0,00</span>
                                 </div>
                             </div>
                             <div id="listaVendasAprovadas" class="space-y-1.5 max-h-[160px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <button onclick="limparVendasAprovadas()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2">🗑️ Limpar Histórico</button>
+                        <button onclick="limparVendasAprovadas()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2"><span class="animate-vip">🗑️</span> Limpar Histórico</button>
                     </div>
 
                     <!-- Aba 1: Pendentes -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/30 border border-neutral-800 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">⚡ Canal Pix Pendente</span>
+                                <span class="text-[11px] font-bold text-white uppercase tracking-wider"><span class="animate-vip">⚡</span> Canal Pix Pendente</span>
                                 <span id="statPendentesCount" class="bg-neutral-800 text-white border border-neutral-700 px-2 py-0.5 rounded-full text-[9px] font-bold">0 Pendentes</span>
                             </div>
                             <div id="listaPedidosPendentes" class="space-y-1.5 max-h-[180px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <span class="text-[9px] text-zinc-500 text-center block pt-1">💡 Aprovar libera o acesso e soma nas vendas.</span>
+                        <span class="text-[9px] text-zinc-500 text-center block pt-1"><span class="animate-vip">💡</span> Aprovar libera o acesso e soma nas vendas.</span>
                     </div>
 
                     <!-- Aba 2: Membros (Usuário 1, 2...) & IPs -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/30 border border-neutral-800 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">👥 Membros & Dispositivos</span>
+                                <span class="text-[11px] font-bold text-white uppercase tracking-wider"><span class="animate-vip">👥</span> Membros & Dispositivos</span>
                                 <span id="statIpCount" class="text-[10px] font-bold text-zinc-400">0 Membros</span>
                             </div>
                             <div id="listaIpsContainer" class="space-y-1.5 max-h-[180px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <button onclick="limparIps()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2">🗑️ Limpar Logs de Membros</button>
+                        <button onclick="limparIps()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2"><span class="animate-vip">🗑️</span> Limpar Logs de Membros</button>
                     </div>
 
                     <!-- Aba 3: Ajustes -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/30 border border-neutral-800 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div class="space-y-2">
-                            <span class="text-[11px] font-bold text-white uppercase tracking-wider block mb-0.5">🎨 Personalizar Tela Inicial</span>
+                            <span class="text-[11px] font-bold text-white uppercase tracking-wider block mb-0.5"><span class="animate-vip">🎨</span> Personalizar Tela Inicial</span>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">🖼️ URL da Logo / Foto de Perfil</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">🖼️</span> URL da Logo / Foto de Perfil</label>
                                 <input type="text" id="configImg" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">👤 Nome do Perfil</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">👤</span> Nome do Perfil</label>
                                 <input type="text" id="configName" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">💬 Biografia</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">💬</span> Biografia</label>
                                 <input type="text" id="configBio" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">🛡️ Selo / Descrição de Segurança</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">🛡️</span> Selo / Descrição de Segurança</label>
                                 <input type="text" id="configSecurity" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">💎 Título do Botão 1 (Compra)</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">💎</span> Título do Botão 1 (Compra)</label>
                                 <input type="text" id="configBtn1Title" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">📌 Subtítulo do Botão 1</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">📌</span> Subtítulo do Botão 1</label>
                                 <input type="text" id="configBtn1Sub" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">🤖 Título do Botão 2 (Suporte)</label>
+                                <label class="block text-[9px] text-zinc-400 mb-0.5"><span class="animate-vip">🤖</span> Título do Botão 2 (Suporte)</label>
                                 <input type="text" id="configBtn2Title" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none">
                             </div>
                         </div>
-                        <button onclick="salvarConfigAdmin()" class="w-full h-8 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-lg text-[10px] transition shadow cursor-pointer mt-2">💾 Salvar Alterações</button>
+                        <button onclick="salvarConfigAdmin()" class="w-full h-8 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-lg text-[10px] transition shadow cursor-pointer mt-2"><span class="animate-vip">💾</span> Salvar Alterações</button>
                     </div>
 
                 </div>
 
                 <div class="pt-2 border-t border-neutral-800 shrink-0 mt-1">
-                    <button type="button" onclick="fecharAdminModal()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition cursor-pointer border border-neutral-800">🔒 Fechar Painel</button>
+                    <button type="button" onclick="fecharAdminModal()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition cursor-pointer border border-neutral-800"><span class="animate-vip">🔒</span> Fechar Painel</button>
                 </div>
             </div>
         </div>
@@ -448,7 +457,7 @@
         };
 
         window.addEventListener('DOMContentLoaded', async () => {
-            let saved = localStorage.getItem('amaralreal7_os_db_v9');
+            let saved = localStorage.getItem('amaralreal7_os_db_v10');
             if (saved) {
                 try { db = JSON.parse(saved); } catch(e) {}
             }
@@ -458,7 +467,7 @@
         });
 
         function salvarDb() {
-            localStorage.setItem('amaralreal7_os_db_v9', JSON.stringify(db));
+            localStorage.setItem('amaralreal7_os_db_v10', JSON.stringify(db));
             aplicarPerfilNaTela();
         }
 
@@ -706,7 +715,7 @@
 
             const listaV = document.getElementById('listaVendasAprovadas');
             if (aprovadas.length === 0) {
-                listaV.innerHTML = `<p class="text-[10px] text-zinc-500 text-center py-4">🛍️ Nenhuma venda registrada ainda.</p>`;
+                listaV.innerHTML = `<p class="text-[10px] text-zinc-500 text-center py-4">💎 Nenhuma venda registrada ainda.</p>`;
             } else {
                 listaV.innerHTML = aprovadas.map(v => `
                     <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl flex items-center justify-between text-[11px]">
@@ -745,7 +754,7 @@
                 listaM.innerHTML = membros.map(m => `
                     <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl flex items-center justify-between text-[11px]">
                         <div>
-                            <span class="font-bold text-white block">👤 ${m.nomeUsuario}</span>
+                            <span class="font-bold text-white block">👑 ${m.nomeUsuario}</span>
                             <span class="text-[9px] text-zinc-400">🌐 IP: ${m.ip} • ${m.device} • ⏱️ ${m.time}</span>
                         </div>
                         <span class="text-[9px] bg-neutral-950 text-emerald-400 px-1.5 py-0.5 rounded border border-neutral-800">🟢 Ativo</span>
