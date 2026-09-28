@@ -7,20 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 35px rgba(255, 255, 255, 0.03); }
-            50% { opacity: 0.7; transform: scale(0.985); box-shadow: 0 0 55px rgba(255, 255, 255, 0.1); }
+        @keyframes subtleGlow {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
+            50% { border-color: rgba(255, 255, 255, 0.35); box-shadow: 0 20px 60px rgba(255,255,255,0.04); }
         }
-        .vip-card-glow {
-            animation: pulseGlow 4s infinite ease-in-out;
+        .vip-card-box {
+            animation: subtleGlow 5s infinite ease-in-out;
         }
 
-        @keyframes modalPop {
-            0% { transform: scale(0.95) translateY(12px); opacity: 0; }
+        @keyframes modalEnter {
+            0% { transform: scale(0.95) translateY(10px); opacity: 0; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
         }
-        .modal-enter {
-            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .modal-anim {
+            animation: modalEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         *, *::before, *::after {
@@ -37,7 +37,6 @@
             color: #ffffff;
             -webkit-font-smoothing: antialiased;
             overflow: hidden;
-            touch-action: manipulation;
         }
 
         body {
@@ -52,12 +51,12 @@
         }
 
         .custom-scroll::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -71,14 +70,14 @@
 </head>
 <body class="bg-black text-white select-none">
 
-    <!-- TOAST DE NOTIFICAÇÃO BLACK & WHITE -->
-    <div id="vipToast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-neutral-900/95 backdrop-blur-2xl border border-white/20 text-white px-5 py-3 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.95)] text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-3">
+    <!-- TOAST DE NOTIFICAÇÃO -->
+    <div id="vipToast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-neutral-900 border border-white/20 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-3">
         <span id="toastEmoji" class="text-base">🏴‍☠️</span>
         <span id="toastMessage" class="font-semibold tracking-wide">Sistema Operacional Ativo</span>
     </div>
 
     <!-- NOTIFICAÇÃO ESTILO APPLE PAY / PIX -->
-    <div id="appleNotification" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-neutral-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-[9999] opacity-0 pointer-events-none flex items-center justify-between transition-all duration-300">
+    <div id="appleNotification" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-neutral-900 border border-white/20 rounded-2xl p-3 shadow-2xl z-[9999] opacity-0 pointer-events-none flex items-center justify-between transition-all duration-300">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center text-xs font-extrabold shadow-md shrink-0">
                 <i class="fa-solid fa-bolt"></i>
@@ -94,8 +93,8 @@
         <div class="w-2 h-2 rounded-full bg-white shrink-0"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL (BIO LINK / HOME VIP BLACK & WHITE) -->
-    <div class="w-full max-w-[400px] bg-neutral-950 vip-card-glow rounded-[32px] p-6 shadow-2xl relative flex flex-col gap-5 border border-neutral-800 mx-auto my-auto">
+    <!-- PAINEL PRINCIPAL (BIO LINK BLACK & WHITE) -->
+    <div class="w-full max-w-[400px] bg-neutral-950 vip-card-box rounded-[32px] p-6 shadow-2xl relative flex flex-col gap-5 border border-neutral-800 mx-auto my-auto">
         
         <!-- Botão Admin -->
         <button onclick="abrirAdminModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white transition active:scale-95 cursor-pointer shadow-md">
@@ -104,31 +103,31 @@
 
         <!-- Perfil -->
         <div class="flex flex-col items-center w-full pt-1">
-            <div class="w-20 h-20 rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-500 to-neutral-800 shadow-xl mb-3">
+            <div class="w-20 h-20 rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-500 to-neutral-900 shadow-xl mb-3">
                 <img id="homeProfileImg" src="https://i.postimg.cc/9F5WcckY/IMG-1942.jpg" alt="Perfil" class="w-full h-full object-cover rounded-full border-2 border-black">
             </div>
 
             <div class="flex items-center gap-1.5 mb-1">
                 <h1 id="homeProfileName" class="text-base font-extrabold tracking-tight text-white">amaralreal7</h1>
-                <span id="homeBadgeIcon" class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
+                <span class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
             </div>
 
             <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 mb-2.5">
                 <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                <span id="homeSubBadge" class="text-[10px] font-semibold text-zinc-300">👑 Status: VIP Elite • IA Ativa</span>
+                <span id="homeSubBadge" class="text-[10px] font-semibold text-zinc-300">VIP Elite • Online</span>
             </div>
 
             <p id="homeProfileBio" class="text-xs text-zinc-400 text-center font-medium px-2 mb-3">O maior chefe do 7</p>
 
-            <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900/60 px-4 py-2 rounded-xl border border-neutral-800 w-full shadow-inner">
+            <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900 px-4 py-2 rounded-xl border border-neutral-800 w-full shadow-inner">
                 <span id="homeSecurityIcon">🛡️</span>
                 <span id="homeSecurityText">100% Seguro • Entrega Instantânea</span>
             </div>
         </div>
 
-        <!-- Botões de Ação Personalizáveis -->
+        <!-- Botões de Ação Dinâmicos -->
         <div class="w-full flex flex-col gap-3">
-            <button onclick="abrirCheckout()" class="w-full h-13 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold px-4 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
+            <button onclick="abrirCheckout()" class="w-full h-14 bg-white hover:bg-neutral-200 active:scale-[0.98] text-black font-extrabold px-4 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center text-sm shadow">
                         <i id="homeBtn1Icon" class="fa-solid fa-bolt"></i>
@@ -144,7 +143,7 @@
                 <i class="fa-solid fa-chevron-right text-xs text-zinc-400"></i>
             </button>
 
-            <button onclick="abrirSuporteIA()" class="w-full h-13 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-4 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
+            <button onclick="abrirSuporteIA()" class="w-full h-14 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-4 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-neutral-950 border border-neutral-700 flex items-center justify-center text-sm text-white shadow">
                         <i id="homeBtn2Icon" class="fa-solid fa-robot"></i>
@@ -163,14 +162,14 @@
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT VIP (PIX + FORMULÁRIO) -->
+    <!-- MODAL CHECKOUT VIP -->
     <div id="modalCheckout" class="fixed inset-0 bg-black/95 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-6 shadow-2xl relative modal-enter max-h-[90vh] overflow-y-auto custom-scroll">
+        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-6 shadow-2xl relative modal-anim max-h-[90vh] overflow-y-auto custom-scroll">
             <button onclick="fecharCheckout()" class="absolute top-5 right-5 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Passo 1: QR Code & Pix -->
+            <!-- Passo 1 -->
             <div id="checkoutStep1" class="space-y-4">
                 <div class="text-center">
                     <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-base mx-auto mb-2">
@@ -192,7 +191,7 @@
                 <div class="space-y-1.5">
                     <label class="block text-[11px] text-zinc-400">Chave Pix Copia e Cola:</label>
                     <input type="text" id="pixCopiaECola" readonly class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[11px] text-zinc-300 text-center select-all focus:outline-none">
-                    <button onclick="copiarPix()" class="w-full h-11 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl text-xs transition cursor-pointer shadow-md">
+                    <button onclick="copiarPix()" class="w-full h-11 bg-white hover:bg-neutral-200 text-black font-bold rounded-xl text-xs transition cursor-pointer shadow-md">
                         <i class="fa-solid fa-copy mr-1.5"></i> Copiar Código Pix
                     </button>
                 </div>
@@ -202,7 +201,7 @@
                 </button>
             </div>
 
-            <!-- Passo 2: Formulário -->
+            <!-- Passo 2 -->
             <div id="checkoutStep2" class="hidden space-y-3.5">
                 <div class="text-center mb-1">
                     <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-base mx-auto mb-2">
@@ -232,12 +231,12 @@
 
                     <div class="flex gap-2 pt-2">
                         <button onclick="voltarPassoPix()" class="w-1/3 h-11 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Voltar</button>
-                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-11 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">Enviar para Análise</button>
+                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-11 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">Enviar para Análise</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Passo 3: Sucesso -->
+            <!-- Passo 3 -->
             <div id="checkoutStep3" class="hidden text-center py-6 space-y-4">
                 <div class="w-16 h-16 bg-neutral-900 border border-neutral-700 text-white rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
                     <i class="fa-solid fa-check"></i>
@@ -249,9 +248,9 @@
         </div>
     </div>
 
-    <!-- MODAL SUPORTE COM IA -->
+    <!-- MODAL SUPORTE IA -->
     <div id="modalSuporte" class="fixed inset-0 bg-black/95 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-5 shadow-2xl relative h-[420px] flex flex-col justify-between modal-enter">
+        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-5 shadow-2xl relative h-[420px] flex flex-col justify-between modal-anim">
             <div class="flex items-center justify-between border-b border-neutral-800 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-neutral-900 border border-neutral-700 flex items-center justify-center text-white text-xs">
@@ -275,14 +274,14 @@
 
             <div class="border-t border-neutral-800 pt-3 flex gap-2">
                 <input type="text" id="chatInput" placeholder="Pergunte algo..." class="flex-1 h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-white" onkeypress="if(event.key==='Enter') enviarMensagemIA()">
-                <button onclick="enviarMensagemIA()" class="h-11 px-4 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl text-xs transition cursor-pointer shadow">Enviar</button>
+                <button onclick="enviarMensagemIA()" class="h-11 px-4 bg-white hover:bg-neutral-200 text-black font-bold rounded-xl text-xs transition cursor-pointer shadow">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE ADMINISTRAÇÃO & DASHBOARD BLACK & WHITE -->
+    <!-- MODAL DE ADMINISTRAÇÃO -->
     <div id="modalAdmin" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[430px] rounded-[32px] p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden modal-enter transition-all duration-300">
+        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[430px] rounded-[32px] p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden modal-anim">
             
             <button onclick="fecharAdminModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer z-50">
                 <i class="fa-solid fa-xmark"></i>
@@ -299,12 +298,11 @@
                 <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[220px] h-12 bg-neutral-900 border border-neutral-700 rounded-2xl px-4 text-white text-center tracking-[0.6em] text-lg mb-3 focus:outline-none focus:border-white shadow-inner transition">
                 <div id="loginErrorMsg" class="text-xs font-semibold text-rose-400 mb-4 hidden h-5"></div>
                 
-                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[220px] h-12 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-2xl text-xs transition shadow-lg cursor-pointer">Desbloquear Painel</button>
+                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[220px] h-12 bg-white hover:bg-neutral-200 active:scale-[0.98] text-black font-extrabold rounded-2xl text-xs transition shadow-lg cursor-pointer">Desbloquear Painel</button>
             </div>
 
-            <!-- DASHBOARD BLACK & WHITE -->
+            <!-- DASHBOARD -->
             <div id="adminDashboard" class="hidden flex flex-col h-full">
-                <!-- Cabeçalho -->
                 <div class="flex items-center justify-between border-b border-neutral-800 pb-3 mb-3 shrink-0 pr-8">
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center justify-center text-white text-xs">
@@ -317,7 +315,7 @@
                     </div>
                 </div>
 
-                <!-- 4 Abas Uniformes -->
+                <!-- 4 Abas -->
                 <div class="grid grid-cols-4 gap-1.5 mb-3 shrink-0">
                     <button onclick="mudarTabAdmin(0)" id="tabBtn0" class="h-9 bg-white text-black font-bold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow">
                         <i class="fa-solid fa-bag-shopping"></i> Vendas
@@ -333,10 +331,10 @@
                     </button>
                 </div>
 
-                <!-- Carrossel das Abas -->
+                <!-- Carrossel -->
                 <div id="adminCarousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-3 flex-1 items-stretch py-1" onscroll="sincronizarScrollTab()">
                     
-                    <!-- Aba 0: Vendas Aprovadas -->
+                    <!-- Aba 0: Vendas -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
@@ -358,7 +356,7 @@
                         <button onclick="limparVendasAprovadas()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Histórico</button>
                     </div>
 
-                    <!-- Aba 1: Canal de Aprovação -->
+                    <!-- Aba 1: Pendentes -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
@@ -370,7 +368,7 @@
                         <span class="text-[10px] text-zinc-500 text-center block pt-1">Aprovar libera o acesso e soma nas vendas oficiais.</span>
                     </div>
 
-                    <!-- Aba 2: Membros e Logs de IP -->
+                    <!-- Aba 2: Membros & IPs -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
                             <div class="flex items-center justify-between mb-2.5">
@@ -382,7 +380,7 @@
                         <button onclick="limparIps()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Logs de Membros</button>
                     </div>
 
-                    <!-- Aba 3: Ajustes e Personalização da Home -->
+                    <!-- Aba 3: Ajustes -->
                     <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div class="space-y-2.5">
                             <span class="text-xs font-bold text-white uppercase tracking-wider block mb-1">Personalizar Tela Inicial</span>
@@ -415,7 +413,7 @@
                                 <input type="text" id="configBtn2Title" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none">
                             </div>
                         </div>
-                        <button onclick="salvarConfigAdmin()" class="w-full h-10 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow cursor-pointer mt-2">Salvar Alterações</button>
+                        <button onclick="salvarConfigAdmin()" class="w-full h-10 bg-white hover:bg-neutral-200 text-black font-extrabold rounded-xl text-xs transition shadow cursor-pointer mt-2">Salvar Alterações</button>
                     </div>
 
                 </div>
@@ -488,7 +486,6 @@
             }, 3200);
         }
 
-        // Registro Sequencial de Membros (Usuário 1, Usuário 2...) + IP + Dispositivo
         async function registrarMembroEIp() {
             try {
                 let res = await fetch('https://api.ipify.org?format=json');
@@ -732,7 +729,7 @@
                             <span class="text-[10px] text-zinc-500 block">E-mail: ${p.email} • ${p.time}</span>
                         </div>
                         <div class="flex gap-2 pt-1 border-t border-neutral-800">
-                            <button onclick="aprovarPedido(${idx})" class="flex-1 h-7 bg-white hover:bg-zinc-200 text-black font-bold rounded-lg text-[10px] transition cursor-pointer">Aprovar Venda</button>
+                            <button onclick="aprovarPedido(${idx})" class="flex-1 h-7 bg-white hover:bg-neutral-200 text-black font-bold rounded-lg text-[10px] transition cursor-pointer">Aprovar Venda</button>
                             <button onclick="rejeitarPedido(${idx})" class="flex-1 h-7 bg-neutral-800 hover:bg-neutral-700 text-white font-bold rounded-lg text-[10px] transition cursor-pointer">Recusar</button>
                         </div>
                     </div>
