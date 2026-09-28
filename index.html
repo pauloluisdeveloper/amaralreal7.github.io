@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo com IA</title>
-    <!-- Tailwind CSS para um design moderno e proporcional -->
+    <title>Sistema de Pagamento & Painel Administrativo</title>
+    <!-- Tailwind CSS para design moderno e responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,8 +21,85 @@
 </head>
 <body class="bg-gray-100 font-sans antialiased">
 
-    <!-- TELA DE LOGIN -->
-    <div id="login-screen" class="flex items-center justify-center min-h-screen bg-gray-900">
+    <!-- ABAS DE NAVEGAÇÃO RÁPIDA (Para testes: Alternar entre Cliente e Admin) -->
+    <div class="bg-gray-900 text-white py-2 px-4 text-center text-xs flex justify-center gap-4">
+        <span>Modo de Teste:</span>
+        <button onclick="switchView('client')" class="underline hover:text-purple-300">Ver Tela do Cliente (Pix)</button>
+        <button onclick="switchView('admin')" class="underline hover:text-purple-300">Ver Painel Administrativo</button>
+    </div>
+
+    <!---------------------------------------------------------
+      1. TELA DO CLIENTE (PIX + FORMULÁRIO DE DADOS)
+    ---------------------------------------------------------->
+    <div id="view-client" class="min-h-[90vh] flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Pagamento via Pix (Nubank)</h1>
+            <p class="text-sm text-gray-500 mb-6">Escaneie o QR Code ou copie a chave Pix abaixo</p>
+
+            <!-- Cronômetro (Minutinhos contando) -->
+            <div class="bg-purple-50 border border-purple-200 p-3 rounded-xl mb-6">
+                <span class="text-xs text-purple-700 font-semibold uppercase block">Tempo Restante para Pagamento</span>
+                <span id="countdown-timer" class="text-2xl font-bold text-nubank">04:59</span>
+            </div>
+
+            <!-- Chave Pix -->
+            <div class="mb-6 text-left">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Chave Pix Copia e Cola:</label>
+                <div class="flex gap-2">
+                    <input type="text" readonly value="00020126580014br.gov.bcb.pix...sua_chave_aqui" id="pix-key-input"
+                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-600 select-all">
+                    <button onclick="copyPixKey()" class="bg-nubank text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-nubankDark transition">
+                        Copiar
+                    </button>
+                </div>
+            </div>
+
+            <hr class="my-6 border-gray-200">
+
+            <!-- Formulário pós-pagamento (Nome, Data Nasc, CPF, E-mail) -->
+            <div id="payment-form-container">
+                <h2 class="text-base font-bold text-gray-800 mb-3 text-left">Já fez o pagamento? Preencha seus dados:</h2>
+                <form id="client-data-form" onsubmit="submitClientData(event)" class="space-y-3 text-left">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700">Nome Completo:</label>
+                        <input type="text" id="client-name" required placeholder="Ex: Maria Silva Santos" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-nubank focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700">Data de Nascimento:</label>
+                        <input type="date" id="client-dob" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-nubank focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700">CPF:</label>
+                        <input type="text" id="client-cpf" required placeholder="000.000.000-00" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-nubank focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700">E-mail:</label>
+                        <input type="email" id="client-email" required placeholder="seu@email.com" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-nubank focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-semibold text-sm transition mt-2">
+                        Enviar Comprovante / Dados
+                    </button>
+                </form>
+            </div>
+
+            <!-- Mensagem de Sucesso ao Enviar -->
+            <div id="client-success-msg" class="hidden py-8 space-y-3">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+                <h3 class="text-lg font-bold text-gray-800">Dados enviados com sucesso!</h3>
+                <p class="text-sm text-gray-600">Seu pagamento está aguardando verificação e aprovação da administração. Assim que aprovado, você receberá o acesso.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!---------------------------------------------------------
+      2. TELA DE LOGIN DA ADMINISTRAÇÃO
+    ---------------------------------------------------------->
+    <div id="login-screen" class="hidden fixed inset-0 flex items-center justify-center bg-gray-900 z-50">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Painel Administrativo</h2>
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
@@ -39,7 +116,10 @@
         </div>
     </div>
 
-    <!-- PAINEL ADMINISTRATIVO (Oculto inicialmente) -->
+
+    <!---------------------------------------------------------
+      3. PAINEL ADMINISTRATIVO (Oculto até logar)
+    ---------------------------------------------------------->
     <div id="admin-panel" class="hidden min-h-screen flex flex-col">
         <!-- Barra Superior -->
         <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
@@ -55,62 +135,50 @@
         <!-- Conteúdo Principal -->
         <main class="flex-1 p-6 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- Coluna 1 e 2: Aprovação de Pagamentos & Nubank -->
+            <!-- Coluna 1 e 2: Canal de Aprovação e Vendas -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Seção Pagamento Nubank -->
+                
+                <!-- Canal de Aprovação de Pagamentos Pendentes -->
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
                     <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        💳 Verificação e Aprovação de Pagamento (Nubank)
+                        ⏳ Canal de Aprovação de Pagamentos (Pendentes)
                     </h2>
-                    
-                    <!-- Botão Nubank Aprimorado -->
-                    <div class="mb-6">
-                        <a href="https://www.nubank.com.br" target="_blank" 
-                           class="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-nubank text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-nubankDark transition-all transform hover:scale-[1.01]">
-                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-5H8V9h3V7.5C11 5.5 12.5 4 14.5 4c1.1 0 2.1.2 2.5.4v2.6h-1.5c-.8 0-1 .5-1 1.2V9h3l-.5 2.5h-2.5v5h-3z"/></svg>
-                            Abrir Aplicativo / Painel Nubank
-                        </a>
-                    </div>
-
-                    <!-- Formulário de Aprovação por Nome Completo -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
-                        <h3 class="text-sm font-semibold text-gray-700">Verificar e Aprovar por Nome Completo</h3>
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="text" id="search-client-name" placeholder="Digite o nome completo do cliente..." 
-                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nubank focus:outline-none text-sm">
-                            <button onclick="checkAndApprovePayment()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition">
-                                Aprovar Pagamento
-                            </button>
-                        </div>
-                        <div id="approval-status" class="text-sm font-medium mt-2"></div>
-                    </div>
-                </div>
-
-                <!-- Seção de Vendas e Logs Recentes -->
-                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Vendas e Registro de Logs</h2>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm text-gray-600">
                             <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
                                 <tr>
-                                    <th class="px-4 py-3">Cliente (Nome Completo)</th>
-                                    <th class="px-4 py-3">Valor</th>
-                                    <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3">Log / Ação</th>
+                                    <th class="px-4 py-3">Nome Completo</th>
+                                    <th class="px-4 py-3">CPF</th>
+                                    <th class="px-4 py-3">E-mail / Nascimento</th>
+                                    <th class="px-4 py-3">Ação</th>
                                 </tr>
                             </thead>
-                            <tbody id="sales-logs-table" class="divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-3 font-medium text-gray-800">Maria Oliveira Santos</td>
-                                    <td class="px-4 py-3">R$ 150,00</td>
-                                    <td class="px-4 py-3"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pendente</span></td>
-                                    <td class="px-4 py-3 text-xs text-gray-500">Aguardando confirmação Pix Nubank</td>
+                            <tbody id="pending-approvals-table" class="divide-y divide-gray-200">
+                                <!-- Preenchido dinamicamente via JS -->
+                                <tr id="no-pending-row">
+                                    <td colspan="4" class="px-4 py-6 text-center text-gray-400">Nenhum pagamento pendente no momento.</td>
                                 </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Aba de Vendas Oficiais (Somente o que foi aprovado) -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">💰 Vendas Concluídas e Aprovadas</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
                                 <tr>
-                                    <td class="px-4 py-3 font-medium text-gray-800">Carlos Eduardo Silva</td>
-                                    <td class="px-4 py-3">R$ 89,90</td>
-                                    <td class="px-4 py-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Aprovado</span></td>
-                                    <td class="px-4 py-3 text-xs text-gray-500">Aprovado por admin via painel</td>
+                                    <th class="px-4 py-3">Cliente</th>
+                                    <th class="px-4 py-3">CPF</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3">Registro de Log</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approved-sales-table" class="divide-y divide-gray-200">
+                                <tr id="no-approved-row">
+                                    <td colspan="4" class="px-4 py-6 text-center text-gray-400">Nenhuma venda aprovada registrada ainda.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -125,11 +193,11 @@
                 </h2>
                 <div id="ai-chat-messages" class="flex-1 overflow-y-auto space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-200 text-sm">
                     <div class="bg-purple-100 text-purple-900 p-3 rounded-xl rounded-tl-none max-w-[85%]">
-                        Olá! Sou o assistente de IA integrado ao painel. Como posso ajudar na administração ou verificação de pagamentos hoje?
+                        Olá! Sou o assistente de IA integrado ao painel. Posso ajudar a conferir dados de clientes, logs ou status de aprovação.
                     </div>
                 </div>
                 <div class="mt-3 flex gap-2">
-                    <input type="text" id="ai-input" placeholder="Digite sua dúvida para a IA..." 
+                    <input type="text" id="ai-input" placeholder="Digite sua dúvida..." 
                         class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-nubank focus:outline-none"
                         onkeypress="if(event.key === 'Enter') sendToAI()">
                     <button onclick="sendToAI()" class="bg-nubank hover:bg-nubankDark text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
@@ -143,67 +211,154 @@
 
     <!-- SCRIPTS DE CONTROLE -->
     <script>
-        const SENHA_ADMIN = "1234"; // Defina a senha numérica desejada aqui
+        const SENHA_ADMIN = "4321"; // Defina sua senha numérica administrativa aqui
+        let pendingPayments = []; // Lista de pagamentos aguardando aprovação
+        let approvedSales = [];   // Lista de vendas aprovadas oficiais
 
+        // Alternar visualização (para teste prático na mesma tela)
+        function switchView(view) {
+            if (view === 'client') {
+                document.getElementById('view-client').classList.remove('hidden');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.add('hidden');
+            } else {
+                // Vai para o admin, exige login
+                document.getElementById('view-client').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
+        }
+
+        // Timer regressivo (Minutinhos contando)
+        let timerSeconds = 300; // 5 minutos
+        function startTimer() {
+            const display = document.getElementById('countdown-timer');
+            const interval = setInterval(() => {
+                let minutes = Math.floor(timerSeconds / 60);
+                let seconds = timerSeconds % 60;
+                display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                if (--timerSeconds < 0) {
+                    clearInterval(interval);
+                    display.textContent = "Expirado";
+                }
+            }, 1000);
+        }
+        startTimer();
+
+        function copyPixKey() {
+            const input = document.getElementById('pix-key-input');
+            input.select();
+            document.execCommand('copy');
+            alert("Chave Pix copiada!");
+        }
+
+        // Cliente submete os dados pós-pagamento
+        function submitClientData(event) {
+            event.preventDefault();
+            const client = {
+                id: Date.now(),
+                name: document.getElementById('client-name').value.trim(),
+                dob: document.getElementById('client-dob').value,
+                cpf: document.getElementById('client-cpf').value.trim(),
+                email: document.getElementById('client-email').value.trim(),
+                date: new Date().toLocaleDateString('pt-BR')
+            };
+
+            // Adiciona na lista de pendentes do admin
+            pendingPayments.push(client);
+
+            // Altera visualização do cliente para mensagem de sucesso
+            document.getElementById('payment-form-container').classList.add('hidden');
+            document.getElementById('client-success-msg').classList.remove('hidden');
+        }
+
+        // Login Admin com validações estritas
         function handleLogin(event) {
             event.preventDefault();
             const passwordInput = document.getElementById('admin-password').value;
             const errorDiv = document.getElementById('login-error');
 
-            // Validação se está vazio
             if (!passwordInput.trim()) {
-                errorDiv.textContent = "Por favor, preencha a senha antes de continuar.";
+                errorDiv.textContent = "Por favor, digite a senha antes de continuar.";
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
-            // Validação se contém apenas números
             if (!/^\d+$/.test(passwordInput)) {
                 errorDiv.textContent = "A senha deve conter apenas números.";
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
-            // Validação se a senha está incorreta
             if (passwordInput !== SENHA_ADMIN) {
                 errorDiv.textContent = "Senha incorreta. Tente novamente.";
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
-            // Login bem-sucedido
+            // Sucesso no login
             errorDiv.classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('admin-panel').classList.remove('hidden');
+            renderAdminTables();
         }
 
         function logout() {
             document.getElementById('admin-password').value = '';
             document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('view-client').classList.remove('hidden');
         }
 
         function refreshData() {
+            renderAdminTables();
             alert("Aba de vendas e registro de logs atualizados com sucesso!");
-            // Aqui você colocaria a lógica de requisição (fetch) para atualizar os dados do backend
         }
 
-        function checkAndApprovePayment() {
-            const clientName = document.getElementById('search-client-name').value.trim();
-            const statusDiv = document.getElementById('approval-status');
+        // Aprovar pagamento pelo painel
+        function approvePayment(id) {
+            const index = pendingPayments.findIndex(p => p.id === id);
+            if (index !== -1) {
+                const approvedItem = pendingPayments.splice(index, 1)[0];
+                approvedSales.push(approvedItem);
+                renderAdminTables();
+                alert(`Pagamento de ${approvedItem.name} aprovado! Agora consta nas vendas oficiais.`);
+            }
+        }
 
-            if (!clientName) {
-                statusDiv.textContent = "Digite o nome completo do cliente para verificar.";
-                statusDiv.className = "text-sm font-medium mt-2 text-red-500";
-                return;
+        // Renderizar tabelas administrativas
+        function renderAdminTables() {
+            // Tabela de Pendentes
+            const pendingTable = document.getElementById('pending-approvals-table');
+            if (pendingPayments.length === 0) {
+                pendingTable.innerHTML = `<tr id="no-pending-row"><td colspan="4" class="px-4 py-6 text-center text-gray-400">Nenhum pagamento pendente no momento.</td></tr>`;
+            } else {
+                pendingTable.innerHTML = pendingPayments.map(p => `
+                    <tr>
+                        <td class="px-4 py-3 font-medium text-gray-800">${p.name}</td>
+                        <td class="px-4 py-3">${p.cpf}</td>
+                        <td class="px-4 py-3 text-xs">${p.email}<br><span class="text-gray-400">Nasc: ${p.dob}</span></td>
+                        <td class="px-4 py-3">
+                            <button onclick="approvePayment(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
+                                Aprovar Pagamento
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
             }
 
-            // Simulação de verificação e aprovação
-            statusDiv.textContent = `Pagamento de "${clientName}" verificado e aprovado com sucesso!`;
-            statusDiv.className = "text-sm font-medium mt-2 text-emerald-600";
-            
-            // Limpa o campo após aprovar
-            document.getElementById('search-client-name').value = '';
+            // Tabela de Vendas Oficiais
+            const approvedTable = document.getElementById('approved-sales-table');
+            if (approvedSales.length === 0) {
+                approvedTable.innerHTML = `<tr id="no-approved-row"><td colspan="4" class="px-4 py-6 text-center text-gray-400">Nenhuma venda aprovada registrada ainda.</td></tr>`;
+            } else {
+                approvedTable.innerHTML = approvedSales.map(s => `
+                    <tr>
+                        <td class="px-4 py-3 font-medium text-gray-800">${s.name}</td>
+                        <td class="px-4 py-3">${s.cpf}</td>
+                        <td class="px-4 py-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Aprovado</span></td>
+                        <td class="px-4 py-3 text-xs text-gray-500">Log: Validado e aprovado em ${s.date}</td>
+                    </tr>
+                `).join('');
+            }
         }
 
         function sendToAI() {
@@ -212,8 +367,6 @@
             if (!messageText) return;
 
             const chatContainer = document.getElementById('ai-chat-messages');
-
-            // Mensagem do usuário
             chatContainer.innerHTML += `
                 <div class="bg-blue-100 text-blue-900 p-3 rounded-xl rounded-tr-none max-w-[85%] ml-auto text-right">
                     ${messageText}
@@ -222,11 +375,10 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Resposta simulada da IA (substitua pela integração real com sua API de IA)
             setTimeout(() => {
                 chatContainer.innerHTML += `
                     <div class="bg-purple-100 text-purple-900 p-3 rounded-xl rounded-tl-none max-w-[85%]">
-                        Entendido. Analisei a solicitação sobre "${messageText}". O sistema está operando normalmente e os registros de log estão sincronizados.
+                        Compreendido. No momento temos ${pendingPayments.length} pagamento(s) pendente(s) aguardando sua checagem no canal de aprovação.
                     </div>
                 `;
                 chatContainer.scrollTop = chatContainer.scrollHeight;
