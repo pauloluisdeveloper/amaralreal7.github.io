@@ -3,94 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nubank - Simulação</title>
+    <title>Nubank - Painel Simulado</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Ícones FontAwesome para o lápis, olho e setas -->
+    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="nu-container">
-        <!-- HEADER / PERFIL -->
-        <header class="nu-header">
-            <div class="profile-container">
-                <div class="avatar-wrapper">
-                    <img id="profile-pic" src="https://via.placeholder.com/150" alt="Foto de Perfil">
-                    <label for="file-input" class="edit-badge" title="Editar foto">
-                        <i class="fa-solid fa-pencil"></i>
-                    </label>
-                    <input type="file" id="file-input" accept="image/*" style="display: none;">
-                </div>
-                <h2 id="profile-name">Seu Nome</h2>
-            </div>
-            <div class="header-icons">
-                <i class="fa-regular fa-eye" id="toggle-visibility" title="Mostrar/Ocultar Saldo"></i>
-                <i class="fa-regular fa-circle-question"></i>
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </header>
+    <div class="iphone-frame">
+        <!-- Simulação da Dynamic Island do iPhone -->
+        <div class="dynamic-island"></div>
 
-        <!-- CONTEÚDO DE SALDO -->
-        <section class="saldo-section">
-            <div class="saldo-header">
-                <h3>Conta</h3>
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-            <div class="saldo-box" id="edit-saldo-btn" title="Clique para editar o saldo">
-                <span class="currency">R$</span> <span id="saldo-value">1.500,00</span>
-            </div>
-            <p class="edit-hint"><i class="fa-solid fa-pencil"></i> Clique no valor para alterar</p>
-        </section>
-
-        <!-- ATALHOS / MENU -->
-        <section class="menu-horizontal">
-            <div class="menu-item" onclick="abrirPixModal()">
-                <div class="icon-circle"><i class="fa-solid fa-pix"></i></div>
-                <span>Área Pix</span>
-            </div>
-            <div class="menu-item">
-                <div class="icon-circle"><i class="fa-solid fa-barcode"></i></div>
-                <span>Pagar</span>
-            </div>
-            <div class="menu-item">
-                <div class="icon-circle"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                <span>Transferir</span>
-            </div>
-            <div class="menu-item">
-                <div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div>
-                <span>Recarga</span>
-            </div>
-        </section>
-
-        <!-- HISTÓRICO RECENTE -->
-        <section class="historico-section">
-            <h3>Histórico</h3>
-            <div id="lista-historico">
-                <div class="historico-item" onclick="gerarComprovante('Pix enviado', 'R$ 150,00', 'João Silva', '123.456.789-00')">
-                    <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
-                    <div class="hist-info">
-                        <strong>Pix enviado para João Silva</strong>
-                        <small>Hoje, 14:30</small>
+        <div class="nu-container">
+            <!-- HEADER / PERFIL -->
+            <header class="nu-header">
+                <div class="profile-top-row">
+                    <div class="profile-container">
+                        <div class="avatar-wrapper">
+                            <img id="profile-pic" src="https://via.placeholder.com/150" alt="Foto de Perfil">
+                            <label for="file-input" class="edit-badge" title="Editar foto">
+                                <i class="fa-solid fa-pencil"></i>
+                            </label>
+                            <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        </div>
                     </div>
-                    <span class="hist-valor negativo">- R$ 150,00</span>
+                    <div class="header-icons">
+                        <i class="fa-regular fa-eye" id="toggle-visibility" title="Mostrar/Ocultar Saldo"></i>
+                        <i class="fa-regular fa-circle-question"></i>
+                        <i class="fa-regular fa-user"></i>
+                    </div>
                 </div>
+                <div class="greeting-row">
+                    <span id="profile-name">Olá, @_notificacaomilionaria</span>
+                </div>
+            </header>
+
+            <div class="scrollable-content">
+                <!-- CONTEÚDO DE CONTA -->
+                <section class="saldo-section">
+                    <div class="saldo-header">
+                        <h3>Conta</h3>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="saldo-box" id="edit-saldo-btn" title="Clique para editar o saldo">
+                        <span class="currency">R$</span> <span id="saldo-value">10.000.000,00</span>
+                    </div>
+                </section>
+
+                <!-- MENU HORIZONTAL (ATALHOS) -->
+                <section class="menu-horizontal">
+                    <div class="menu-item" onclick="abrirPixModal()">
+                        <div class="icon-circle"><i class="fa-solid fa-pix"></i></div>
+                        <span>Área Pix</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-barcode"></i></div>
+                        <span>Pagar</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-piggy-bank"></i></div>
+                        <span>Pegar emprestado</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <span>Recarga de celular</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                        <span>Transferir</span>
+                    </div>
+                </section>
+
+                <!-- CARDS DE ATALHO (MEUS CARTÕES) -->
+                <section class="cards-section">
+                    <div class="card-pill">
+                        <i class="fa-regular fa-credit-card"></i>
+                        <span>Meus cartões</span>
+                    </div>
+                    <div class="card-carousel">
+                        <div class="info-card">
+                            <p>Pague boletos no crédito em até 12x, direto pelo app</p>
+                        </div>
+                        <div class="info-card">
+                            <p>Guarde dinheiro na caixinha e rendas mais que a poupança</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARTÃO DE CRÉDITO -->
+                <section class="credit-section">
+                    <div class="saldo-header">
+                        <h3>Cartão de crédito</h3>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="fatura-info">
+                        <small>Fatura atual</small>
+                        <h2 id="fatura-value">R$ 888.888,88</h2>
+                        <small class="limite-txt">Limite disponível de R$ 819,91</small>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO DE TRANSAÇÕES -->
+                <section class="historico-section">
+                    <h3>Histórico recente</h3>
+                    <div id="lista-historico">
+                        <div class="historico-item" onclick="gerarComprovante('Pix enviado', 'R$ 150,00', 'João Silva', 'E123456782026...')">
+                            <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                            <div class="hist-info">
+                                <strong>Pix enviado para João Silva</strong>
+                                <small>Hoje, 14:30</small>
+                            </div>
+                            <span class="hist-valor negativo">- R$ 150,00</span>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
+
+            <!-- BARRA DE NAVEGAÇÃO INFERIOR FLUTUANTE -->
+            <nav class="bottom-nav">
+                <div class="nav-item active"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <div class="nav-item"><i class="fa-solid fa-dollar-sign"></i></div>
+                <div class="nav-item"><i class="fa-solid fa-bag-shopping"></i></div>
+            </nav>
+        </div>
     </div>
 
-    <!-- MODAL DE PIX / SIMULAÇÃO -->
+    <!-- MODAL DE PIX -->
     <div id="pix-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharPixModal()">&times;</span>
             <h3>Simular Pix</h3>
-            <p>Envie um Pix para testar o saldo e gerar comprovante.</p>
+            <p>Envie um Pix para testar o saldo e gerar comprovante oficial.</p>
             <input type="text" id="pix-destinatario" placeholder="Nome do Recebedor (ex: Maria Souza)">
             <input type="number" id="pix-valor" placeholder="Valor (ex: 50.00)">
             <button class="btn-nu" onclick="realizarPixSimulado()">Pagar Pix</button>
         </div>
     </div>
 
-    <!-- MODAL DE COMPROVANTE NUBANK -->
+    <!-- MODAL DE COMPROVANTE -->
     <div id="comprovante-modal" class="modal">
         <div class="modal-content comprovante-box">
             <span class="close" onclick="fecharComprovante()">&times;</span>
