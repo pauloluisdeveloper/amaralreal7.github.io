@@ -3,751 +3,889 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco Inter - Simulador Oficial</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Banco Inter - Simulação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f1015; color: #1f2937; }
-        .inter-orange { background-color: #FF5000; }
-        .inter-orange-text { color: #FF5000; }
-        .inter-orange-border { border-color: #FF5000; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        :root {
+            --inter-orange: #FF7A00;
+            --inter-orange-dark: #E06B00;
+            --inter-dark: #121212;
+            --inter-gray-light: #F5F6F8;
+            --inter-gray: #E4E7EB;
+            --inter-text: #333333;
+            --inter-text-muted: #717171;
+            --white: #FFFFFF;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--inter-text);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            max-height: 896px;
+            background-color: var(--white);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 415px) {
+            .app-container {
+                border-radius: 40px;
+                border: 10px solid #222;
+            }
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .screen.hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* TELA DE LOGIN */
+        #login-screen {
+            background: linear-gradient(135deg, var(--inter-orange) 0%, #FF9933 100%);
+            color: var(--white);
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .login-subtitle {
+            font-size: 1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .login-form {
+            width: 100%;
+            background: var(--white);
+            padding: 30px 20px;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            color: var(--inter-text);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--inter-text-muted);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid var(--inter-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--inter-orange);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--inter-orange);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:active {
+            background-color: var(--inter-orange-dark);
+        }
+
+        /* HEADER DO APLICATIVO */
+        .app-header {
+            background-color: var(--inter-orange);
+            color: var(--white);
+            padding: 20px;
+            padding-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
+
+        .user-profile-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 48px;
+            height: 48px;
+        }
+
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--white);
+        }
+
+        .edit-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--white);
+            color: var(--inter-orange);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.65rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .user-texts h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .user-texts span {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .app-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .balance-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid var(--inter-gray);
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--inter-text-muted);
+            font-size: 0.85rem;
+        }
+
+        .balance-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--inter-text);
+        }
+
+        /* AÇÕES RÁPIDAS */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            background: #FFF2E6;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--inter-orange);
+            font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+
+        .action-btn:active .action-icon {
+            background: #FFE0C2;
+        }
+
+        .action-btn span {
+            font-size: 0.75rem;
+            color: var(--inter-text);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* TRANSAÇÕES RECENTES */
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--inter-gray);
+        }
+
+        .tx-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tx-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--inter-gray-light);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--inter-orange);
+        }
+
+        .tx-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .tx-info span {
+            font-size: 0.75rem;
+            color: var(--inter-text-muted);
+        }
+
+        .tx-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tx-value.positive { color: var(--success); }
+        .tx-value.negative { color: var(--inter-text); }
+
+        /* MODAIS E TELA DE PIX */
+        .sub-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sub-screen.active {
+            transform: translateY(0);
+        }
+
+        .sub-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--inter-gray);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sub-header i {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .sub-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* TECLADO PIN (SENHA) */
+        .pin-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .pin-dots {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .pin-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--inter-orange);
+            background: transparent;
+            transition: background 0.2s;
+        }
+
+        .pin-dot.filled {
+            background: var(--inter-orange);
+        }
+
+        .pin-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .pin-key {
+            background: var(--inter-gray-light);
+            border: none;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            transition: background 0.2s;
+        }
+
+        .pin-key:active {
+            background: var(--inter-gray);
+        }
+
+        /* COMPROVANTE */
+        .receipt-card {
+            background: var(--inter-gray-light);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--inter-orange);
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .receipt-row span:first-child {
+            color: var(--inter-text-muted);
+        }
+
+        .receipt-row span:last-child {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .success-icon-large {
+            text-align: center;
+            font-size: 3.5rem;
+            color: var(--success);
+            margin-bottom: 15px;
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-0 md:p-6">
+<body>
 
-    <!-- Container do Dispositivo -->
-    <div id="device-container" class="w-full max-w-md h-[100vh] md:h-[844px] md:rounded-[40px] md:border-[10px] md:border-zinc-800 bg-white shadow-2xl overflow-hidden relative flex flex-col transition-all duration-300">
-        
-        <!-- Barra Superior de Controle (Desktop) -->
-        <div class="hidden md:flex items-center justify-between bg-zinc-900 text-white px-4 py-2 text-xs select-none z-50">
-            <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
-                <span class="ml-2 font-medium text-zinc-400">Banco Inter Simulator Pro</span>
-            </div>
-            <div class="flex space-x-2">
-                <button onclick="setMode('phone')" class="px-2.5 py-1 bg-zinc-800 rounded transition font-medium text-orange-400" id="btn-phone"><i class="fa-solid fa-mobile-screen"></i> Celular</button>
-                <button onclick="setMode('tv')" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded transition font-medium text-zinc-300" id="btn-tv"><i class="fa-solid fa-tv"></i> Tela Cheia / TV</button>
-            </div>
-        </div>
-
-        <!-- SPLASH SCREEN -->
-        <div id="splash-screen" class="absolute inset-0 inter-orange z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
-            <div class="animate-bounce mb-4 bg-white p-6 rounded-3xl shadow-xl">
-                <span class="text-4xl font-extrabold inter-orange-text tracking-wider">inter</span>
-            </div>
-            <p class="text-sm font-medium tracking-widest uppercase opacity-90">O seu banco digital</p>
-            <div class="absolute bottom-12 w-12 h-1 bg-white/40 rounded-full animate-pulse"></div>
-        </div>
+    <div class="app-container">
 
         <!-- TELA DE LOGIN -->
-        <div id="login-screen" class="absolute inset-0 bg-white z-40 flex flex-col justify-between p-6 overflow-y-auto hidden">
-            <div class="mt-8">
-                <div class="flex justify-between items-center mb-10">
-                    <span class="text-3xl font-black inter-orange-text">inter</span>
-                    <button onclick="fillDemoLogin()" class="text-xs bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-3 py-1.5 rounded-full font-medium transition">Preencher Demo</button>
-                </div>
-                <h1 class="text-2xl font-bold text-zinc-900 mb-2">Acesse sua conta</h1>
-                <p class="text-sm text-zinc-500 mb-6">Entre no simulador oficial do Inter.</p>
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 uppercase mb-1">Agência</label>
-                        <input type="text" id="login-agencia" value="0001" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-800 font-medium focus:outline-none focus:border-orange-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 uppercase mb-1">Conta com dígito</label>
-                        <input type="text" id="login-conta" value="123456-7" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-800 font-medium focus:outline-none focus:border-orange-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 uppercase mb-1">Senha de Acesso</label>
-                        <input type="password" id="login-senha" value="123456" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-800 font-medium focus:outline-none focus:border-orange-500 transition">
-                    </div>
-                </div>
-            </div>
-
-            <div class="my-6">
-                <button onclick="realizarLogin()" class="w-full inter-orange hover:bg-orange-600 text-white font-semibold py-4 rounded-2xl shadow-lg transition active:scale-[0.98]">
-                    Entrar na Conta
-                </button>
-            </div>
-        </div>
-
-        <!-- APLICAÇÃO PRINCIPAL -->
-        <div id="main-app" class="flex-1 flex flex-col h-full bg-zinc-50 overflow-hidden hidden">
+        <div id="login-screen" class="screen">
+            <div class="login-logo">inter</div>
+            <div class="login-subtitle">O seu banco digital completo</div>
             
-            <!-- Header do App -->
-            <header class="bg-white px-5 py-4 border-b border-zinc-100 flex items-center justify-between z-10">
-                <div class="flex items-center space-x-3 relative">
-                    <!-- Foto de Perfil com Lápis -->
-                    <div class="relative group cursor-pointer" onclick="document.getElementById('input-foto-perfil').click()">
-                        <div id="avatar-container" class="w-11 h-11 rounded-full inter-orange flex items-center justify-center text-white font-bold text-base shadow-md overflow-hidden bg-cover bg-center">
-                            <span id="avatar-iniciais">US</span>
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 bg-zinc-900 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow border border-white">
-                            <i class="fa-solid fa-pen"></i>
-                        </div>
-                        <input type="file" id="input-foto-perfil" accept="image/*" class="hidden" onchange="mudarFotoPerfil(event)">
+            <div class="login-form">
+                <div class="input-group">
+                    <label>Conta ou CPF</label>
+                    <input type="text" id="login-user" value="123.456.789-00">
+                </div>
+                <div class="input-group">
+                    <label>Senha de Acesso</label>
+                    <input type="password" id="login-pass" value="123456">
+                </div>
+                <button class="btn-primary" onclick="fazerLogin()">Entrar</button>
+            </div>
+        </div>
+
+        <!-- TELA PRINCIPAL (HOME) -->
+        <div id="home-screen" class="screen hidden">
+            <div class="app-header">
+                <div class="user-profile-info" onclick="abrirPerfil()">
+                    <div class="avatar-container">
+                        <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Perfil">
+                        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
                     </div>
-                    <div>
-                        <p class="text-xs text-zinc-400 font-medium">Olá,</p>
-                        <h2 id="display-nome-usuario" class="text-sm font-bold text-zinc-800 cursor-pointer hover:text-orange-600" onclick="abrirPerfilConfig()" title="Clique para editar dados">Usuário Inter</h2>
+                    <div class="user-texts">
+                        <h4 id="display-name">Ana Silva</h4>
+                        <span>CPF: <span id="display-cpf">123.456.789-00</span></span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleSaldo()" class="text-zinc-600 hover:text-orange-500 transition">
-                        <i id="eye-icon" class="fa-solid fa-eye text-lg"></i>
+                <div class="header-actions">
+                    <i class="fa-regular fa-bell" onclick="alert('Sem novas notificações.')"></i>
+                </div>
+            </div>
+
+            <div class="app-body">
+                <!-- Saldo -->
+                <div class="balance-card">
+                    <div class="balance-header">
+                        <span>Saldo em conta</span>
+                        <i class="fa-regular fa-eye" id="toggle-balance" onclick="alternarSaldo()" style="cursor: pointer;"></i>
+                    </div>
+                    <div class="balance-value" id="balance-text">R$ 5.430,20</div>
+                </div>
+
+                <!-- Ações Rápidas -->
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="abrirPix()">
+                        <div class="action-icon"><i class="fa-solid fa-pix"></i></div>
+                        <span>Pix</span>
                     </button>
-                    <button onclick="abrirPerfilConfig()" class="text-zinc-600 hover:text-orange-500 transition" title="Configurações de Perfil">
-                        <i class="fa-solid fa-user-gear text-lg"></i>
+                    <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento.')">
+                        <div class="action-icon"><i class="fa-solid fa-barcode"></i></div>
+                        <span>Pagar</span>
+                    </button>
+                    <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento.')">
+                        <div class="action-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                        <span>Transferir</span>
+                    </button>
+                    <button class="action-btn" onclick="abrirPerfil()">
+                        <div class="action-icon"><i class="fa-solid fa-user-gear"></i></div>
+                        <span>Perfil</span>
                     </button>
                 </div>
-            </header>
 
-            <!-- Conteúdo das Abas -->
-            <div id="tab-content" class="flex-1 overflow-y-auto pb-24">
-                
-                <!-- HOME -->
-                <div id="view-home" class="p-5 space-y-6">
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-zinc-100 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Conta Digital</span>
-                            <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full"><i class="fa-solid fa-chart-line mr-1"></i> 100% CDI</span>
+                <!-- Histórico -->
+                <div class="section-title">Últimas Transações</div>
+                <div class="transaction-list" id="transaction-list">
+                    <div class="transaction-item">
+                        <div class="tx-left">
+                            <div class="tx-icon"><i class="fa-solid fa-arrow-down"></i></div>
+                            <div class="tx-info">
+                                <h5>Pix Recebido</h5>
+                                <span id="tx-date-1">Hoje, 14:20</span>
+                            </div>
                         </div>
-                        <div class="flex items-baseline space-x-2">
-                            <h1 id="saldo-valor" class="text-3xl font-extrabold text-zinc-900 cursor-pointer" onclick="editarSaldoDireto()" title="Clique para alterar saldo">R$ 4.850,20</h1>
-                            <span id="saldo-oculto" class="text-2xl font-extrabold text-zinc-900 hidden">••••••</span>
-                        </div>
-                        <p class="text-xs text-zinc-400">Rendimento total: +R$ 38,40 este mês</p>
+                        <div class="tx-value positive">+ R$ 350,00</div>
                     </div>
-
-                    <!-- Atalhos -->
-                    <div class="grid grid-cols-4 gap-3">
-                        <button onclick="switchTab('pix')" class="flex flex-col items-center bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm hover:border-orange-500 transition group">
-                            <div class="w-12 h-12 rounded-2xl bg-orange-50 group-hover:bg-orange-500 transition flex items-center justify-center mb-2">
-                                <svg class="w-6 h-6 fill-current text-orange-600 group-hover:text-white transition" viewBox="0 0 512 512">
-                                    <path d="M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm82.3 313.3c-23.3 23.3-61.2 23.3-84.5 0l-45.8-45.8-45.8 45.8c-23.3 23.3-61.2 23.3-84.5 0-23.3-23.3-23.3-61.2 0-84.5l45.8-45.8-45.8-45.8c-23.3-23.3-23.3-61.2 0-84.5 23.3-23.3 61.2-23.3 84.5 0l45.8 45.8 45.8-45.8c23.3-23.3 61.2-23.3 84.5 0 23.3 23.3 23.3 61.2 0 84.5l-45.8 45.8 45.8 45.8c23.3 23.3 23.3 61.2 0 84.5z"/>
-                                </svg>
+                    <div class="transaction-item">
+                        <div class="tx-left">
+                            <div class="tx-icon"><i class="fa-solid fa-shopping-cart"></i></div>
+                            <div class="tx-info">
+                                <h5>Super App Compra</h5>
+                                <span>Ontem, 09:15</span>
                             </div>
-                            <span class="text-xs font-semibold text-zinc-700">Pix</span>
-                        </button>
-                        <button onclick="switchTab('cards')" class="flex flex-col items-center bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm hover:border-orange-500 transition group">
-                            <div class="w-12 h-12 rounded-2xl bg-orange-50 group-hover:bg-orange-500 transition flex items-center justify-center mb-2 text-orange-600 group-hover:text-white">
-                                <i class="fa-solid fa-credit-card text-lg"></i>
-                            </div>
-                            <span class="text-xs font-semibold text-zinc-700">Cartões</span>
-                        </button>
-                        <button onclick="switchTab('invest')" class="flex flex-col items-center bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm hover:border-orange-500 transition group">
-                            <div class="w-12 h-12 rounded-2xl bg-orange-50 group-hover:bg-orange-500 transition flex items-center justify-center mb-2 text-orange-600 group-hover:text-white">
-                                <i class="fa-solid fa-chart-pie text-lg"></i>
-                            </div>
-                            <span class="text-xs font-semibold text-zinc-700">Investir</span>
-                        </button>
-                        <button onclick="switchTab('shop')" class="flex flex-col items-center bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm hover:border-orange-500 transition group">
-                            <div class="w-12 h-12 rounded-2xl bg-orange-50 group-hover:bg-orange-500 transition flex items-center justify-center mb-2 text-orange-600 group-hover:text-white">
-                                <i class="fa-solid fa-bag-shopping text-lg"></i>
-                            </div>
-                            <span class="text-xs font-semibold text-zinc-700">Shop</span>
-                        </button>
-                    </div>
-
-                    <!-- Últimas Transações -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-zinc-100 space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-bold text-zinc-800">Últimas Transações</h3>
-                            <button onclick="switchTab('extrato')" class="text-xs text-orange-600 font-semibold hover:underline">Ver extrato</button>
                         </div>
-                        <div id="lista-transacoes-home" class="space-y-3">
-                            <!-- Preenchido via JS -->
-                        </div>
+                        <div class="tx-value negative">- R$ 89,90</div>
                     </div>
                 </div>
-
-                <!-- PIX -->
-                <div id="view-pix" class="p-5 space-y-6 hidden">
-                    <h2 class="text-xl font-bold text-zinc-800">Área Pix</h2>
-                    
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-zinc-100 space-y-4">
-                        <h3 class="text-xs font-semibold uppercase text-zinc-400 tracking-wider">Enviar Transferência</h3>
-                        
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-600 mb-1">Chave Pix (CPF, CNPJ, E-mail ou Tel)</label>
-                            <input type="text" id="pix-chave" placeholder="Digite a chave" oninput="validarChavePix(this.value)" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-orange-500 transition">
-                            <p id="status-chave" class="text-[11px] mt-1 text-zinc-400">Aguardando chave...</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-600 mb-1">Nome do Recebedor</label>
-                            <input type="text" id="pix-nome-recebedor" placeholder="Ex: Maria Silva" oninput="validarNomeRecebedor(this.value)" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-orange-500 transition">
-                            <p id="status-nome" class="text-[11px] mt-1 text-zinc-400">Insira o nome do favorecido</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-600 mb-1">CPF/CNPJ do Recebedor</label>
-                            <input type="text" id="pix-cpf-recebedor" placeholder="000.000.000-00" oninput="validarCpfRecebedor(this.value)" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-orange-500 transition">
-                            <p id="status-cpf-rec" class="text-[11px] mt-1 text-zinc-400">Insira o documento do recebedor</p>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-zinc-600 mb-1">Valor (R$)</label>
-                            <input type="number" id="pix-valor" placeholder="0,00" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-orange-500 transition">
-                        </div>
-
-                        <button onclick="iniciarFluxoPix()" class="w-full inter-orange hover:bg-orange-600 text-white font-semibold py-3.5 rounded-xl shadow transition">
-                            Continuar Pagamento
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CARTÕES -->
-                <div id="view-cards" class="p-5 space-y-6 hidden">
-                    <h2 class="text-xl font-bold text-zinc-800">Meus Cartões</h2>
-                    <div id="cartao-visual" class="w-full h-52 rounded-3xl p-6 text-white flex flex-col justify-between shadow-xl transition-all duration-300 inter-orange relative overflow-hidden">
-                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
-                        <div class="flex justify-between items-center z-10">
-                            <span class="text-xl font-black tracking-wider">inter</span>
-                            <i class="fa-solid fa-wifi text-lg opacity-80"></i>
-                        </div>
-                        <div class="z-10">
-                            <div class="w-10 h-8 bg-amber-200 rounded-md mb-2 flex items-center justify-center opacity-90">
-                                <div class="w-6 h-4 border border-amber-600/40 rounded-xs"></div>
-                            </div>
-                            <p id="card-number-display" class="font-mono text-base tracking-widest">•••• •••• •••• 4892</p>
-                        </div>
-                        <div class="flex justify-between items-end z-10 text-xs">
-                            <div>
-                                <span class="opacity-70 block text-[9px] uppercase">Titular</span>
-                                <span id="card-holder-name" class="font-bold tracking-wide">USUARIO INTER</span>
-                            </div>
-                            <div>
-                                <span class="opacity-70 block text-[9px] uppercase">Validade</span>
-                                <span class="font-bold">10/30</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-zinc-100 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-bold text-zinc-800">Bloqueio Temporário</p>
-                                <p class="text-xs text-zinc-400">Bloqueie o cartão para compras</p>
-                            </div>
-                            <input type="checkbox" id="toggle-lock" onchange="toggleCardLock(this)" class="w-6 h-6 accent-orange-500 rounded cursor-pointer">
-                        </div>
-                        <hr class="border-zinc-100">
-                        <button onclick="toggleCardDetails()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 py-3 rounded-xl font-semibold text-xs transition">
-                            <i class="fa-solid fa-eye mr-2"></i> Ver Dados Completos
-                        </button>
-                    </div>
-                </div>
-
-                <!-- INVESTIMENTOS -->
-                <div id="view-invest" class="p-5 space-y-6 hidden">
-                    <h2 class="text-xl font-bold text-zinc-800">Investimentos</h2>
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-zinc-100 space-y-4">
-                        <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Patrimônio Total</span>
-                        <h1 class="text-2xl font-black text-zinc-900">R$ 12.450,80</h1>
-                        <div class="space-y-2 pt-2">
-                            <div class="flex justify-between text-xs font-semibold text-zinc-700">
-                                <span>Renda Fixa (CDI)</span>
-                                <span class="text-orange-600">R$ 8.200,00</span>
-                            </div>
-                            <div class="w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
-                                <div class="w-[65%] h-full inter-orange rounded-full"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SHOP -->
-                <div id="view-shop" class="p-5 space-y-6 hidden">
-                    <h2 class="text-xl font-bold text-zinc-800">Inter Shop</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm">
-                            <div class="w-full h-28 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center text-zinc-400"><i class="fa-solid fa-laptop text-2xl"></i></div>
-                            <p class="text-xs font-bold text-zinc-800 truncate">Notebook Gamer Pro</p>
-                            <p class="text-xs font-black text-orange-600 mt-1">R$ 4.500,00</p>
-                        </div>
-                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm">
-                            <div class="w-full h-28 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center text-zinc-400"><i class="fa-solid fa-mobile text-2xl"></i></div>
-                            <p class="text-xs font-bold text-zinc-800 truncate">Smartphone 5G Ultra</p>
-                            <p class="text-xs font-black text-orange-600 mt-1">R$ 2.890,00</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- EXTRATO -->
-                <div id="view-extrato" class="p-5 space-y-4 hidden">
-                    <h2 class="text-xl font-bold text-zinc-800">Extrato Completo</h2>
-                    <input type="text" placeholder="Buscar transação..." oninput="filtrarExtrato(this.value)" class="w-full px-4 py-2.5 bg-white border border-zinc-200 rounded-xl text-xs focus:outline-none focus:border-orange-500">
-                    <div id="lista-extrato-completo" class="space-y-3"></div>
-                </div>
-
-            </div>
-
-            <!-- Navegação Inferior -->
-            <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-zinc-100 px-4 py-2 flex justify-around items-center z-20">
-                <button onclick="switchTab('home')" class="nav-btn flex flex-col items-center text-orange-500 transition" data-tab="home">
-                    <i class="fa-solid fa-house text-lg"></i>
-                    <span class="text-[10px] font-semibold mt-1">Início</span>
-                </button>
-                <button onclick="switchTab('pix')" class="nav-btn flex flex-col items-center text-zinc-400 hover:text-orange-500 transition" data-tab="pix">
-                    <svg class="w-5 h-5 fill-current" viewBox="0 0 512 512">
-                        <path d="M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm82.3 313.3c-23.3 23.3-61.2 23.3-84.5 0l-45.8-45.8-45.8 45.8c-23.3 23.3-61.2 23.3-84.5 0-23.3-23.3-23.3-61.2 0-84.5l45.8-45.8-45.8-45.8c-23.3-23.3-23.3-61.2 0-84.5 23.3-23.3 61.2-23.3 84.5 0l45.8 45.8 45.8-45.8c23.3-23.3 61.2-23.3 84.5 0 23.3 23.3 23.3 61.2 0 84.5l-45.8 45.8 45.8 45.8c23.3 23.3 23.3 61.2 0 84.5z"/>
-                    </svg>
-                    <span class="text-[10px] font-semibold mt-1">Pix</span>
-                </button>
-                <button onclick="switchTab('cards')" class="nav-btn flex flex-col items-center text-zinc-400 hover:text-orange-500 transition" data-tab="cards">
-                    <i class="fa-solid fa-credit-card text-lg"></i>
-                    <span class="text-[10px] font-semibold mt-1">Cartões</span>
-                </button>
-                <button onclick="switchTab('invest')" class="nav-btn flex flex-col items-center text-zinc-400 hover:text-orange-500 transition" data-tab="invest">
-                    <i class="fa-solid fa-chart-pie text-lg"></i>
-                    <span class="text-[10px] font-semibold mt-1">Investir</span>
-                </button>
-                <button onclick="switchTab('shop')" class="nav-btn flex flex-col items-center text-zinc-400 hover:text-orange-500 transition" data-tab="shop">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
-                    <span class="text-[10px] font-semibold mt-1">Shop</span>
-                </button>
-            </nav>
-
-        </div>
-
-        <!-- MODAL DE SENHA DE 4 DÍGITOS -->
-        <div id="modal-senha" class="absolute inset-0 bg-black/60 z-50 flex items-end justify-center hidden">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-5 animate-slide-up">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-base font-bold text-zinc-800">Digite sua senha (4 dígitos)</h3>
-                    <button onclick="fecharModalSenha()" class="text-zinc-400 hover:text-zinc-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-                <p class="text-xs text-zinc-500">Sua senha cadastrada atual é: <b id="senha-atual-hint" class="text-orange-600">1234</b> (Você pode alterá-la nas configurações de perfil)</p>
-                <div class="flex justify-center space-x-3 my-4">
-                    <input type="password" maxlength="1" class="w-12 h-12 text-center text-xl font-bold bg-zinc-100 rounded-xl border border-zinc-200 pin-input" autofocus>
-                    <input type="password" maxlength="1" class="w-12 h-12 text-center text-xl font-bold bg-zinc-100 rounded-xl border border-zinc-200 pin-input">
-                    <input type="password" maxlength="1" class="w-12 h-12 text-center text-xl font-bold bg-zinc-100 rounded-xl border border-zinc-200 pin-input">
-                    <input type="password" maxlength="1" class="w-12 h-12 text-center text-xl font-bold bg-zinc-100 rounded-xl border border-zinc-200 pin-input">
-                </div>
-                <button onclick="validarSenhaEfetivarPix()" class="w-full inter-orange hover:bg-orange-600 text-white font-semibold py-3.5 rounded-xl shadow transition">
-                    Confirmar Pagamento
-                </button>
             </div>
         </div>
 
-        <!-- MODAL DE CONFIGURAÇÃO DE PERFIL (EDITAR NOME, CPF, DATA NASCIMENTO E SENHA) -->
-        <div id="modal-perfil" class="absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
-            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-base font-bold text-zinc-800">Editar Dados do Usuário</h3>
-                    <button onclick="fecharPerfilConfig()" class="text-zinc-400 hover:text-zinc-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <!-- TELA DE PIX -->
+        <div id="pix-screen" class="sub-screen">
+            <div class="sub-header">
+                <i class="fa-solid fa-arrow-left" onclick="fecharPix()"></i>
+                <span>Área Pix</span>
+            </div>
+            <div class="sub-body">
+                <div class="input-group">
+                    <label>Chave Pix (CPF, CNPJ, E-mail ou Telefone)</label>
+                    <input type="text" id="pix-key" placeholder="Digite a chave do recebedor">
                 </div>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 mb-1">Nome Completo</label>
-                        <input type="text" id="edit-nome" class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 mb-1">CPF do Usuário</label>
-                        <input type="text" id="edit-cpf" class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium" placeholder="000.000.000-00">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 mb-1">Data de Nascimento</label>
-                        <input type="text" id="edit-nascimento" class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium" placeholder="DD/MM/AAAA">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-600 mb-1">Nova Senha Pix (4 Dígitos)</label>
-                        <input type="password" maxlength="4" id="edit-senha-pix" class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium" placeholder="Ex: 5892">
-                    </div>
+                <div class="input-group">
+                    <label>Nome do Recebedor</label>
+                    <input type="text" id="pix-name" placeholder="Nome completo">
                 </div>
-                <button onclick="salvarPerfilConfig()" class="w-full inter-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-xl text-xs shadow transition">
-                    Salvar Alterações
-                </button>
+                <div class="input-group">
+                    <label>Valor (R$)</label>
+                    <input type="number" id="pix-value" placeholder="0,00">
+                </div>
+                <button class="btn-primary" onclick="avancarParaSenha()" style="margin-top: 20px;">Pagar com Pix</button>
             </div>
         </div>
 
-        <!-- TELA DE COMPROVANTE PIX (FAKE) -->
-        <div id="view-comprovante" class="absolute inset-0 bg-zinc-100 z-50 flex flex-col justify-between p-5 overflow-y-auto hidden">
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-2xl font-black inter-orange-text">inter</span>
-                    <button onclick="fecharComprovante()" class="text-zinc-500 hover:text-zinc-800"><i class="fa-solid fa-xmark text-xl"></i></button>
-                </div>
-                
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-zinc-200 space-y-5">
-                    <div class="text-center space-y-1">
-                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl mb-2">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
-                        <h2 class="text-base font-bold text-zinc-900">Transferência Pix Realizada!</h2>
-                        <p id="comp-valor" class="text-2xl font-black text-zinc-900">R$ 0,00</p>
-                        <p class="text-xs text-zinc-400" id="comp-data-hora">Hoje, 29 Set 2026 - 15:42</p>
-                    </div>
-
-                    <hr class="border-zinc-100">
-
-                    <div class="space-y-3 text-xs">
-                        <div>
-                            <span class="text-zinc-400 block">Favorecido (Recebedor)</span>
-                            <span id="comp-nome-fav" class="font-bold text-zinc-800">Nome</span>
-                            <span id="comp-cpf-fav" class="text-zinc-500 block">CPF: 000.000.000-00</span>
-                        </div>
-                        <div>
-                            <span class="text-zinc-400 block">Chave Pix</span>
-                            <span id="comp-chave" class="font-bold text-zinc-800">-</span>
-                        </div>
-                        <hr class="border-zinc-100">
-                        <div>
-                            <span class="text-zinc-400 block">Pagador (Você)</span>
-                            <span id="comp-pagador-nome" class="font-bold text-zinc-800">Usuário Inter</span>
-                            <span id="comp-pagador-cpf" class="text-zinc-500 block">CPF: 123.456.789-00</span>
-                            <span id="comp-pagador-nasc" class="text-zinc-500 block">Nascimento: 15/05/1995</span>
-                        </div>
-                        <div>
-                            <span class="text-zinc-400 block">ID da Transação / EndToEnd</span>
-                            <span class="font-mono text-[10px] text-zinc-600">E902830912830918230912830912</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- TELA DE SENHA TRANSACIONAL -->
+        <div id="pin-screen" class="sub-screen">
+            <div class="sub-header">
+                <i class="fa-solid fa-arrow-left" onclick="fecharPin()"></i>
+                <span>Senha Transacional</span>
             </div>
+            <div class="sub-body pin-container">
+                <p style="color: var(--inter-text-muted); font-size: 0.9rem;">Digite sua senha de 4 dígitos</p>
+                <div class="pin-dots">
+                    <div class="pin-dot" id="dot-0"></div>
+                    <div class="pin-dot" id="dot-1"></div>
+                    <div class="pin-dot" id="dot-2"></div>
+                    <div class="pin-dot" id="dot-3"></div>
+                </div>
 
-            <div class="mt-6">
-                <button onclick="fecharComprovante()" class="w-full inter-orange hover:bg-orange-600 text-white font-semibold py-3.5 rounded-2xl shadow transition">
-                    Concluir
-                </button>
+                <div class="pin-pad">
+                    <button class="pin-key" onclick="digitarPin('1')">1</button>
+                    <button class="pin-key" onclick="digitarPin('2')">2</button>
+                    <button class="pin-key" onclick="digitarPin('3')">3</button>
+                    <button class="pin-key" onclick="digitarPin('4')">4</button>
+                    <button class="pin-key" onclick="digitarPin('5')">5</button>
+                    <button class="pin-key" onclick="digitarPin('6')">6</button>
+                    <button class="pin-key" onclick="digitarPin('7')">7</button>
+                    <button class="pin-key" onclick="digitarPin('8')">8</button>
+                    <button class="pin-key" onclick="digitarPin('9')">9</button>
+                    <button class="pin-key" onclick="digitarPin('C')" style="font-size: 1rem;">C</button>
+                    <button class="pin-key" onclick="digitarPin('0')">0</button>
+                    <button class="pin-key" onclick="digitarPin('<-')" style="font-size: 1rem;"><i class="fa-solid fa-delete-left"></i></button>
+                </div>
             </div>
         </div>
 
-        <!-- TOAST -->
-        <div id="toast" class="absolute top-4 left-4 right-4 bg-zinc-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between transform -translate-y-24 transition-transform duration-300 z-50">
-            <span id="toast-text" class="text-xs font-medium">Sucesso!</span>
-            <button onclick="hideToast()" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <!-- TELA DE COMPROVANTE -->
+        <div id="receipt-screen" class="sub-screen">
+            <div class="sub-header">
+                <i class="fa-solid fa-xmark" onclick="fecharComprovante()"></i>
+                <span>Comprovante</span>
+            </div>
+            <div class="sub-body">
+                <div class="success-icon-large">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h3 style="text-align: center; margin-bottom: 20px;">Transferência Pix Realizada</h3>
+
+                <div class="receipt-card">
+                    <div class="receipt-row">
+                        <span>Valor</span>
+                        <span id="rec-value">R$ 0,00</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Favorecido</span>
+                        <span id="rec-name">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Chave Pix</span>
+                        <span id="rec-key">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Data / Hora</span>
+                        <span id="rec-date">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>ID da Transação</span>
+                        <span id="rec-id">E123456782026...</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="fecharComprovante()">Concluir</button>
+            </div>
+        </div>
+
+        <!-- TELA DE PERFIL / DADOS EDITÁVEIS -->
+        <div id="profile-screen" class="sub-screen">
+            <div class="sub-header">
+                <i class="fa-solid fa-arrow-left" onclick="fecharPerfil()"></i>
+                <span>Editar Perfil</span>
+            </div>
+            <div class="sub-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div class="avatar-container" style="width: 80px; height: 80px; margin: 0 auto 10px auto;">
+                        <img id="edit-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Perfil">
+                        <label for="file-input" class="edit-badge" style="width: 26px; height: 26px; cursor: pointer; font-size: 0.8rem;">
+                            <i class="fa-solid fa-pencil"></i>
+                        </label>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="mudarFotoPerfil(event)">
+                    <span style="font-size: 0.8rem; color: var(--inter-text-muted);">Toque no lápis para trocar a foto</span>
+                </div>
+
+                <div class="input-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="input-edit-name" value="Ana Silva">
+                </div>
+                <div class="input-group">
+                    <label>CPF</label>
+                    <input type="text" id="input-edit-cpf" value="123.456.789-00">
+                </div>
+                <div class="input-group">
+                    <label>Data de Nascimento</label>
+                    <input type="text" id="input-edit-dob" value="15/08/1995">
+                </div>
+                <button class="btn-primary" onclick="salvarPerfil()">Salvar Alterações</button>
+            </div>
         </div>
 
     </div>
 
-    <!-- Script Completo -->
     <script>
-        let saldoAtual = 4850.20;
-        let saldoOcultoState = false;
-        let senhaTransacional = "1234";
+        let saldoAtual = 5430.20;
+        let saldoVisivel = true;
+        let pinDigitado = "";
+
         let dadosUsuario = {
-            nome: "Usuário Inter",
+            nome: "Ana Silva",
             cpf: "123.456.789-00",
-            nascimento: "12/04/1998",
-            avatarUrl: null
+            nascimento: "15/08/1995",
+            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
         };
-        let pixPendenteTemp = null;
 
-        let transacoes = [
-            { tipo: 'enviado', titulo: 'Pix Enviado - Maria', data: 'Hoje, 14:20', valor: 150.00 },
-            { tipo: 'recebido', titulo: 'Pix Recebido - João', data: 'Ontem, 09:15', valor: 1200.00 }
-        ];
+        let dadosTransacao = {
+            chave: "",
+            nome: "",
+            valor: 0
+        };
 
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    document.getElementById('login-screen').classList.remove('hidden');
-                }, 700);
-            }, 1800);
-            renderExtrato();
-        });
+        function fazerLogin() {
+            const user = document.getElementById('login-user').value;
+            if(!user) {
+                alert('Por favor, preencha o login.');
+                return;
+            }
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+        }
 
-        function setMode(mode) {
-            const container = document.getElementById('device-container');
-            const btnPhone = document.getElementById('btn-phone');
-            const btnTv = document.getElementById('btn-tv');
-            if(mode === 'phone') {
-                container.className = "w-full max-w-md h-[844px] md:rounded-[40px] md:border-[10px] md:border-zinc-800 bg-white shadow-2xl overflow-hidden relative flex flex-col transition-all duration-300";
-                btnPhone.className = "px-2.5 py-1 bg-zinc-800 rounded transition font-medium text-orange-400";
-                btnTv.className = "px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded transition font-medium text-zinc-300";
+        function alternarSaldo() {
+            saldoVisivel = !saldoVisivel;
+            const elem = document.getElementById('balance-text');
+            const icon = document.getElementById('toggle-balance');
+            if(saldoVisivel) {
+                elem.innerText = "R$ " + saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                icon.className = "fa-regular fa-eye";
             } else {
-                container.className = "w-full max-w-6xl h-[92vh] rounded-[24px] border-[6px] border-zinc-800 bg-white shadow-2xl overflow-hidden relative flex flex-col transition-all duration-300";
-                btnTv.className = "px-2.5 py-1 bg-zinc-800 rounded transition font-medium text-orange-400";
-                btnPhone.className = "px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded transition font-medium text-zinc-300";
+                elem.innerText = "R$ ••••••";
+                icon.className = "fa-regular fa-eye-slash";
             }
         }
 
-        function fillDemoLogin() {
-            document.getElementById('login-agencia').value = "0001";
-            document.getElementById('login-conta').value = "123456-7";
-            document.getElementById('login-senha').value = "123456";
+        function abrirPix() {
+            document.getElementById('pix-screen').classList.add('active');
         }
 
-        function realizarLogin() {
-            const loginScreen = document.getElementById('login-screen');
-            loginScreen.style.opacity = '0';
-            setTimeout(() => {
-                loginScreen.classList.add('hidden');
-                document.getElementById('main-app').classList.remove('hidden');
-                showToast("Sessão iniciada com sucesso!");
-            }, 300);
+        function fecharPix() {
+            document.getElementById('pix-screen').classList.remove('active');
         }
 
-        function switchTab(tabName) {
-            ['home', 'pix', 'cards', 'invest', 'shop', 'extrato'].forEach(t => {
-                const el = document.getElementById(`view-${t}`);
-                if(el) el.classList.add('hidden');
-            });
-            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+        function avancarParaSenha() {
+            const chave = document.getElementById('pix-key').value;
+            const nome = document.getElementById('pix-name').value;
+            const valor = parseFloat(document.getElementById('pix-value').value);
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.getAttribute('data-tab') === tabName) {
-                    btn.classList.remove('text-zinc-400');
-                    btn.classList.add('text-orange-500');
+            if(!chave || !nome || !valor || isNaN(valor) || valor <= 0) {
+                alert('Preencha todos os campos do Pix corretamente.');
+                return;
+            }
+
+            if(valor > saldoAtual) {
+                alert('Saldo insuficiente para realizar esta transação.');
+                return;
+            }
+
+            dadosTransacao = { chave, nome, valor };
+            pinDigitado = "";
+            atualizarPinDots();
+
+            document.getElementById('pin-screen').classList.add('active');
+        }
+
+        function fecharPin() {
+            document.getElementById('pin-screen').classList.remove('active');
+        }
+
+        function digitarPin(digito) {
+            if(digito === 'C') {
+                pinDigitado = "";
+            } else if(digito === '<-') {
+                pinDigitado = pinDigitado.slice(0, -1);
+            } else if(pinDigitado.length < 4) {
+                pinDigitado += digito;
+            }
+
+            atualizarPinDots();
+
+            if(pinDigitado.length === 4) {
+                setTimeout(concluirTransacao, 300);
+            }
+        }
+
+        function atualizarPinDots() {
+            for(let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if(i < pinDigitado.length) {
+                    dot.classList.add('filled');
                 } else {
-                    btn.classList.remove('text-orange-500');
-                    btn.classList.add('text-zinc-400');
+                    dot.classList.remove('filled');
                 }
-            });
-            if(tabName === 'extrato') renderExtrato();
-        }
-
-        function toggleSaldo() {
-            saldoOcultoState = !saldoOcultoState;
-            document.getElementById('saldo-valor').classList.toggle('hidden', saldoOcultoState);
-            document.getElementById('saldo-oculto').classList.toggle('hidden', !saldoOcultoState);
-            document.getElementById('eye-icon').className = saldoOcultoState ? "fa-solid fa-eye-slash text-lg" : "fa-solid fa-eye text-lg";
-        }
-
-        function editarSaldoDireto() {
-            const novo = prompt("Digite o novo valor do saldo:", saldoAtual);
-            if(novo !== null && !isNaN(parseFloat(novo))) {
-                saldoAtual = parseFloat(novo);
-                document.getElementById('saldo-valor').innerText = `R$ ${saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                showToast("Saldo atualizado com sucesso!");
             }
         }
 
-        // Alterar Foto de Perfil
+        function concluirTransacao() {
+            saldoAtual -= dadosTransacao.valor;
+            if(saldoVisivel) {
+                document.getElementById('balance-text').innerText = "R$ " + saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            }
+
+            // Atualizar comprovante
+            document.getElementById('rec-value').innerText = "R$ " + dadosTransacao.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('rec-name').innerText = dadosTransacao.nome;
+            document.getElementById('rec-key').innerText = dadosTransacao.chave;
+            
+            const agora = new Date();
+            document.getElementById('rec-date').innerText = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR');
+            document.getElementById('rec-id').innerText = 'E' + Math.floor(Math.random() * 10000000000000000);
+
+            // Adicionar à lista
+            const list = document.getElementById('transaction-list');
+            const novoItem = document.createElement('div');
+            novoItem.className = 'transaction-item';
+            novoItem.innerHTML = `
+                <div class="tx-left">
+                    <div class="tx-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                    <div class="tx-info">
+                        <h5>Pix Enviado - ${dadosTransacao.nome}</h5>
+                        <span>Hoje, ${agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                </div>
+                <div class="tx-value negative">- R$ ${dadosTransacao.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+            `;
+            list.prepend(novoItem);
+
+            document.getElementById('pin-screen').classList.remove('active');
+            document.getElementById('pix-screen').classList.remove('active');
+            document.getElementById('receipt-screen').classList.add('active');
+        }
+
+        function fecharComprovante() {
+            document.getElementById('receipt-screen').classList.remove('active');
+            document.getElementById('pix-key').value = '';
+            document.getElementById('pix-name').value = '';
+            document.getElementById('pix-value').value = '';
+        }
+
+        function abrirPerfil() {
+            document.getElementById('input-edit-name').value = dadosUsuario.nome;
+            document.getElementById('input-edit-cpf').value = dadosUsuario.cpf;
+            document.getElementById('input-edit-dob').value = dadosUsuario.nascimento;
+            document.getElementById('edit-avatar-preview').src = dadosUsuario.avatar;
+            document.getElementById('profile-screen').classList.add('active');
+        }
+
+        function fecharPerfil() {
+            document.getElementById('profile-screen').classList.remove('active');
+        }
+
         function mudarFotoPerfil(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    dadosUsuario.avatarUrl = e.target.result;
-                    const avatarDiv = document.getElementById('avatar-container');
-                    avatarDiv.style.backgroundImage = `url('${e.target.result}')`;
-                    document.getElementById('avatar-iniciais').innerText = '';
-                    showToast("Foto de perfil alterada com sucesso!");
+                    dadosUsuario.avatar = e.target.result;
+                    document.getElementById('edit-avatar-preview').src = dadosUsuario.avatar;
+                    document.getElementById('header-avatar').src = dadosUsuario.avatar;
                 }
                 reader.readAsDataURL(file);
             }
         }
 
-        // Validações inteligentes Pix
-        function validarChavePix(val) {
-            const status = document.getElementById('status-chave');
-            if(val.length > 5) {
-                status.innerText = "✓ Chave Pix válida encontrada";
-                status.className = "text-[11px] mt-1 text-emerald-600 font-semibold";
-            } else {
-                status.innerText = "Digite uma chave válida (CPF, E-mail ou Tel)";
-                status.className = "text-[11px] mt-1 text-zinc-400";
-            }
-        }
+        function salvarPerfil() {
+            dadosUsuario.nome = document.getElementById('input-edit-name').value;
+            dadosUsuario.cpf = document.getElementById('input-edit-cpf').value;
+            dadosUsuario.nascimento = document.getElementById('input-edit-dob').value;
 
-        function validarNomeRecebedor(val) {
-            const status = document.getElementById('status-nome');
-            if(val.length >= 3) {
-                status.innerText = "✓ Nome verificado";
-                status.className = "text-[11px] mt-1 text-emerald-600 font-semibold";
-            } else {
-                status.innerText = "Mínimo de 3 caracteres";
-                status.className = "text-[11px] mt-1 text-zinc-400";
-            }
-        }
+            document.getElementById('display-name').innerText = dadosUsuario.nome;
+            document.getElementById('display-cpf').innerText = dadosUsuario.cpf;
 
-        function validarCpfRecebedor(val) {
-            const status = document.getElementById('status-cpf-rec');
-            if(val.length >= 11) {
-                status.innerText = "✓ CPF/CNPJ válido";
-                status.className = "text-[11px] mt-1 text-emerald-600 font-semibold";
-            } else {
-                status.innerText = "Informe o documento correto";
-                status.className = "text-[11px] mt-1 text-zinc-400";
-            }
-        }
-
-        // Fluxo Pix & Senha
-        function iniciarFluxoPix() {
-            const chave = document.getElementById('pix-chave').value;
-            const nome = document.getElementById('pix-nome-recebedor').value;
-            const cpfRec = document.getElementById('pix-cpf-recebedor').value;
-            const valor = parseFloat(document.getElementById('pix-valor').value);
-
-            if(!chave || !nome || !cpfRec || isNaN(valor) || valor <= 0) {
-                showToast("Preencha todos os campos corretamente!");
-                return;
-            }
-            if(valor > saldoAtual) {
-                showToast("Saldo insuficiente.");
-                return;
-            }
-
-            pixPendenteTemp = { chave, nome, cpfRec, valor };
-            document.getElementById('senha-atual-hint').innerText = senhaTransacional;
-            document.getElementById('modal-senha').classList.remove('hidden');
-        }
-
-        function fecharModalSenha() {
-            document.getElementById('modal-senha').classList.add('hidden');
-        }
-
-        function validarSenhaEfetivarPix() {
-            const inputs = document.querySelectorAll('.pin-input');
-            let digitada = '';
-            inputs.forEach(i => digitada += i.value);
-
-            if(digitada !== senhaTransacional) {
-                showToast("Senha incorreta! Tente novamente.");
-                inputs.forEach(i => i.value = '');
-                return;
-            }
-
-            // Desconta saldo e gera comprovante
-            saldoAtual -= pixPendenteTemp.valor;
-            document.getElementById('saldo-valor').innerText = `R$ ${saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-
-            transacoes.unshift({
-                tipo: 'enviado',
-                titulo: `Pix - ${pixPendenteTemp.nome}`,
-                data: 'Agora mesmo',
-                valor: pixPendenteTemp.valor
-            });
-
-            // Preenche Comprovante
-            document.getElementById('comp-valor').innerText = `R$ ${pixPendenteTemp.valor.toFixed(2)}`;
-            document.getElementById('comp-nome-fav').innerText = pixPendenteTemp.nome;
-            document.getElementById('comp-cpf-fav').innerText = `CPF: ${pixPendenteTemp.cpfRec}`;
-            document.getElementById('comp-chave').innerText = pixPendenteTemp.chave;
-            document.getElementById('comp-pagador-nome').innerText = dadosUsuario.nome;
-            document.getElementById('comp-pagador-cpf').innerText = `CPF: ${dadosUsuario.cpf}`;
-            document.getElementById('comp-pagador-nasc').innerText = `Nascimento: ${dadosUsuario.nascimento}`;
-
-            fecharModalSenha();
-            inputs.forEach(i => i.value = '');
-            document.getElementById('view-comprovante').classList.remove('hidden');
-            showToast("Transferência concluída com sucesso!");
-        }
-
-        function fecharComprovante() {
-            document.getElementById('view-comprovante').classList.add('hidden');
-            document.getElementById('pix-chave').value = '';
-            document.getElementById('pix-nome-recebedor').value = '';
-            document.getElementById('pix-cpf-recebedor').value = '';
-            document.getElementById('pix-valor').value = '';
-            switchTab('home');
-        }
-
-        // Configurações de Perfil
-        function abrirPerfilConfig() {
-            document.getElementById('edit-nome').value = dadosUsuario.nome;
-            document.getElementById('edit-cpf').value = dadosUsuario.cpf;
-            document.getElementById('edit-nascimento').value = dadosUsuario.nascimento;
-            document.getElementById('edit-senha-pix').value = senhaTransacional;
-            document.getElementById('modal-perfil').classList.remove('hidden');
-        }
-
-        function fecharPerfilConfig() {
-            document.getElementById('modal-perfil').classList.add('hidden');
-        }
-
-        function salvarPerfilConfig() {
-            dadosUsuario.nome = document.getElementById('edit-nome').value || "Usuário Inter";
-            dadosUsuario.cpf = document.getElementById('edit-cpf').value || "000.000.000-00";
-            dadosUsuario.nascimento = document.getElementById('edit-nascimento').value || "01/01/2000";
-            
-            const novaSenha = document.getElementById('edit-senha-pix').value;
-            if(novaSenha && novaSenha.length === 4) {
-                senhaTransacional = novaSenha;
-            }
-
-            document.getElementById('display-nome-usuario').innerText = dadosUsuario.nome;
-            document.getElementById('card-holder-name').innerText = dadosUsuario.nome.toUpperCase();
-
-            fecharPerfilConfig();
-            showToast("Dados atualizados com sucesso!");
-        }
-
-        // Cartões
-        function toggleCardLock(checkbox) {
-            const card = document.getElementById('cartao-visual');
-            if(checkbox.checked) {
-                card.style.opacity = '0.5';
-                showToast("Cartão bloqueado temporariamente.");
-            } else {
-                card.style.opacity = '1';
-                showToast("Cartão desbloqueado!");
-            }
-        }
-
-        function toggleCardDetails() {
-            showToast("Número completo: 5432 8829 1029 4892 | CVV: 892");
-        }
-
-        // Extrato
-        function renderExtrato(filtro = '') {
-            const listaHome = document.getElementById('lista-transacoes-home');
-            const listaCompleta = document.getElementById('lista-extrato-completo');
-            
-            let html = '';
-            transacoes.filter(t => t.titulo.toLowerCase().includes(filtro.toLowerCase())).forEach(t => {
-                const isEnv = t.tipo === 'enviado';
-                html += `
-                    <div class="flex items-center justify-between py-2 border-b border-zinc-50">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl ${isEnv ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'} flex items-center justify-center">
-                                <i class="fa-solid ${isEnv ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-zinc-800">${t.titulo}</p>
-                                <p class="text-[10px] text-zinc-400">${t.data}</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold ${isEnv ? 'text-red-600' : 'text-emerald-600'}">${isEnv ? '-' : '+'} R$ ${t.valor.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-
-            if(listaCompleta) listaCompleta.innerHTML = html;
-            if(listaHome) listaHome.innerHTML = transacoes.slice(0, 2).map(t => {
-                const isEnv = t.tipo === 'enviado';
-                return `
-                    <div class="flex items-center justify-between py-2 border-b border-zinc-50">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl ${isEnv ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'} flex items-center justify-center">
-                                <i class="fa-solid ${isEnv ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-zinc-800">${t.titulo}</p>
-                                <p class="text-[10px] text-zinc-400">${t.data}</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold ${isEnv ? 'text-red-600' : 'text-emerald-600'}">${isEnv ? '-' : '+'} R$ ${t.valor.toFixed(2)}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function filtrarExtrato(val) { renderExtrato(val); }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').innerText = msg;
-            toast.style.transform = 'translateY(0)';
-            setTimeout(hideToast, 3500);
-        }
-
-        function hideToast() {
-            document.getElementById('toast').style.transform = 'translateY(-100px)';
+            fecharPerfil();
+            alert('Perfil atualizado com sucesso!');
         }
     </script>
 </body>
 </html>
-
-```
