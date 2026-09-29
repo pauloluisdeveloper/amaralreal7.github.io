@@ -3,301 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco Inter - Simulação</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Banco Inter - Simulador Black & White</title>
     <style>
         :root {
-            --inter-orange: #FF7A00;
-            --inter-orange-dark: #E06B00;
-            --inter-dark: #121212;
-            --inter-gray-light: #F5F6F8;
-            --inter-gray: #E4E7EB;
-            --inter-text: #333333;
-            --inter-text-muted: #717171;
-            --white: #FFFFFF;
-            --success: #28a745;
+            --bg-color: #000000;
+            --surface-color: #111111;
+            --surface-hover: #1c1c1c;
+            --border-color: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a1;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: var(--font-family);
         }
 
         body {
-            background-color: #f0f2f5;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--inter-text);
+            padding: 20px;
         }
 
         .app-container {
             width: 100%;
-            max-width: 414px;
-            height: 100vh;
-            max-height: 896px;
-            background-color: var(--white);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-        }
-
-        @media (min-width: 415px) {
-            .app-container {
-                border-radius: 40px;
-                border: 10px solid #222;
-            }
-        }
-
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            z-index: 10;
-            overflow-y: auto;
-        }
-
-        .screen.hidden {
-            transform: translateX(100%);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* TELA DE LOGIN */
-        #login-screen {
-            background: linear-gradient(135deg, var(--inter-orange) 0%, #FF9933 100%);
-            color: var(--white);
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .login-logo {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-
-        .login-subtitle {
-            font-size: 1rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        .login-form {
-            width: 100%;
-            background: var(--white);
-            padding: 30px 20px;
+            max-width: 420px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            color: var(--inter-text);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            height: 840px;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--inter-text-muted);
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1.5px solid var(--inter-gray);
-            border-radius: 12px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-group input:focus {
-            border-color: var(--inter-orange);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--inter-orange);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:active {
-            background-color: var(--inter-orange-dark);
-        }
-
-        /* HEADER DO APLICATIVO */
-        .app-header {
-            background-color: var(--inter-orange);
-            color: var(--white);
+        /* Cabeçalho */
+        header {
             padding: 20px;
-            padding-top: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .user-profile-info {
+        .user-info {
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
         }
 
-        .avatar-container {
-            position: relative;
-            width: 48px;
-            height: 48px;
-        }
-
-        .user-avatar {
-            width: 100%;
-            height: 100%;
+        .avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--white);
-        }
-
-        .edit-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: var(--white);
-            color: var(--inter-orange);
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
+            background-color: var(--text-primary);
+            color: var(--bg-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 0.65rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: bold;
+            font-size: 16px;
         }
 
-        .user-texts h4 {
-            font-size: 0.95rem;
+        .greeting span {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .greeting h2 {
+            font-size: 16px;
             font-weight: 600;
         }
 
-        .user-texts span {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 15px;
-            font-size: 1.2rem;
+        .header-icons button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
             cursor: pointer;
         }
 
-        /* CONTEÚDO PRINCIPAL */
-        .app-body {
+        /* Área de Conteúdo Rolável */
+        .content {
             flex: 1;
-            padding: 20px;
             overflow-y: auto;
+            padding: 20px;
         }
 
+        /* Card de Saldo */
         .balance-card {
-            background: var(--white);
-            padding: 20px;
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            border: 1px solid var(--inter-gray);
+            padding: 20px;
+            margin-bottom: 24px;
         }
 
         .balance-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            color: var(--inter-text-muted);
-            font-size: 0.85rem;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
-        .balance-value {
-            font-size: 1.6rem;
+        .balance-amount {
+            font-size: 28px;
             font-weight: 700;
-            color: var(--inter-text);
+            letter-spacing: -0.5px;
         }
 
-        /* AÇÕES RÁPIDAS */
-        .quick-actions {
+        /* Atalhos Rápidos */
+        .shortcuts {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
         }
 
-        .action-btn {
+        .shortcut-btn {
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            background: none;
-            border: none;
+            color: var(--text-primary);
             cursor: pointer;
-        }
-
-        .action-icon {
-            width: 56px;
-            height: 56px;
-            background: #FFF2E6;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--inter-orange);
-            font-size: 1.2rem;
             transition: background 0.2s;
         }
 
-        .action-btn:active .action-icon {
-            background: #FFE0C2;
+        .shortcut-btn:hover {
+            background-color: var(--border-color);
         }
 
-        .action-btn span {
-            font-size: 0.75rem;
-            color: var(--inter-text);
-            font-weight: 500;
+        .shortcut-btn span {
+            font-size: 11px;
             text-align: center;
+            color: var(--text-secondary);
         }
 
-        /* TRANSAÇÕES RECENTES */
+        .shortcut-icon {
+            font-size: 18px;
+        }
+
+        /* Seções e Extrato */
         .section-title {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .transaction-list {
@@ -308,584 +176,417 @@
 
         .transaction-item {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 12px;
-            background: var(--white);
+            align-items: center;
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
             border-radius: 12px;
-            border: 1px solid var(--inter-gray);
         }
 
-        .tx-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .tx-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--inter-gray-light);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--inter-orange);
-        }
-
-        .tx-info h5 {
-            font-size: 0.9rem;
-            font-weight: 600;
+        .tx-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
         }
 
         .tx-info span {
-            font-size: 0.75rem;
-            color: var(--inter-text-muted);
+            font-size: 11px;
+            color: var(--text-secondary);
         }
 
         .tx-value {
+            font-size: 14px;
             font-weight: 600;
-            font-size: 0.9rem;
         }
 
-        .tx-value.positive { color: var(--success); }
-        .tx-value.negative { color: var(--inter-text); }
+        .tx-value.negative {
+            color: var(--text-primary);
+        }
 
-        /* MODAIS E TELA DE PIX */
-        .sub-screen {
+        .tx-value.positive {
+            color: var(--text-primary);
+        }
+
+        /* Modais / Telas Secundárias */
+        .modal {
+            display: none;
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--white);
-            z-index: 20;
-            display: flex;
+            background-color: var(--bg-color);
+            z-index: 10;
             flex-direction: column;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .sub-screen.active {
-            transform: translateY(0);
-        }
-
-        .sub-header {
             padding: 20px;
+        }
+
+        .modal.active {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid var(--inter-gray);
-            font-weight: 600;
-            font-size: 1.1rem;
         }
 
-        .sub-header i {
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .sub-body {
-            padding: 20px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        /* TECLADO PIN (SENHA) */
-        .pin-container {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .pin-dots {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .pin-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid var(--inter-orange);
-            background: transparent;
-            transition: background 0.2s;
-        }
-
-        .pin-dot.filled {
-            background: var(--inter-orange);
-        }
-
-        .pin-pad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            max-width: 280px;
-            margin: 0 auto;
-        }
-
-        .pin-key {
-            background: var(--inter-gray-light);
-            border: none;
-            border-radius: 50%;
-            width: 64px;
-            height: 64px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
-            transition: background 0.2s;
-        }
-
-        .pin-key:active {
-            background: var(--inter-gray);
-        }
-
-        /* COMPROVANTE */
-        .receipt-card {
-            background: var(--inter-gray-light);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px dashed var(--inter-orange);
-        }
-
-        .receipt-row {
+        .modal-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
-        .receipt-row span:first-child {
-            color: var(--inter-text-muted);
-        }
-
-        .receipt-row span:last-child {
+        .modal-header h3 {
+            font-size: 18px;
             font-weight: 600;
-            text-align: right;
         }
 
-        .success-icon-large {
-            text-align: center;
-            font-size: 3.5rem;
-            color: var(--success);
-            margin-bottom: 15px;
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--text-primary);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: var(--text-primary);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        /* Menu Inferior (Navegação) */
+        nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 0;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+        }
+
+        .nav-icon {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
+        <!-- Cabeçalho Principal -->
+        <header>
+            <div class="user-info">
+                <div class="avatar">U</div>
+                <div class="greeting">
+                    <span>Olá, seja bem-vindo</span>
+                    <h2 id="userName">Usuário</h2>
+                </div>
+            </div>
+            <div class="header-icons">
+                <button onclick="toggleVisibility()">👁️</button>
+            </div>
+        </header>
 
-        <!-- TELA DE LOGIN -->
-        <div id="login-screen" class="screen">
-            <div class="login-logo">inter</div>
-            <div class="login-subtitle">O seu banco digital completo</div>
+        <!-- Conteúdo do Dashboard -->
+        <div class="content">
+            <!-- Saldo -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <span>Conta Digital</span>
+                    <span>PJ / PF</span>
+                </div>
+                <div class="balance-amount" id="balanceDisplay">R$ 5.430,20</div>
+            </div>
+
+            <!-- Atalhos de Ações -->
+            <div class="shortcuts">
+                <button class="shortcut-btn" onclick="openModal('pixModal')">
+                    <div class="shortcut-icon">⚡</div>
+                    <span>Pix</span>
+                </button>
+                <button class="shortcut-btn" onclick="openModal('payModal')">
+                    <div class="shortcut-icon">📄</div>
+                    <span>Pagar</span>
+                </button>
+                <button class="shortcut-btn" onclick="openModal('cardsModal')">
+                    <div class="shortcut-icon">💳</div>
+                    <span>Cartões</span>
+                </button>
+                <button class="shortcut-btn" onclick="openModal('investModal')">
+                    <div class="shortcut-icon">📈</div>
+                    <span>Investir</span>
+                </button>
+            </div>
+
+            <!-- Extrato Recente -->
+            <div class="section-title">
+                <span>Extrato</span>
+                <span style="font-size: 12px; color: var(--text-secondary); cursor: pointer;" onclick="viewAllExtrato()">Ver tudo</span>
+            </div>
             
-            <div class="login-form">
-                <div class="input-group">
-                    <label>Conta ou CPF</label>
-                    <input type="text" id="login-user" value="123.456.789-00">
-                </div>
-                <div class="input-group">
-                    <label>Senha de Acesso</label>
-                    <input type="password" id="login-pass" value="123456">
-                </div>
-                <button class="btn-primary" onclick="fazerLogin()">Entrar</button>
+            <div class="transaction-list" id="transactionList">
+                <!-- Preenchido via JavaScript -->
             </div>
         </div>
 
-        <!-- TELA PRINCIPAL (HOME) -->
-        <div id="home-screen" class="screen hidden">
-            <div class="app-header">
-                <div class="user-profile-info" onclick="abrirPerfil()">
-                    <div class="avatar-container">
-                        <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Perfil">
-                        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
-                    </div>
-                    <div class="user-texts">
-                        <h4 id="display-name">Ana Silva</h4>
-                        <span>CPF: <span id="display-cpf">123.456.789-00</span></span>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <i class="fa-regular fa-bell" onclick="alert('Sem novas notificações.')"></i>
-                </div>
+        <!-- Menu Inferior -->
+        <nav>
+            <button class="nav-item active" onclick="switchTab('home')">
+                <span class="nav-icon">🏠</span>
+                <span>Início</span>
+            </button>
+            <button class="nav-item" onclick="openModal('pixModal')">
+                <span class="nav-icon">⚡</span>
+                <span>Pix</span>
+            </button>
+            <button class="nav-item" onclick="openModal('cardsModal')">
+                <span class="nav-icon">💳</span>
+                <span>Cartão</span>
+            </button>
+            <button class="nav-item" onclick="openModal('investModal')">
+                <span class="nav-icon">📊</span>
+                <span>Mais</span>
+            </button>
+        </nav>
+
+        <!-- MODAL: PIX -->
+        <div class="modal" id="pixModal">
+            <div class="modal-header">
+                <h3>Área Pix</h3>
+                <button class="close-btn" onclick="closeModal('pixModal')">&times;</button>
             </div>
-
-            <div class="app-body">
-                <!-- Saldo -->
-                <div class="balance-card">
-                    <div class="balance-header">
-                        <span>Saldo em conta</span>
-                        <i class="fa-regular fa-eye" id="toggle-balance" onclick="alternarSaldo()" style="cursor: pointer;"></i>
-                    </div>
-                    <div class="balance-value" id="balance-text">R$ 5.430,20</div>
-                </div>
-
-                <!-- Ações Rápidas -->
-                <div class="quick-actions">
-                    <button class="action-btn" onclick="abrirPix()">
-                        <div class="action-icon"><i class="fa-solid fa-pix"></i></div>
-                        <span>Pix</span>
-                    </button>
-                    <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento.')">
-                        <div class="action-icon"><i class="fa-solid fa-barcode"></i></div>
-                        <span>Pagar</span>
-                    </button>
-                    <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento.')">
-                        <div class="action-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-                        <span>Transferir</span>
-                    </button>
-                    <button class="action-btn" onclick="abrirPerfil()">
-                        <div class="action-icon"><i class="fa-solid fa-user-gear"></i></div>
-                        <span>Perfil</span>
-                    </button>
-                </div>
-
-                <!-- Histórico -->
-                <div class="section-title">Últimas Transações</div>
-                <div class="transaction-list" id="transaction-list">
-                    <div class="transaction-item">
-                        <div class="tx-left">
-                            <div class="tx-icon"><i class="fa-solid fa-arrow-down"></i></div>
-                            <div class="tx-info">
-                                <h5>Pix Recebido</h5>
-                                <span id="tx-date-1">Hoje, 14:20</span>
-                            </div>
-                        </div>
-                        <div class="tx-value positive">+ R$ 350,00</div>
-                    </div>
-                    <div class="transaction-item">
-                        <div class="tx-left">
-                            <div class="tx-icon"><i class="fa-solid fa-shopping-cart"></i></div>
-                            <div class="tx-info">
-                                <h5>Super App Compra</h5>
-                                <span>Ontem, 09:15</span>
-                            </div>
-                        </div>
-                        <div class="tx-value negative">- R$ 89,90</div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>Chave Pix, CPF, CNPJ ou E-mail</label>
+                <input type="text" class="form-control" id="pixKey" placeholder="Digite a chave destino...">
             </div>
+            <div class="form-group">
+                <label>Valor (R$)</label>
+                <input type="number" class="form-control" id="pixValue" placeholder="0,00">
+            </div>
+            <button class="btn-primary" onclick="makePix()">Realizar Transferência Pix</button>
         </div>
 
-        <!-- TELA DE PIX -->
-        <div id="pix-screen" class="sub-screen">
-            <div class="sub-header">
-                <i class="fa-solid fa-arrow-left" onclick="fecharPix()"></i>
-                <span>Área Pix</span>
+        <!-- MODAL: PAGAR BOLETO -->
+        <div class="modal" id="payModal">
+            <div class="modal-header">
+                <h3>Pagar Conta</h3>
+                <button class="close-btn" onclick="closeModal('payModal')">&times;</button>
             </div>
-            <div class="sub-body">
-                <div class="input-group">
-                    <label>Chave Pix (CPF, CNPJ, E-mail ou Telefone)</label>
-                    <input type="text" id="pix-key" placeholder="Digite a chave do recebedor">
-                </div>
-                <div class="input-group">
-                    <label>Nome do Recebedor</label>
-                    <input type="text" id="pix-name" placeholder="Nome completo">
-                </div>
-                <div class="input-group">
-                    <label>Valor (R$)</label>
-                    <input type="number" id="pix-value" placeholder="0,00">
-                </div>
-                <button class="btn-primary" onclick="avancarParaSenha()" style="margin-top: 20px;">Pagar com Pix</button>
+            <div class="form-group">
+                <label>Código de Barras</label>
+                <input type="text" class="form-control" placeholder="Cole o código de barras...">
             </div>
+            <div class="form-group">
+                <label>Valor do Documento</label>
+                <input type="number" class="form-control" placeholder="0,00">
+            </div>
+            <button class="btn-primary" onclick="alert('Pagamento simulado com sucesso!'); closeModal('payModal');">Efetuar Pagamento</button>
         </div>
 
-        <!-- TELA DE SENHA TRANSACIONAL -->
-        <div id="pin-screen" class="sub-screen">
-            <div class="sub-header">
-                <i class="fa-solid fa-arrow-left" onclick="fecharPin()"></i>
-                <span>Senha Transacional</span>
+        <!-- MODAL: CARTÕES -->
+        <div class="modal" id="cardsModal">
+            <div class="modal-header">
+                <h3>Meus Cartões</h3>
+                <button class="close-btn" onclick="closeModal('cardsModal')">&times;</button>
             </div>
-            <div class="sub-body pin-container">
-                <p style="color: var(--inter-text-muted); font-size: 0.9rem;">Digite sua senha de 4 dígitos</p>
-                <div class="pin-dots">
-                    <div class="pin-dot" id="dot-0"></div>
-                    <div class="pin-dot" id="dot-1"></div>
-                    <div class="pin-dot" id="dot-2"></div>
-                    <div class="pin-dot" id="dot-3"></div>
+            <div class="balance-card" style="margin-bottom: 20px;">
+                <div class="balance-header">
+                    <span>Cartão Múltiplo (Físico/Virtual)</span>
+                    <span>Mastercard</span>
                 </div>
-
-                <div class="pin-pad">
-                    <button class="pin-key" onclick="digitarPin('1')">1</button>
-                    <button class="pin-key" onclick="digitarPin('2')">2</button>
-                    <button class="pin-key" onclick="digitarPin('3')">3</button>
-                    <button class="pin-key" onclick="digitarPin('4')">4</button>
-                    <button class="pin-key" onclick="digitarPin('5')">5</button>
-                    <button class="pin-key" onclick="digitarPin('6')">6</button>
-                    <button class="pin-key" onclick="digitarPin('7')">7</button>
-                    <button class="pin-key" onclick="digitarPin('8')">8</button>
-                    <button class="pin-key" onclick="digitarPin('9')">9</button>
-                    <button class="pin-key" onclick="digitarPin('C')" style="font-size: 1rem;">C</button>
-                    <button class="pin-key" onclick="digitarPin('0')">0</button>
-                    <button class="pin-key" onclick="digitarPin('<-')" style="font-size: 1rem;"><i class="fa-solid fa-delete-left"></i></button>
-                </div>
+                <div class="balance-amount" style="font-size: 20px; margin-top: 10px;">**** **** **** 8920</div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Função: Crédito e Débito</p>
             </div>
+            <button class="btn-primary" onclick="alert('Gerando novo cartão virtual...');">Gerar Cartão Virtual</button>
         </div>
 
-        <!-- TELA DE COMPROVANTE -->
-        <div id="receipt-screen" class="sub-screen">
-            <div class="sub-header">
-                <i class="fa-solid fa-xmark" onclick="fecharComprovante()"></i>
-                <span>Comprovante</span>
+        <!-- MODAL: INVESTIMENTOS -->
+        <div class="modal" id="investModal">
+            <div class="modal-header">
+                <h3>Investimentos</h3>
+                <button class="close-btn" onclick="closeModal('investModal')">&times;</button>
             </div>
-            <div class="sub-body">
-                <div class="success-icon-large">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <h3 style="text-align: center; margin-bottom: 20px;">Transferência Pix Realizada</h3>
-
-                <div class="receipt-card">
-                    <div class="receipt-row">
-                        <span>Valor</span>
-                        <span id="rec-value">R$ 0,00</span>
+            <div class="transaction-list">
+                <div class="transaction-item">
+                    <div class="tx-info">
+                        <h4>Renda Fixa IPCA+</h4>
+                        <span>Liquidez Diária</span>
                     </div>
-                    <div class="receipt-row">
-                        <span>Favorecido</span>
-                        <span id="rec-name">-</span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Chave Pix</span>
-                        <span id="rec-key">-</span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Data / Hora</span>
-                        <span id="rec-date">-</span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>ID da Transação</span>
-                        <span id="rec-id">E123456782026...</span>
-                    </div>
+                    <div class="tx-value positive">110% CDI</div>
                 </div>
-
-                <button class="btn-primary" onclick="fecharComprovante()">Concluir</button>
-            </div>
-        </div>
-
-        <!-- TELA DE PERFIL / DADOS EDITÁVEIS -->
-        <div id="profile-screen" class="sub-screen">
-            <div class="sub-header">
-                <i class="fa-solid fa-arrow-left" onclick="fecharPerfil()"></i>
-                <span>Editar Perfil</span>
-            </div>
-            <div class="sub-body">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div class="avatar-container" style="width: 80px; height: 80px; margin: 0 auto 10px auto;">
-                        <img id="edit-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Perfil">
-                        <label for="file-input" class="edit-badge" style="width: 26px; height: 26px; cursor: pointer; font-size: 0.8rem;">
-                            <i class="fa-solid fa-pencil"></i>
-                        </label>
+                <div class="transaction-item">
+                    <div class="tx-info">
+                        <h4>CDB Banco Inter</h4>
+                        <span>Resgate Imediato</span>
                     </div>
-                    <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="mudarFotoPerfil(event)">
-                    <span style="font-size: 0.8rem; color: var(--inter-text-muted);">Toque no lápis para trocar a foto</span>
+                    <div class="tx-value positive">100% CDI</div>
                 </div>
-
-                <div class="input-group">
-                    <label>Nome Completo</label>
-                    <input type="text" id="input-edit-name" value="Ana Silva">
-                </div>
-                <div class="input-group">
-                    <label>CPF</label>
-                    <input type="text" id="input-edit-cpf" value="123.456.789-00">
-                </div>
-                <div class="input-group">
-                    <label>Data de Nascimento</label>
-                    <input type="text" id="input-edit-dob" value="15/08/1995">
-                </div>
-                <button class="btn-primary" onclick="salvarPerfil()">Salvar Alterações</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        let saldoAtual = 5430.20;
-        let saldoVisivel = true;
-        let pinDigitado = "";
-
-        let dadosUsuario = {
-            nome: "Ana Silva",
-            cpf: "123.456.789-00",
-            nascimento: "15/08/1995",
-            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+        // Estado inicial da aplicação
+        let state = {
+            balance: 5430.20,
+            isVisible: true,
+            transactions: [
+                { title: "Pix Enviado", subtitle: "Para: Maria Silva", value: -150.00, date: "Hoje, 14:20" },
+                { title: "Depósito Recebido", subtitle: "Via Ted - Empresa X", value: 1200.00, date: "Ontem, 09:15" },
+                { title: "Pagamento de Fatura", subtitle: "Cartão de Crédito", value: -840.50, date: "26 Set" }
+            ]
         };
 
-        let dadosTransacao = {
-            chave: "",
-            nome: "",
-            valor: 0
-        };
-
-        function fazerLogin() {
-            const user = document.getElementById('login-user').value;
-            if(!user) {
-                alert('Por favor, preencha o login.');
-                return;
-            }
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('home-screen').classList.remove('hidden');
+        // Renderiza transações na tela
+        function renderTransactions() {
+            const list = document.getElementById('transactionList');
+            list.innerHTML = '';
+            
+            state.transactions.forEach(tx => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                
+                const formattedValue = tx.value < TxsValueFormat(tx.value) : `+ R$ ${Math.abs(tx.value).toFixed(2)}`;
+                
+                item.innerHTML = `
+                    <div class="tx-info">
+                        <h4>${tx.title}</h4>
+                        <span>${tx.subtitle} • ${tx.date}</span>
+                    </div>
+                    <div class="tx-value ${tx.value < 0 ? 'negative' : 'positive'}">
+                        ${tx.value < 0 ? '- ' : '+ '}R$ ${Math.abs(tx.value).toFixed(2).replace('.', ',')}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
         }
 
-        function alternarSaldo() {
-            saldoVisivel = !saldoVisivel;
-            const elem = document.getElementById('balance-text');
-            const icon = document.getElementById('toggle-balance');
-            if(saldoVisivel) {
-                elem.innerText = "R$ " + saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                icon.className = "fa-regular fa-eye";
+        function TxsValueFormat(val) {
+            return val < 0;
+        }
+
+        // Atualiza saldo na tela
+        function updateUI() {
+            const display = document.getElementById('balanceDisplay');
+            if (state.isVisible) {
+                display.innerText = `R$ ${state.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
             } else {
-                elem.innerText = "R$ ••••••";
-                icon.className = "fa-regular fa-eye-slash";
+                display.innerText = 'R$ ••••••';
             }
+            renderTransactions();
         }
 
-        function abrirPix() {
-            document.getElementById('pix-screen').classList.add('active');
+        // Alternar visibilidade do saldo
+        function toggleVisibility() {
+            state.isVisible = !state.isVisible;
+            updateUI();
         }
 
-        function fecharPix() {
-            document.getElementById('pix-screen').classList.remove('active');
+        // Controle de Modais
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
         }
 
-        function avancarParaSenha() {
-            const chave = document.getElementById('pix-key').value;
-            const nome = document.getElementById('pix-name').value;
-            const valor = parseFloat(document.getElementById('pix-value').value);
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
 
-            if(!chave || !nome || !valor || isNaN(valor) || valor <= 0) {
-                alert('Preencha todos os campos do Pix corretamente.');
+        // Ação de Pix Funcional
+        function makePix() {
+            const key = document.getElementById('pixKey').value;
+            const valInput = document.getElementById('pixValue').value;
+            const value = parseFloat(valInput);
+
+            if (!key || isNaN(value) || value <= 0) {
+                alert('Por favor, preencha a chave Pix e um valor válido.');
                 return;
             }
 
-            if(valor > saldoAtual) {
+            if (value > state.balance) {
                 alert('Saldo insuficiente para realizar esta transação.');
                 return;
             }
 
-            dadosTransacao = { chave, nome, valor };
-            pinDigitado = "";
-            atualizarPinDots();
+            // Atualiza saldo e adiciona histórico
+            state.balance -= value;
+            state.transactions.unshift({
+                title: "Pix Enviado",
+                subtitle: `Para: ${key}`,
+                value: -value,
+                date: "Agora"
+            });
 
-            document.getElementById('pin-screen').classList.add('active');
+            // Limpa campos e fecha modal
+            document.getElementById('pixKey').value = '';
+            document.getElementById('pixValue').value = '';
+            closeModal('pixModal');
+
+            updateUI();
+            alert('Pix realizado com sucesso!');
         }
 
-        function fecharPin() {
-            document.getElementById('pin-screen').classList.remove('active');
+        function viewAllExtrato() {
+            alert('Exibindo histórico completo de transações simuladas.');
         }
 
-        function digitarPin(digito) {
-            if(digito === 'C') {
-                pinDigitado = "";
-            } else if(digito === '<-') {
-                pinDigitado = pinDigitado.slice(0, -1);
-            } else if(pinDigitado.length < 4) {
-                pinDigitado += digito;
-            }
-
-            atualizarPinDots();
-
-            if(pinDigitado.length === 4) {
-                setTimeout(concluirTransacao, 300);
-            }
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
 
-        function atualizarPinDots() {
-            for(let i = 0; i < 4; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if(i < pinDigitado.length) {
-                    dot.classList.add('filled');
-                } else {
-                    dot.classList.remove('filled');
-                }
-            }
-        }
-
-        function concluirTransacao() {
-            saldoAtual -= dadosTransacao.valor;
-            if(saldoVisivel) {
-                document.getElementById('balance-text').innerText = "R$ " + saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            }
-
-            // Atualizar comprovante
-            document.getElementById('rec-value').innerText = "R$ " + dadosTransacao.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('rec-name').innerText = dadosTransacao.nome;
-            document.getElementById('rec-key').innerText = dadosTransacao.chave;
-            
-            const agora = new Date();
-            document.getElementById('rec-date').innerText = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR');
-            document.getElementById('rec-id').innerText = 'E' + Math.floor(Math.random() * 10000000000000000);
-
-            // Adicionar à lista
-            const list = document.getElementById('transaction-list');
-            const novoItem = document.createElement('div');
-            novoItem.className = 'transaction-item';
-            novoItem.innerHTML = `
-                <div class="tx-left">
-                    <div class="tx-icon"><i class="fa-solid fa-arrow-up"></i></div>
-                    <div class="tx-info">
-                        <h5>Pix Enviado - ${dadosTransacao.nome}</h5>
-                        <span>Hoje, ${agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
-                    </div>
-                </div>
-                <div class="tx-value negative">- R$ ${dadosTransacao.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
-            `;
-            list.prepend(novoItem);
-
-            document.getElementById('pin-screen').classList.remove('active');
-            document.getElementById('pix-screen').classList.remove('active');
-            document.getElementById('receipt-screen').classList.add('active');
-        }
-
-        function fecharComprovante() {
-            document.getElementById('receipt-screen').classList.remove('active');
-            document.getElementById('pix-key').value = '';
-            document.getElementById('pix-name').value = '';
-            document.getElementById('pix-value').value = '';
-        }
-
-        function abrirPerfil() {
-            document.getElementById('input-edit-name').value = dadosUsuario.nome;
-            document.getElementById('input-edit-cpf').value = dadosUsuario.cpf;
-            document.getElementById('input-edit-dob').value = dadosUsuario.nascimento;
-            document.getElementById('edit-avatar-preview').src = dadosUsuario.avatar;
-            document.getElementById('profile-screen').classList.add('active');
-        }
-
-        function fecharPerfil() {
-            document.getElementById('profile-screen').classList.remove('active');
-        }
-
-        function mudarFotoPerfil(event) {
-            const file = event.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    dadosUsuario.avatar = e.target.result;
-                    document.getElementById('edit-avatar-preview').src = dadosUsuario.avatar;
-                    document.getElementById('header-avatar').src = dadosUsuario.avatar;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function salvarPerfil() {
-            dadosUsuario.nome = document.getElementById('input-edit-name').value;
-            dadosUsuario.cpf = document.getElementById('input-edit-cpf').value;
-            dadosUsuario.nascimento = document.getElementById('input-edit-dob').value;
-
-            document.getElementById('display-name').innerText = dadosUsuario.nome;
-            document.getElementById('display-cpf').innerText = dadosUsuario.cpf;
-
-            fecharPerfil();
-            alert('Perfil atualizado com sucesso!');
-        }
+        // Inicialização
+        updateUI();
     </script>
 </body>
 </html>
