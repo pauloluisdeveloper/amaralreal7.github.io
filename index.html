@@ -3,170 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel - Jogo de Dominó</title>
+    <title>Mod Menu FF - Visual</title>
     <style>
-        :root {
-            --bg-color: #000000;
-            --card-bg: #111111;
-            --text-color: #ffffff;
-            --border-color: #ffffff;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: #121212;
             height: 100vh;
-            margin: 0;
-        }
-
-        h1 {
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .board {
-            background-color: var(--card-bg);
-            border: 2px solid var(--border-color);
-            width: 80vw;
-            height: 40vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 15px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            overflow-x: auto;
+            align-items: center;
+            overflow: hidden;
         }
 
-        .domino-tile {
-            background-color: #ffffff;
-            color: #000000;
-            border: 2px solid #000000;
-            width: 50px;
-            height: 100px;
+        /* Ícone Flutuante (Botão de Abrir/Fechar) */
+        .float-icon {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: space-around;
-            font-weight: bold;
-            font-size: 20px;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+            z-index: 1000;
             transition: transform 0.2s;
         }
 
-        .domino-tile:hover {
-            transform: scale(1.05);
+        .float-icon:active {
+            transform: scale(0.9);
         }
 
-        .half {
+        .float-icon img {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Janela Principal do Menu */
+        .mod-menu {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 340px;
+            background: #1a1a1a;
+            border: 2px solid #ff416c;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 50%;
-            width: 100%;
-            border-bottom: 1px solid #000000;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
         }
 
-        .half:last-child {
-            border-bottom: none;
-        }
-
-        .controls {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-        }
-
-        button {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            border: 2px solid var(--border-color);
-            padding: 10px 20px;
-            cursor: pointer;
-            font-family: inherit;
+        /* Cabeçalho */
+        .menu-header {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 12px;
+            text-align: center;
             font-weight: bold;
+            font-size: 15px;
             letter-spacing: 1px;
-            transition: background 0.3s, color 0.3s;
+            cursor: move;
         }
 
-        button:hover {
-            background-color: var(--text-color);
-            color: var(--bg-color);
+        /* Abas de Navegação */
+        .menu-tabs {
+            display: flex;
+            background: #222;
+            border-bottom: 1px solid #333;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #ff416c;
+            border-bottom: 2px solid #ff416c;
+            background: #1a1a1a;
+        }
+
+        /* Conteúdo das Abas */
+        .menu-body {
+            padding: 15px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Elementos de Controle (Switches e Sliders) */
+        .control-group {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #252525;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .control-label {
+            color: #ddd;
+            font-size: 13px;
+        }
+
+        /* Estilo do Switch (Botão de Ligar/Desligar) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .3s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #ff416c;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Rodapé do Menu */
+        .menu-footer {
+            background: #151515;
+            padding: 8px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px solid #252525;
         }
     </style>
 </head>
 <body>
 
-    <h1>DOMINÓ // MESA</h1>
-    
-    <div class="board" id="game-board">
-        <!-- As peças jogadas aparecerão aqui -->
+    <!-- Ícone Flutuante -->
+    <div class="float-icon" id="floatIcon" onclick="toggleMenu()">
+        <span style="color: white; font-weight: bold; font-size: 18px;">FF</span>
     </div>
 
-    <div class="controls">
-        <button onclick="jogarPeca()">Jogar Peça</button>
-        <button onclick="reiniciarMesa()">Reiniciar</button>
+    <!-- Painel do Mod Menu -->
+    <div class="mod-menu" id="modMenu">
+        <div class="menu-header">
+            MOD MENU VIP - FF
+        </div>
+        
+        <div class="menu-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'aimbot')">Aimbot</button>
+            <button class="tab-btn" onclick="switchTab(event, 'visuals')">Visual</button>
+            <button class="tab-btn" onclick="switchTab(event, 'extra')">Outros</button>
+        </div>
+
+        <div class="menu-body">
+            <!-- Aba Aimbot -->
+            <div id="aimbot" class="tab-content active">
+                <div class="control-group">
+                    <span class="control-label">Aimbot Assistido</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">Aim Lock (Mira Automática)</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">No Recoil (Sem Recado)</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Aba Visual -->
+            <div id="visuals" class="tab-content">
+                <div class="control-group">
+                    <span class="control-label">ESP Linha</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">ESP Caixa (Box)</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">ESP Distância</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Aba Outros -->
+            <div id="extra" class="tab-content">
+                <div class="control-group">
+                    <span class="control-label">Velocidade (Speed)</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">Antena Player</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-footer">
+            Status: Conectado (Apenas Visual)
+        </div>
     </div>
 
     <script>
-        const pecasDisponiveis = [
-            [0,0], [0,1], [0,2], [0,3], [0,4], [0,5], [0,6],
-            [1,1], [1,2], [1,3], [1,4], [1,5], [1,6],
-            [2,2], [2,3], [2,4], [2,5], [2,6],
-            [3,3], [3,4], [3,5], [3,6],
-            [4,4], [4,5], [4,6],
-            [5,5], [5,6],
-            [6,6]
-        ];
-
-        function criarElementoPeca(ladoA, ladoB) {
-            const tile = document.createElement('div');
-            tile.className = 'domino-tile';
-            
-            const meio1 = document.createElement('div');
-            meio1.className = 'half';
-            meio1.innerText = ladoA;
-
-            const meio2 = document.createElement('div');
-            meio2.className = 'half';
-            meio2.innerText = ladoB;
-
-            tile.appendChild(meio1);
-            tile.appendChild(meio2);
-
-            return tile;
+        // Função para abrir e fechar o menu clicando no ícone flutuante
+        function toggleMenu() {
+            const menu = document.getElementById('modMenu');
+            menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
         }
 
-        function jogarPeca() {
-            const board = document.getElementById('game-board');
-            if (board.children.length >= 8) {
-                alert("A mesa está cheia!");
-                return;
+        // Função para alternar entre as abas do menu
+        function switchTab(evt, tabName) {
+            const contents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
             }
-            const randomIndex = Math.floor(Math.random() * pecasDisponiveis.length);
-            const [a, b] = pecasDisponiveis[randomIndex];
-            
-            const pecaEl = criarElementoPeca(a, b);
-            board.appendChild(pecaEl);
-        }
 
-        function reiniciarMesa() {
-            const board = document.getElementById('game-board');
-            board.innerHTML = '';
-        }
+            const buttons = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
 
-        // Inicia com uma peça na mesa
-        window.onload = () => {
-            jogarPeca();
-        };
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
     </script>
-
 </body>
 </html>
