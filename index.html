@@ -1,816 +1,285 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>amaralreal7 • VIP Sales OS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo</title>
+    <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.05); }
-            50% { opacity: 0.6; transform: scale(0.98); box-shadow: 0 0 45px rgba(255, 255, 255, 0.15); }
-        }
-        .vip-card-glow {
-            animation: pulseGlow 4s infinite ease-in-out;
-        }
-
-        @keyframes modalPop {
-            0% { transform: scale(0.94) translateY(10px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .modal-enter {
-            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* TRAVA TOTAL DA TELA E DO TOUCH GLOBAL PARA NÃO ROLAR NO IPHONE */
-        html, body {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            background-color: #000000;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #ffffff;
-            -webkit-font-smoothing: antialiased;
-            touch-action: none;
-        }
-
+        /* Estilos Gerais */
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Painel de Administração */
+        .painel-admin {
+            background: #ffffff;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .topo-painel {
             display: flex;
             align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .icone-topo-painel {
+            font-size: 24px;
+            color: #2563EB;
+        }
+
+        .admin-config-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-config-section label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .admin-config-section select, 
+        .admin-config-section input[type="color"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 12px;
+        }
+
+        /* Botões de Ação e Atualizar */
+        .btn-acao, .btn-atualizar {
+            background-color: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-acao:hover, .btn-atualizar:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Animação de Rotação para o Botão de Atualizar */
+        @keyframes girar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .girando {
+            animation: girar 1s linear infinite;
+        }
+
+        /* Modais / Abas Fixas e Centralizadas */
+        .container-centralizado {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
             justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
         }
 
-        .interactive-touch {
-            touch-action: pan-y;
+        .aba-painel {
+            width: 90%;
+            max-width: 450px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
-        input, select, textarea {
-            font-size: 16px !important;
-            touch-action: manipulation;
-        }
-
-        .custom-scroll::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        /* Toast de Sucesso */
+        .toast-sucesso {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10B981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+            font-weight: bold;
         }
     </style>
 </head>
-<body class="bg-black text-white select-none">
+<body>
 
-    <!-- TOAST DE NOTIFICAÇÃO VIP FLUTUANTE -->
-    <div id="vipToast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-neutral-900/95 backdrop-blur-xl border border-white/10 text-white px-5 py-3 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.9)] text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-3">
-        <span id="toastEmoji" class="text-base">✨</span>
-        <span id="toastMessage" class="font-semibold tracking-wide">Sistema Operacional Ativo</span>
-    </div>
-
-    <!-- NOTIFICAÇÃO ESTILO APPLE PAY / NUBANK -->
-    <div id="appleNotification" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-neutral-900/90 backdrop-blur-2xl border border-white/10 rounded-2xl p-3 shadow-2xl z-[9999] opacity-0 pointer-events-none flex items-center justify-between transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-md shrink-0">
-                <i class="fa-solid fa-n"></i>
-            </div>
-            <div>
-                <div class="flex items-center gap-1.5">
-                    <span class="text-[11px] font-bold text-white tracking-tight">InfinitePay • Pix Recebido</span>
-                    <span class="text-[9px] text-zinc-400 font-medium">Agora</span>
-                </div>
-                <p class="text-[11px] font-medium text-zinc-300 mt-0.5">Transferência de +R$ 5,99 confirmada</p>
-            </div>
-        </div>
-        <div class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
-    </div>
-
-    <!-- CONTAINER PRINCIPAL (ESTILO EXATO DA FOTO) - FIXO NO MEIO -->
-    <div class="w-[92%] max-w-[360px] bg-neutral-950 vip-card-glow rounded-[32px] p-5 shadow-2xl relative flex flex-col items-center border border-neutral-800/80 interactive-touch">
-        
-        <!-- Botão de Configuração / Admin -->
-        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:border-neutral-500 transition active:scale-95 cursor-pointer shadow-md">
-            <i class="fa-solid fa-gear text-xs"></i>
-        </button>
-
-        <!-- Foto de Perfil Compacta e Proporcional -->
-        <div class="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-b from-white via-zinc-500 to-transparent shadow-xl mb-2.5 mt-1">
-            <img id="homeProfileImg" src="https://i.postimg.cc/9F5WcckY/IMG-1942.jpg" alt="Perfil" class="w-full h-full object-cover rounded-full border-2 border-black">
+    <!-- PAINEL DE ADMINISTRAÇÃO -->
+    <div class="painel-admin" id="painelAdmin">
+        <div class="topo-painel">
+            <i class="icone-topo-painel fas fa-shield-alt"></i>
+            <h2>Painel Administrativo</h2>
         </div>
 
-        <!-- Nome e Selo -->
-        <div class="flex items-center gap-1.5 mb-2">
-            <h1 id="homeProfileName" class="text-sm font-extrabold tracking-tight text-white">amaralreal7</h1>
-            <span id="homeBadgeIcon" class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
-        </div>
-
-        <!-- Crachá de Status Online -->
-        <div class="bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-full flex items-center gap-2 mb-2 shadow-inner">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[10px] font-medium text-zinc-300 tracking-wide">Online • IA Neural Ativa</span>
-        </div>
-
-        <!-- Bio -->
-        <p id="homeProfileBio" class="text-[11px] text-zinc-400 text-center font-medium px-2 mb-3">O maior chefe do 7</p>
-
-        <!-- Pílula de Segurança -->
-        <div class="w-full bg-neutral-900/80 border border-neutral-800/80 py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 mb-3.5 shadow-sm">
-            <i class="fa-solid fa-shield-halved text-[10px] text-zinc-400"></i>
-            <span id="homeSecurity" class="text-[10px] text-zinc-400 font-medium">100% Seguro • Entrega por e-mail</span>
-        </div>
-
-        <!-- Botões de Ação Principal (Estilo Exato da Imagem) -->
-        <div class="w-full space-y-2.5 mb-3">
-            <!-- Botão 1: Acesso VIP -->
-            <button onclick="abrirCheckout()" class="w-full h-14 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black px-3.5 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center text-xs shadow shrink-0">
-                        <i id="btnIcon1" class="fa-solid fa-bolt"></i>
-                    </div>
-                    <div class="text-left">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-black tracking-tight text-black">Acesso VIP (InfinitePay)</span>
-                            <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.5 rounded-md">R$ 5,99</span>
-                        </div>
-                        <span class="text-[10px] text-zinc-600 font-medium block mt-0.5">Checkout Automatizado Instantâneo</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-[11px] text-zinc-400"></i>
-            </button>
-
-            <!-- Botão 2: Suporte com IA -->
-            <button onclick="abrirSuporteIA()" class="w-full h-14 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white px-3.5 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-neutral-950 border border-neutral-700/80 flex items-center justify-center text-xs text-purple-400 shadow shrink-0">
-                        <i id="btnIcon2" class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="text-xs font-black tracking-tight text-white block">Suporte Inteligente 24H</span>
-                        <span class="text-[10px] text-zinc-400 font-medium block mt-0.5">Atendimento Neural com IA</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-[11px] text-zinc-500"></i>
-            </button>
-        </div>
-
-        <div class="w-full text-center text-[10px] font-semibold text-zinc-600 tracking-wider">
-            <span id="homeFooter">amaralreal7.system</span>
-        </div>
-    </div>
-
-    <!-- MODAL CHECKOUT VIP -->
-    <div id="modalCheckout" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4 interactive-touch">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[340px] rounded-[28px] p-5 shadow-2xl relative modal-enter max-h-[85vh] overflow-y-auto custom-scroll">
-            <button onclick="fecharCheckout()" class="absolute top-4 right-4 text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <!-- Passo 1: QR Code & Pix -->
-            <div id="checkoutStep1" class="space-y-3">
-                <div class="text-center">
-                    <div class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-xs mx-auto mb-1.5">
-                        <i class="fa-solid fa-qrcode text-purple-400"></i>
-                    </div>
-                    <h3 class="text-xs font-bold text-white">Pagamento Pix • InfinitePay</h3>
-                    <p class="text-[11px] text-zinc-400">Escaneie o QR Code ou copie a chave</p>
-                </div>
-
-                <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl text-center">
-                    <span class="text-[9px] text-zinc-400 font-semibold uppercase tracking-wider block mb-0.5">Tempo Restante</span>
-                    <span id="pixTimer" class="text-sm font-extrabold text-emerald-400">04:59</span>
-                </div>
-
-                <div class="bg-white p-2 rounded-xl w-32 h-32 mx-auto shadow-lg flex items-center justify-center">
-                    <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix..." alt="QR Code Pix" class="w-full h-full object-contain">
-                </div>
-
-                <div class="space-y-1">
-                    <label class="block text-[10px] text-zinc-400">Chave Pix Copia e Cola:</label>
-                    <input type="text" id="pixCopiaECola" value="00020126580014br.gov.bcb.pix0136amaralreal7-infinitepay-vip-599" readonly class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[10px] text-zinc-300 text-center select-all focus:outline-none">
-                    <button onclick="copiarPix()" class="w-full h-9 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-[11px] transition cursor-pointer shadow-md">
-                        <i class="fa-solid fa-copy mr-1"></i> Copiar Código Pix
-                    </button>
-                </div>
-
-                <button onclick="irParaPassoDados()" class="w-full h-10 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-[11px] transition shadow-lg cursor-pointer">
-                    Já Realizei o Pagamento <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
-            </div>
-
-            <!-- Passo 2: Formulário do Cliente -->
-            <div id="checkoutStep2" class="hidden space-y-2.5">
-                <div class="text-center mb-1">
-                    <div class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-xs mx-auto mb-1.5">
-                        <i class="fa-solid fa-user-check text-emerald-400"></i>
-                    </div>
-                    <h3 class="text-xs font-bold text-white">Confirmação de Dados</h3>
-                    <p class="text-[11px] text-zinc-400">Preencha para liberação do acesso</p>
-                </div>
-
-                <div class="space-y-2">
-                    <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">Nome Completo</label>
-                        <input type="text" id="clientName" placeholder="Ex: Lucas Gabriel" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">Data de Nascimento (DD/MM/AAAA)</label>
-                        <input type="text" id="clientDob" placeholder="25/08/1998" maxlength="10" oninput="maskDate(this)" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">CPF</label>
-                        <input type="text" id="clientCpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-medium text-zinc-300 mb-0.5">E-mail para Entrega</label>
-                        <input type="email" id="clientEmail" placeholder="seuemail@dominio.com" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                    </div>
-
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="voltarPassoPix()" class="w-1/3 h-9 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-bold rounded-xl text-[11px] transition cursor-pointer border border-neutral-800">Voltar</button>
-                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-9 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-[11px] transition shadow-lg cursor-pointer">Enviar para Análise</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Passo 3: Sucesso -->
-            <div id="checkoutStep3" class="hidden text-center py-4 space-y-3">
-                <div class="w-12 h-12 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-base shadow-inner">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-                <h3 class="text-xs font-bold text-white">Pedido Enviado com Sucesso!</h3>
-                <p class="text-[11px] text-zinc-400 leading-relaxed px-2">Seus dados aguardam aprovação no painel administrativo.</p>
-                <button onclick="fecharCheckout()" class="w-full h-9 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl text-[11px] transition cursor-pointer border border-neutral-800 mt-1">Concluir</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SUPORTE COM IA -->
-    <div id="modalSuporte" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4 interactive-touch">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[340px] rounded-[28px] p-4 shadow-2xl relative h-[380px] flex flex-col justify-between modal-enter">
-            <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 text-[11px]">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold text-white">IA Neural-7</h4>
-                        <span class="text-[9px] text-emerald-400 font-medium">Online</span>
-                    </div>
-                </div>
-                <button onclick="fecharSuporteIA()" class="text-zinc-400 hover:text-white w-6 h-6 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div id="chatMessages" class="flex-1 overflow-y-auto custom-scroll my-2 space-y-2 pr-1 text-[11px]">
-                <div class="bg-neutral-900 border border-neutral-800/80 p-2.5 rounded-xl text-zinc-300 leading-relaxed">
-                    🤖 Olá! Sou a IA Neural-7. Como posso ajudar com seu pagamento ou acesso?
-                </div>
-            </div>
-
-            <div class="border-t border-neutral-800/80 pt-2 flex gap-1.5">
-                <input type="text" id="chatInput" placeholder="Digite sua dúvida..." class="flex-1 h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[11px] text-white focus:outline-none focus:border-purple-500" onkeypress="if(event.key==='Enter') enviarMensagemIA()">
-                <button onclick="enviarMensagemIA()" class="h-9 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-[11px] transition cursor-pointer shadow">Enviar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DE ADMINISTRAÇÃO & DASHBOARD - FIXO NO MEIO DA TELA SEM ROLAGEM -->
-    <div id="modalAdmin" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4 interactive-touch">
-        <div id="adminPanelCard" class="bg-neutral-950 border border-neutral-800 w-full max-w-[360px] rounded-[28px] p-4 shadow-2xl relative flex flex-col max-h-[85vh] overflow-hidden modal-enter transition-all duration-300">
+        <!-- Seção de Personalização (Cor e Ícone) -->
+        <div class="admin-config-section">
+            <h3>Personalização do Painel</h3>
             
-            <button onclick="fecharAdminModal()" class="absolute top-3.5 right-3.5 text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer z-50">
-                <i class="fa-solid fa-xmark"></i>
+            <label for="input-cor-painel">Cor de Fundo do Painel:</label>
+            <input type="color" id="input-cor-painel" value="#ffffff" onchange="mudarCorPainel(this.value)">
+
+            <label for="select-icone">Ícone do Sistema:</label>
+            <select id="select-icone" onchange="mudarIconePainel(this.value)">
+                <option value="fa-shield-alt">Segurança / Admin</option>
+                <option value="fa-chart-line">Gráfico de Vendas</option>
+                <option value="fa-store">Loja / Vendas</option>
+                <option value="fa-wallet">Carteira / Pagamentos</option>
+            </select>
+        </div>
+
+        <!-- Seção de Botões Editáveis -->
+        <div class="admin-config-section">
+            <h3>Botões Personalizados</h3>
+            <p style="font-size: 13px; color: #666;">Clique no texto do botão abaixo para editá-lo diretamente:</p>
+            
+            <button id="meu-botao-personalizado" class="btn-acao">
+                <i class="fas fa-edit"></i>
+                <span class="texto-botao" contenteditable="true" onblur="salvarTextoBotao(this)">Clique para editar</span>
             </button>
+        </div>
 
-            <!-- TELA DE LOGIN NUMÉRICA FIXA NO MEIO -->
-            <div id="adminLoginBox" class="py-5 text-center flex flex-col items-center justify-center">
-                <div class="w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center justify-center text-white text-xs mx-auto mb-2.5 shadow-inner">
-                    <i class="fa-solid fa-lock text-purple-400"></i>
-                </div>
-                <h3 class="text-xs font-bold text-white mb-0.5">Painel Administrativo</h3>
-                <p class="text-[11px] text-zinc-400 mb-4 font-medium">Digite sua senha numérica</p>
-                
-                <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[200px] h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-4 text-white text-center tracking-[0.5em] text-sm mb-2 focus:outline-none focus:border-purple-500 transition">
-                <div id="loginErrorMsg" class="text-[11px] font-semibold text-rose-400 mb-2.5 hidden h-4"></div>
-                
-                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[200px] h-10 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-xl text-[11px] transition shadow-lg cursor-pointer">Acessar</button>
-            </div>
-
-            <!-- DASHBOARD SUPREMA COM ABAS E REFRESH -->
-            <div id="adminDashboard" class="hidden flex flex-col h-full">
-                <!-- Cabeçalho -->
-                <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2 mb-2 shrink-0 pr-7">
-                    <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 bg-neutral-900 border border-neutral-800 rounded-lg flex items-center justify-center text-white text-[11px]">
-                            <i class="fa-solid fa-chart-line text-emerald-400"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-[11px] font-bold text-white">Dashboard Neural-7</h3>
-                            <span class="text-[9px] text-emerald-400 font-medium">🟢 Ativo</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4 Abas Uniformes -->
-                <div class="grid grid-cols-4 gap-1 mb-2 shrink-0">
-                    <button onclick="mudarTabAdmin(0)" id="tabBtn0" class="h-7 bg-white text-black font-bold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 shadow">
-                        <i class="fa-solid fa-bag-shopping"></i> Vendas
-                    </button>
-                    <button onclick="mudarTabAdmin(1)" id="tabBtn1" class="h-7 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        <i class="fa-solid fa-clock"></i> Pendentes
-                    </button>
-                    <button onclick="mudarTabAdmin(2)" id="tabBtn2" class="h-7 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        <i class="fa-solid fa-users"></i> IPs
-                    </button>
-                    <button onclick="mudarTabAdmin(3)" id="tabBtn3" class="h-7 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
-                        <i class="fa-solid fa-sliders"></i> Ajustes
-                    </button>
-                </div>
-
-                <!-- Carrossel das Abas -->
-                <div id="adminCarousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-2 flex-1 items-stretch py-1" onscroll="sincronizarScrollTab()">
-                    
-                    <!-- Aba 0: Vendas Aprovadas & Faturamento -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">Histórico</span>
-                                <button onclick="renderizarAdminData()" class="px-2 py-0.5 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-md text-[9px] hover:text-white flex items-center gap-1">
-                                    <i class="fa-solid fa-rotate text-[8px]"></i> Atualizar
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-2 gap-1.5 mb-2">
-                                <div class="bg-neutral-900 border border-neutral-800 p-1.5 rounded-lg">
-                                    <span class="text-[9px] text-zinc-400 block">Aprovadas</span>
-                                    <span id="statVendasCount" class="text-xs font-extrabold text-emerald-400">0</span>
-                                </div>
-                                <div class="bg-neutral-900 border border-neutral-800 p-1.5 rounded-lg">
-                                    <span class="text-[9px] text-zinc-400 block">Faturamento</span>
-                                    <span id="statFaturamento" class="text-xs font-extrabold text-purple-400">R$ 0,00</span>
-                                </div>
-                            </div>
-                            <div id="listaVendasAprovadas" class="space-y-1.5 max-h-[110px] overflow-y-auto custom-scroll pr-1"></div>
-                        </div>
-                        <button onclick="limparVendasAprovadas()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2">Limpar Histórico</button>
-                    </div>
-
-                    <!-- Aba 1: Canal de Aprovação -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">Aprovação Pix</span>
-                                <span id="statPendentesCount" class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded-full text-[9px] font-bold">0 Pendentes</span>
-                            </div>
-                            <div id="listaPedidosPendentes" class="space-y-1.5 max-h-[130px] overflow-y-auto custom-scroll pr-1"></div>
-                        </div>
-                        <span class="text-[9px] text-zinc-500 text-center block pt-1">Aprovar libera o acesso imediatamente.</span>
-                    </div>
-
-                    <!-- Aba 2: Logs de IP -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-bold text-white uppercase tracking-wider">Rastreamento IP</span>
-                                <button onclick="renderizarAdminData()" class="px-2 py-0.5 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-md text-[9px] hover:text-white flex items-center gap-1">
-                                    <i class="fa-solid fa-rotate text-[8px]"></i> Atualizar
-                                </button>
-                            </div>
-                            <div id="listaIpsContainer" class="space-y-1.5 max-h-[120px] overflow-y-auto custom-scroll pr-1"></div>
-                        </div>
-                        <button onclick="limparIps()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition border border-neutral-800 mt-2">Limpar Logs</button>
-                    </div>
-
-                    <!-- Aba 3: Ajustes e Customizações -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3 rounded-xl flex flex-col justify-between overflow-y-auto custom-scroll">
-                        <div class="space-y-1.5">
-                            <span class="text-[11px] font-bold text-white uppercase tracking-wider block mb-1">Customização</span>
-                            <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">Ícone Botão 1</label>
-                                <input type="text" id="configIcon1" placeholder="fa-solid fa-bolt" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                            <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">Ícone Botão 2</label>
-                                <input type="text" id="configIcon2" placeholder="fa-solid fa-robot" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                            <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">Selo / Ícone Perfil</label>
-                                <input type="text" id="configBadge" placeholder="fa-solid fa-circle-check" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                            <div>
-                                <label class="block text-[9px] text-zinc-400 mb-0.5">Cor do Painel Admin</label>
-                                <input type="text" id="configPanelColor" placeholder="#0a0a0a" class="w-full h-8 bg-neutral-900 border border-neutral-800 rounded-lg px-2.5 text-[11px] text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                        </div>
-                        <button onclick="salvarConfigAdminCustom()" class="w-full h-8 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-lg text-[10px] transition shadow cursor-pointer mt-2">Salvar</button>
-                    </div>
-
-                </div>
-
-                <div class="pt-2 border-t border-neutral-800/80 shrink-0 mt-1">
-                    <button type="button" onclick="fecharAdminModal()" class="w-full h-8 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-lg text-[10px] transition cursor-pointer border border-neutral-800">Fechar Painel</button>
-                </div>
-            </div>
+        <!-- Botão de Atualizar com Animação -->
+        <div class="admin-config-section" style="border-bottom: none;">
+            <h3>Sincronização</h3>
+            <button class="btn-atualizar" onclick="atualizarDadosPainel(this)">
+                <i class="fas fa-sync-alt icone-atualizar"></i> Atualizar Dados
+            </button>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- ABA 1: Preenchimento de Dados (Fixada e Centralizada - mude 'display: flex' para mostrar) -->
+    <div class="container-centralizado" id="aba-preenchimento" style="display: none;">
+        <div class="aba-painel">
+            <h3>Preencha seus dados</h3>
+            <p>Insira as informações necessárias abaixo:</p>
+            <!-- Adicione seus inputs aqui -->
+            <button class="btn-acao" onclick="fecharAba('aba-preenchimento')">Fechar</button>
+        </div>
+    </div>
+
+    <!-- ABA 2: Realizar Pagamento (Fixada e Centralizada - mude 'display: flex' para mostrar) -->
+    <div class="container-centralizado" id="aba-pagamento" style="display: none;">
+        <div class="aba-painel">
+            <h3>Realizar Pagamento</h3>
+            <p>Escolha InfinitePay ou Pix Nubank:</p>
+            <!-- Adicione os botões de pagamento aqui -->
+            <button class="btn-acao" onclick="fecharAba('aba-pagamento')">Fechar</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DE CONTROLE -->
     <script>
-        const SENHA_MESTRE = "7777";
-
-        let db = {
-            profile: {
-                name: "amaralreal7",
-                bio: "O maior chefe do 7",
-                img: "https://i.postimg.cc/9F5WcckY/IMG-1942.jpg",
-                security: "100% Seguro • Entrega por e-mail",
-                footer: "amaralreal7.system",
-                icon1: "fa-solid fa-bolt",
-                icon2: "fa-solid fa-robot",
-                badgeIcon: "fa-solid fa-circle-check",
-                panelColor: "#0a0a0a"
-            },
-            vendasAprovadas: [],
-            pedidosPendentes: [],
-            visitorIps: []
-        };
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            let saved = localStorage.getItem('amaralreal7_os_db');
-            if (saved) {
-                try { db = JSON.parse(saved); } catch(e) {}
+        // 1. Mudar Cor do Painel
+        function mudarCorPainel(cor) {
+            const painel = document.getElementById('painelAdmin');
+            if (painel) {
+                painel.style.backgroundColor = cor;
+                localStorage.setItem('corPainelAdmin', cor);
             }
-            aplicarPerfilNaTela();
-            await capturarIpVisitante();
-            iniciarNotificacoesApple();
+        }
+
+        // 2. Mudar Ícone do Painel
+        function mudarIconePainel(classeIcone) {
+            const iconeContainer = document.querySelector('.icone-topo-painel');
+            if (iconeContainer) {
+                iconeContainer.className = `icone-topo-painel fas ${classeIcone}`;
+                localStorage.setItem('iconePainelAdmin', classeIcone);
+            }
+        }
+
+        // 3. Salvar Texto Editável do Botão
+        function salvarTextoBotao(elemento) {
+            const novoTexto = elemento.innerText;
+            localStorage.setItem('textoBotaoPersonalizado', novoTexto);
+        }
+
+        // 4. Atualizar Dados com Animação e Sucesso
+        function atualizarDadosPainel(botao) {
+            const icone = botao.querySelector('.icone-atualizar');
+            
+            if (icone) icone.classList.add('girando');
+            botao.disabled = true;
+
+            setTimeout(() => {
+                if (icone) icone.classList.remove('girando');
+                botao.disabled = false;
+
+                mostrarMensagemSucesso("Atualizado com sucesso!");
+            }, 1500);
+        }
+
+        // 5. Exibir Mensagem de Sucesso (Toast)
+        function mostrarMensagemSucesso(texto) {
+            const toastAntigo = document.querySelector('.toast-sucesso');
+            if (toastAntigo) toastAntigo.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-sucesso';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${texto}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Função auxiliar para fechar abas de exemplo
+        function fecharAba(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Carregar configurações salvas ao iniciar a página
+        window.addEventListener('DOMContentLoaded', () => {
+            // Cor salva
+            const corSalva = localStorage.getItem('corPainelAdmin');
+            if (corSalva) {
+                document.getElementById('painelAdmin').style.backgroundColor = corSalva;
+                document.getElementById('input-cor-painel').value = corSalva;
+            }
+
+            // Ícone salvo
+            const iconeSalvo = localStorage.getItem('iconePainelAdmin');
+            if (iconeSalvo) {
+                const iconeContainer = document.querySelector('.icone-topo-painel');
+                if (iconeContainer) iconeContainer.className = `icone-topo-painel fas ${iconeSalvo}`;
+                document.getElementById('select-icone').value = iconeSalvo;
+            }
+
+            // Texto do botão salvo
+            const textoSalvo = localStorage.getItem('textoBotaoPersonalizado');
+            if (textoSalvo) {
+                const elemento = document.querySelector('#meu-botao-personalizado .texto-botao');
+                if (elemento) elemento.innerText = textoSalvo;
+            }
         });
-
-        function salvarDb() {
-            localStorage.setItem('amaralreal7_os_db', JSON.stringify(db));
-            aplicarPerfilNaTela();
-        }
-
-        function aplicarPerfilNaTela() {
-            document.getElementById('homeProfileImg').src = db.profile.img;
-            document.getElementById('homeProfileName').innerText = db.profile.name;
-            document.getElementById('homeProfileBio').innerText = db.profile.bio;
-            document.getElementById('homeSecurity').innerText = db.profile.security || "100% Seguro • Entrega por e-mail";
-            document.getElementById('homeFooter').innerText = db.profile.footer;
-
-            document.getElementById('btnIcon1').className = db.profile.icon1 || "fa-solid fa-bolt";
-            document.getElementById('btnIcon2').className = db.profile.icon2 || "fa-solid fa-robot";
-            document.getElementById('homeBadgeIcon').innerHTML = `<i class="${db.profile.badgeIcon || 'fa-solid fa-circle-check'}"></i>`;
-            document.getElementById('adminPanelCard').style.backgroundColor = db.profile.panelColor || "#0a0a0a";
-        }
-
-        function showToast(msg, emoji = "✨") {
-            const t = document.getElementById('vipToast');
-            document.getElementById('toastEmoji').innerText = emoji;
-            document.getElementById('toastMessage').innerText = msg;
-            t.classList.remove('opacity-0', 'pointer-events-none');
-            t.classList.add('opacity-100');
-            setTimeout(() => {
-                t.classList.remove('opacity-100');
-                t.classList.add('opacity-0', 'pointer-events-none');
-            }, 3200);
-        }
-
-        async function capturarIpVisitante() {
-            try {
-                let res = await fetch('https://api.ipify.org?format=json');
-                let data = await res.json();
-                let ip = data.ip || '127.0.0.1';
-                let agora = new Date().toLocaleTimeString('pt-BR');
-                let device = navigator.userAgent.includes("Mobi") ? "Smartphone" : "Computador";
-
-                let existing = db.visitorIps.find(i => i.ip === ip);
-                if (existing) {
-                    existing.time = agora;
-                } else {
-                    db.visitorIps.unshift({
-                        id: 'IP_' + Math.floor(Math.random() * 89999 + 10000),
-                        ip: ip,
-                        device: device,
-                        time: agora
-                    });
-                }
-                salvarDb();
-            } catch(e) {}
-        }
-
-        function iniciarNotificacoesApple() {
-            setInterval(() => {
-                const notif = document.getElementById('appleNotification');
-                notif.classList.remove('opacity-0', 'pointer-events-none');
-                notif.classList.add('opacity-100');
-                setTimeout(() => {
-                    notif.classList.remove('opacity-100');
-                    notif.classList.add('opacity-0', 'pointer-events-none');
-                }, 4000);
-            }, 25000);
-        }
-
-        let timerInterval = null;
-        function abrirCheckout() {
-            document.getElementById('modalCheckout').classList.remove('hidden');
-            document.getElementById('checkoutStep1').classList.remove('hidden');
-            document.getElementById('checkoutStep2').classList.add('hidden');
-            document.getElementById('checkoutStep3').classList.add('hidden');
-            iniciarCronometroPix(300);
-        }
-
-        function fecharCheckout() {
-            document.getElementById('modalCheckout').classList.add('hidden');
-            if (timerInterval) clearInterval(timerInterval);
-        }
-
-        function iniciarCronometroPix(duracao) {
-            if (timerInterval) clearInterval(timerInterval);
-            let timer = duracao;
-            const display = document.getElementById('pixTimer');
-            timerInterval = setInterval(() => {
-                let minutos = parseInt(timer / 60, 10);
-                let segundos = parseInt(timer % 60, 10);
-                minutos = minutos < 10 ? "0" + minutos : minutos;
-                segundos = segundos < 10 ? "0" + segundos : segundos;
-                display.textContent = minutos + ":" + segundos;
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    display.textContent = "Expirado";
-                }
-            }, 1000);
-        }
-
-        function copiarPix() {
-            const input = document.getElementById('pixCopiaECola');
-            input.select();
-            input.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(input.value);
-            showToast("Código Pix copiado com sucesso!", "📋");
-        }
-
-        function irParaPassoDados() {
-            document.getElementById('checkoutStep1').classList.add('hidden');
-            document.getElementById('checkoutStep2').classList.remove('hidden');
-        }
-
-        function voltarPassoPix() {
-            document.getElementById('checkoutStep2').classList.add('hidden');
-            document.getElementById('checkoutStep1').classList.remove('hidden');
-        }
-
-        function maskDate(input) {
-            let v = input.value.replace(/\D/g, "");
-            if (v.length > 8) v = v.slice(0, 8);
-            if (v.length >= 5) {
-                v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, "$1/$2/$3");
-            } else if (v.length >= 3) {
-                v = v.replace(/^(\d{2})(\d{0,2})/, "$1/$2");
-            }
-            input.value = v;
-        }
-
-        function maskCpf(input) {
-            let v = input.value.replace(/\D/g, "");
-            if (v.length > 11) v = v.slice(0, 11);
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            input.value = v;
-        }
-
-        function enviarPedidoCliente() {
-            const name = document.getElementById('clientName').value.trim();
-            const dob = document.getElementById('clientDob').value.trim();
-            const cpf = document.getElementById('clientCpf').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-
-            if (!name || !dob || !cpf || !email) {
-                showToast("Preencha todos os campos corretamente!", "⚠️");
-                return;
-            }
-
-            const novoPedido = {
-                id: 'VIP_' + Math.floor(Math.random() * 8999 + 1000),
-                name: name,
-                dob: dob,
-                cpf: cpf,
-                email: email,
-                valor: 'R$ 5,99',
-                time: new Date().toLocaleTimeString('pt-BR')
-            };
-
-            db.pedidosPendentes.unshift(novoPedido);
-            salvarDb();
-
-            document.getElementById('checkoutStep2').classList.add('hidden');
-            document.getElementById('checkoutStep3').classList.remove('hidden');
-            showToast("Pedido enviado para análise!", "🚀");
-        }
-
-        function abrirSuporteIA() {
-            document.getElementById('modalSuporte').classList.remove('hidden');
-        }
-
-        function fecharSuporteIA() {
-            document.getElementById('modalSuporte').classList.add('hidden');
-        }
-
-        function enviarMensagemIA() {
-            const input = document.getElementById('chatInput');
-            const txt = input.value.trim();
-            if (!txt) return;
-
-            const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="bg-purple-950/60 border border-purple-800/50 p-2 rounded-xl text-white ml-6 text-right">${txt}</div>`;
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
-
-            setTimeout(() => {
-                let resposta = "Entendido! Nossos servidores InfinitePay monitoram os pagamentos em tempo real.";
-                const lower = txt.toLowerCase();
-                if (lower.includes('pagamento') || lower.includes('pix')) {
-                    resposta = "O pagamento de R$ 5,99 via Pix é processado instantaneamente.";
-                }
-                chat.innerHTML += `<div class="bg-neutral-900 border border-neutral-800/80 p-2 rounded-xl text-zinc-300 leading-relaxed mr-6">🤖 ${resposta}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 800);
-        }
-
-        function abrirAdminModal() {
-            document.getElementById('modalAdmin').classList.remove('hidden');
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('loginErrorMsg').classList.add('hidden');
-            document.getElementById('adminLoginBox').classList.remove('hidden');
-            document.getElementById('adminDashboard').classList.add('hidden');
-        }
-
-        function fecharAdminModal() {
-            document.getElementById('modalAdmin').classList.add('hidden');
-        }
-
-        function tentarLoginAdmin() {
-            const senha = document.getElementById('adminPasswordInput').value;
-            const err = document.getElementById('loginErrorMsg');
-            if (senha === SENHA_MESTRE) {
-                document.getElementById('adminLoginBox').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-                renderizarAdminData();
-                showToast("Painel Desbloqueado!", "🔓");
-            } else {
-                err.innerText = "Senha incorreta!";
-                err.classList.remove('hidden');
-            }
-        }
-
-        function mudarTabAdmin(index) {
-            const carousel = document.getElementById('adminCarousel');
-            carousel.scrollTo({ left: index * carousel.clientWidth, behavior: 'smooth' });
-            atualizarBotoesTab(index);
-        }
-
-        function sincronizarScrollTab() {
-            const carousel = document.getElementById('adminCarousel');
-            const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
-            atualizarBotoesTab(index);
-        }
-
-        function atualizarBotoesTab(activeIdx) {
-            for (let i = 0; i < 4; i++) {
-                const btn = document.getElementById(`tabBtn${i}`);
-                if (i === activeIdx) {
-                    btn.className = "h-7 bg-white text-black font-bold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 shadow";
-                } else {
-                    btn.className = "h-7 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-lg text-[9px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800";
-                }
-            }
-        }
-
-        function renderizarAdminData() {
-            const listaVendas = document.getElementById('listaVendasAprovadas');
-            listaVendas.innerHTML = '';
-            let faturamentoTotal = 0;
-
-            if (db.vendasAprovadas.length === 0) {
-                listaVendas.innerHTML = `<p class="text-[10px] text-zinc-500 text-center py-3">Nenhuma venda aprovada.</p>`;
-            } else {
-                db.vendasAprovadas.forEach(v => {
-                    faturamentoTotal += 5.99;
-                    listaVendas.innerHTML += `
-                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-lg flex items-center justify-between text-[10px]">
-                            <div>
-                                <span class="font-bold text-white block">${v.name}</span>
-                                <span class="text-[9px] text-zinc-400">${v.email} • ${v.time}</span>
-                            </div>
-                            <span class="text-emerald-400 font-extrabold">+R$ 5,99</span>
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('statVendasCount').innerText = db.vendasAprovadas.length;
-            document.getElementById('statFaturamento').innerText = `R$ ${faturamentoTotal.toFixed(2).replace('.', ',')}`;
-
-            const listaPendentes = document.getElementById('listaPedidosPendentes');
-            listaPendentes.innerHTML = '';
-            document.getElementById('statPendentesCount').innerText = `${db.pedidosPendentes.length} Pendentes`;
-
-            if (db.pedidosPendentes.length === 0) {
-                listaPendentes.innerHTML = `<p class="text-[10px] text-zinc-500 text-center py-3">Nenhum pedido pendente.</p>`;
-            } else {
-                db.pedidosPendentes.forEach((p, idx) => {
-                    listaPendentes.innerHTML += `
-                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-lg space-y-1 text-[10px]">
-                            <div class="flex items-center justify-between">
-                                <span class="font-bold text-white">${p.name}</span>
-                                <span class="text-amber-400 font-semibold">${p.valor}</span>
-                            </div>
-                            <div class="text-[9px] text-zinc-400">CPF: ${p.cpf} | ${p.email}</div>
-                            <div class="flex gap-1.5 pt-0.5">
-                                <button onclick="aprovarPedido(${idx})" class="flex-1 h-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-md text-[9px] transition cursor-pointer">Aprovar</button>
-                                <button onclick="rejeitarPedido(${idx})" class="flex-1 h-6 bg-neutral-800 hover:bg-neutral-700 text-zinc-300 font-semibold rounded-md text-[9px] transition cursor-pointer">Rejeitar</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            const listaIps = document.getElementById('listaIpsContainer');
-            listaIps.innerHTML = '';
-            if (db.visitorIps.length === 0) {
-                listaIps.innerHTML = `<p class="text-[10px] text-zinc-500 text-center py-3">Nenhum IP registrado.</p>`;
-            } else {
-                db.visitorIps.forEach(ip => {
-                    listaIps.innerHTML += `
-                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-lg flex items-center justify-between text-[10px]">
-                            <div>
-                                <span class="font-bold text-white block">${ip.ip}</span>
-                                <span class="text-[9px] text-zinc-400">${ip.device} • ${ip.time}</span>
-                            </div>
-                            <span class="text-[9px] px-1.5 py-0.5 bg-neutral-800 text-zinc-300 rounded">Ativo</span>
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('configIcon1').value = db.profile.icon1 || "";
-            document.getElementById('configIcon2').value = db.profile.icon2 || "";
-            document.getElementById('configBadge').value = db.profile.badgeIcon || "";
-            document.getElementById('configPanelColor').value = db.profile.panelColor || "#0a0a0a";
-        }
-
-        function aprovarPedido(index) {
-            const pedido = db.pedidosPendentes.splice(index, 1)[0];
-            db.vendasAprovadas.unshift(pedido);
-            salvarDb();
-            renderizarAdminData();
-            showToast(`Venda de ${pedido.name} aprovada!`, "✅");
-        }
-
-        function rejeitarPedido(index) {
-            db.pedidosPendentes.splice(index, 1);
-            salvarDb();
-            renderizarAdminData();
-            showToast("Pedido rejeitado.", "🗑️");
-        }
-
-        function limparVendasAprovadas() {
-            if (confirm("Limpar histórico de vendas?")) {
-                db.vendasAprovadas = [];
-                salvarDb();
-                renderizarAdminData();
-                showToast("Histórico limpo.", "🧹");
-            }
-        }
-
-        function limparIps() {
-            db.visitorIps = [];
-            salvarDb();
-            renderizarAdminData();
-            showToast("Logs limpos.", "🧹");
-        }
-
-        function salvarConfigAdminCustom() {
-            db.profile.icon1 = document.getElementById('configIcon1').value.trim() || "fa-solid fa-bolt";
-            db.profile.icon2 = document.getElementById('configIcon2').value.trim() || "fa-solid fa-robot";
-            db.profile.badgeIcon = document.getElementById('configBadge').value.trim() || "fa-solid fa-circle-check";
-            db.profile.panelColor = document.getElementById('configPanelColor').value.trim() || "#0a0a0a";
-            salvarDb();
-            renderizarAdminData();
-            showToast("Customizações salvas!", "💾");
-        }
     </script>
 </body>
 </html>
