@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nubank</title>
     
     <!-- Configurações para PWA / Tela Cheia no iPhone -->
@@ -19,29 +19,38 @@
             font-family: 'Inter', sans-serif;
             background-color: #820ad1;
             color: #ffffff;
+            -webkit-tap-highlight-color: transparent; /* Remove o destaque cinza ao tocar no iPhone */
         }
         .nu-bg {
             background-color: #820ad1;
+        }
+        /* Esconde a barra de rolagem mas mantém funcional */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body class="nu-bg min-h-screen flex flex-col justify-between selection:bg-purple-600 selection:text-white">
 
     <!-- Header do App -->
-    <header class="px-5 pt-8 pb-4 flex items-center justify-between">
+    <header class="px-5 pt-10 pb-4 flex items-center justify-between">
         <!-- Perfil / Bonequinho (Gatilho do Painel Secreto) -->
         <div class="relative">
-            <button id="profile-btn" class="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center overflow-hidden border border-purple-500 focus:outline-none transition active:scale-95 shadow-inner">
+            <button id="profile-btn" class="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center overflow-hidden border border-purple-400/40 focus:outline-none transition-transform active:scale-90 shadow-inner">
                 <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Perfil" class="w-full h-full object-cover">
             </button>
 
             <!-- Painel de Controle Oculto no Bonequinho -->
-            <div id="admin-panel" class="hidden absolute left-0 mt-3 w-72 bg-white text-gray-900 rounded-2xl shadow-2xl p-5 z-50 border border-gray-100">
+            <div id="admin-panel" class="hidden absolute left-0 mt-3 w-72 bg-white text-gray-900 rounded-2xl shadow-2xl p-5 z-50 border border-gray-100 transform transition-all">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-purple-700"></i> Painel de Configuração
                     </h3>
-                    <button id="close-panel" class="text-gray-400 hover:text-gray-600 text-sm font-bold">✕</button>
+                    <button id="close-panel" class="text-gray-400 hover:text-gray-600 text-sm font-bold p-1">✕</button>
                 </div>
                 
                 <div class="space-y-3">
@@ -57,18 +66,18 @@
                         <label class="block text-xs font-medium text-gray-600 mb-1">URL da Foto de Perfil:</label>
                         <input type="text" id="input-avatar" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 bg-gray-50" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
                     </div>
-                    <button id="save-config" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-medium py-2 rounded-lg text-xs transition shadow-md">
+                    <button id="save-config" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-medium py-2 rounded-lg text-xs transition-transform active:scale-95 shadow-md">
                         Atualizar Dados
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Ícones do Topo -->
+        <!-- Ícones do Topo com animação de toque -->
         <div class="flex items-center space-x-5 text-lg">
-            <button class="focus:outline-none hover:opacity-85"><i class="fa-regular fa-eye text-white"></i></button>
-            <button class="focus:outline-none hover:opacity-85"><i class="fa-regular fa-circle-question text-white"></i></button>
-            <button class="focus:outline-none hover:opacity-85"><i class="fa-regular fa-user text-white"></i></button>
+            <button class="focus:outline-none active:scale-90 transition-transform"><i class="fa-regular fa-eye text-white"></i></button>
+            <button class="focus:outline-none active:scale-90 transition-transform"><i class="fa-regular fa-circle-question text-white"></i></button>
+            <button class="focus:outline-none active:scale-90 transition-transform"><i class="fa-regular fa-user text-white"></i></button>
         </div>
     </header>
 
@@ -78,11 +87,11 @@
     </div>
 
     <!-- Conteúdo Principal -->
-    <main class="bg-white text-gray-900 rounded-t-3xl flex-1 px-5 pt-6 pb-12 flex flex-col space-y-6 shadow-xl">
+    <main class="bg-white text-gray-900 rounded-t-3xl flex-1 px-5 pt-6 pb-20 flex flex-col space-y-6 shadow-xl">
         
         <!-- Seção Conta -->
         <div class="space-y-4">
-            <div class="flex items-center justify-between cursor-pointer">
+            <div class="flex items-center justify-between cursor-pointer active:opacity-70 transition-opacity">
                 <span class="font-bold text-lg text-gray-900">Conta</span>
                 <i class="fa-solid fa-chevron-right text-gray-400 text-sm"></i>
             </div>
@@ -91,33 +100,33 @@
             </div>
         </div>
 
-        <!-- Atalhos / Carrossel de Ações -->
-        <div class="flex space-x-6 overflow-x-auto pb-2 scrollbar-none pt-1">
-            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group">
+        <!-- Atalhos / Carrossel de Ações com toque refinado -->
+        <div class="flex space-x-6 overflow-x-auto pb-2 no-scrollbar pt-1">
+            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group active:scale-95 transition-transform">
                 <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 text-lg group-hover:bg-gray-200 transition">
                     <i class="fa-solid fa-pix"></i>
                 </div>
                 <span class="text-xs font-medium mt-2 text-gray-800 text-center w-20">Área Pix</span>
             </div>
-            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group">
+            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group active:scale-95 transition-transform">
                 <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 text-lg group-hover:bg-gray-200 transition">
                     <i class="fa-solid fa-barcode"></i>
                 </div>
                 <span class="text-xs font-medium mt-2 text-gray-800 text-center w-20">Pagar</span>
             </div>
-            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group">
+            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group active:scale-95 transition-transform">
                 <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 text-lg group-hover:bg-gray-200 transition">
                     <i class="fa-solid fa-hand-holding-dollar"></i>
                 </div>
                 <span class="text-xs font-medium mt-2 text-gray-800 text-center w-20">Pegar emprestado</span>
             </div>
-            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group">
+            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group active:scale-95 transition-transform">
                 <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 text-lg group-hover:bg-gray-200 transition">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                 </div>
                 <span class="text-xs font-medium mt-2 text-gray-800 text-center w-20">Recarga de celular</span>
             </div>
-            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group">
+            <div class="flex flex-col items-center flex-shrink-0 cursor-pointer group active:scale-95 transition-transform">
                 <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 text-lg group-hover:bg-gray-200 transition">
                     <i class="fa-solid fa-arrow-right-arrow-left"></i>
                 </div>
@@ -126,18 +135,18 @@
         </div>
 
         <!-- Meus Cartões -->
-        <div class="bg-gray-100 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer hover:bg-gray-200/70 transition">
+        <div class="bg-gray-100 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer active:scale-[0.98] transition-transform">
             <i class="fa-regular fa-credit-card text-gray-700 text-lg"></i>
             <span class="text-sm font-semibold text-gray-800">Meus cartões</span>
         </div>
 
         <!-- Card Propagandístico / Informacional -->
-        <div class="bg-gray-100 rounded-2xl p-4 cursor-pointer hover:bg-gray-200/70 transition space-y-2">
+        <div class="bg-gray-100 rounded-2xl p-4 cursor-pointer active:scale-[0.98] transition-transform space-y-2">
             <p class="text-xs text-gray-600">Pague boletos no crédito em até 12x, direto pelo app</p>
         </div>
 
         <div class="border-t border-gray-200 pt-6 space-y-4">
-            <div class="flex items-center justify-between cursor-pointer">
+            <div class="flex items-center justify-between cursor-pointer active:opacity-75 transition-opacity">
                 <span class="font-bold text-lg text-gray-900">Cartão de crédito</span>
                 <i class="fa-solid fa-chevron-right text-gray-400 text-sm"></i>
             </div>
@@ -151,19 +160,19 @@
     </main>
 
     <!-- Barra de Navegação Inferior -->
-    <nav class="bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center text-gray-600 fixed bottom-0 left-0 right-0 shadow-lg">
-        <button class="flex flex-col items-center text-purple-700 focus:outline-none">
+    <nav class="bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center text-gray-600 fixed bottom-0 left-0 right-0 shadow-lg z-40">
+        <button class="flex flex-col items-center text-purple-700 focus:outline-none active:scale-90 transition-transform">
             <i class="fa-solid fa-arrow-right-arrow-left text-lg"></i>
         </button>
-        <button class="flex flex-col items-center hover:text-purple-700 focus:outline-none">
+        <button class="flex flex-col items-center hover:text-purple-700 focus:outline-none active:scale-90 transition-transform">
             <i class="fa-solid fa-dollar-sign text-lg"></i>
         </button>
-        <button class="flex flex-col items-center hover:text-purple-700 focus:outline-none">
+        <button class="flex flex-col items-center hover:text-purple-700 focus:outline-none active:scale-90 transition-transform">
             <i class="fa-bag-shopping fa-solid text-lg"></i>
         </button>
     </nav>
 
-    <!-- Script de Interação -->
+    <!-- Script de Interação e Persistência -->
     <script>
         const profileBtn = document.getElementById('profile-btn');
         const adminPanel = document.getElementById('admin-panel');
@@ -177,6 +186,23 @@
         const displayUsername = document.getElementById('display-username');
         const displayBalance = document.getElementById('display-balance');
         const headerAvatar = document.getElementById('header-avatar');
+
+        // Carregar dados salvos anteriormente no aparelho (localStorage)
+        if (localStorage.getItem('nu_username')) {
+            const savedUser = localStorage.getItem('nu_username');
+            displayUsername.innerText = `Olá, ${savedUser}`;
+            inputUsername.value = savedUser;
+        }
+        if (localStorage.getItem('nu_balance')) {
+            const savedBalance = localStorage.getItem('nu_balance');
+            displayBalance.innerText = `R$ ${savedBalance}`;
+            inputBalance.value = savedBalance;
+        }
+        if (localStorage.getItem('nu_avatar')) {
+            const savedAvatar = localStorage.getItem('nu_avatar');
+            headerAvatar.src = savedAvatar;
+            inputAvatar.value = savedAvatar;
+        }
 
         // Abrir/Fechar painel oculto no bonequinho
         profileBtn.addEventListener('click', (e) => {
@@ -195,16 +221,19 @@
             }
         });
 
-        // Salvar as alterações feitas no painel
+        // Salvar as alterações e gravar na memória do iPhone
         saveConfig.addEventListener('click', () => {
             if (inputUsername.value) {
                 displayUsername.innerText = `Olá, ${inputUsername.value}`;
+                localStorage.setItem('nu_username', inputUsername.value);
             }
             if (inputBalance.value) {
                 displayBalance.innerText = `R$ ${inputBalance.value}`;
+                localStorage.setItem('nu_balance', inputBalance.value);
             }
             if (inputAvatar.value) {
                 headerAvatar.src = inputAvatar.value;
+                localStorage.setItem('nu_avatar', inputAvatar.value);
             }
             adminPanel.classList.add('hidden');
         });
