@@ -2,13 +2,16 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Inter</title>
-    <!-- Configuração PWA para Adicionar ao Ecrã Inicial -->
+    
+    <!-- Configuração PWA / Tela Cheia Real -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Inter">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#FF7A00">
+    
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkludGVyIiwKICAic2hvcnRfbmFtZSI6ICJJbnRlciIsCi  wic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRjdBMDAiLAogICJ0aGVtZV9jb2xvciI6ICIjRkY3QTAwIiwKICAiaWNvbnMiOiB7CiAgICAic3JjIjogImh0dHBzOi8vdXBsb2Fkcy53aWtpbWVkaWEub3JnL3dpa2lwZWRpYS9jb21tb25zL2UvZTZMb2dvX2RvX2JhbmNvX0ludGVyXygyMDIzKS5zdmciLAogICAgInNpemVzIjogIjE5M3gxOTMiLAogICAgInR5cGUiOiAiaW1hZgevL3N2Zyt4bWwiCiAgfVp9">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
     
@@ -16,151 +19,156 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: #121214; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; padding: 0; 
+            width: 100vw; height: 100vh; height: 100dvh;
+            overflow: hidden; 
+            display: flex; justify-content: center; align-items: center; 
+        }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        /* Estilo para o input de ficheiro escondido */
-        #file-input { display: none; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen m-0 p-0">
+<body>
 
-    <!-- Container Principal do Telemóvel -->
-    <div id="app-container" class="w-full max-w-md bg-white h-[100vh] sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
+    <!-- Container Fixo Centralizado (App Frame / Responsivo Absoluto) -->
+    <div id="app-container" class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
 
         <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
-        <div id="screen-login" class="absolute inset-0 bg-white z-50 flex flex-col justify-between p-6 transition-transform duration-300">
-            <div class="pt-12 text-center">
-                <!-- Logo Oficial Atualizado Inter -->
-                <div class="flex justify-center mb-6">
+        <div id="screen-login" class="absolute inset-0 bg-white z-[100] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
+            <div class="pt-8 text-center">
+                <div class="flex justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter Logo" class="h-10">
                 </div>
-                <h2 class="text-xl font-bold text-zinc-800">Acesse sua conta</h2>
-                <p class="text-xs text-zinc-500 mt-1">Insira os dados da sua agência e conta</p>
+                <h2 class="text-lg font-bold text-zinc-800">Acesse sua conta</h2>
+                <p class="text-xs text-zinc-500 mt-1">Insira os seus dados para simulação</p>
             </div>
 
-            <div class="space-y-4 my-auto">
+            <div class="space-y-3 my-auto py-2">
                 <div>
                     <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Titular</label>
-                    <input type="text" id="input-nome-login" value="Usuário Inter" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    <input type="text" id="input-nome-login" value="Usuário Inter" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-xs font-semibold text-zinc-600 block mb-1">Agência</label>
-                        <input type="text" id="input-agencia" value="0001" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                        <input type="text" id="input-agencia" value="0001" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                     <div>
                         <label class="text-xs font-semibold text-zinc-600 block mb-1">Conta</label>
-                        <input type="text" id="input-conta" value="1234567-8" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                        <input type="text" id="input-conta" value="1234567-8" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                 </div>
                 <div>
                     <label class="text-xs font-semibold text-zinc-600 block mb-1">Saldo Inicial (R$)</label>
-                    <input type="text" id="input-saldo" value="4.850,20" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    <input type="text" id="input-saldo" value="4.850,20" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                 </div>
             </div>
 
-            <div>
-                <button onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30">
+            <div class="pt-4">
+                <button type="button" onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30 cursor-pointer text-sm">
                     Entrar na Conta
                 </button>
-                <p class="text-[10px] text-center text-zinc-400 mt-4">Banco Inter S.A. • CNPJ: 00.416.968/0001-01</p>
+                <p class="text-[10px] text-center text-zinc-400 mt-3">Banco Inter S.A. • Simulador Oficial</p>
             </div>
         </div>
 
         <!-- ================= 2. HOME PRINCIPAL ================= -->
         <!-- Cabeçalho -->
-        <header class="px-6 pt-6 pb-4 bg-white flex justify-between items-center z-10 shrink-0">
+        <header class="px-5 pt-4 pb-3 bg-white flex justify-between items-center z-10 shrink-0 border-b border-zinc-100">
             <div class="flex items-center space-x-3">
-                <!-- Foto de Perfil com Lápis -->
-                <div class="relative cursor-pointer group" onclick="document.getElementById('file-input').click()">
-                    <div class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-sm shadow-sm overflow-hidden border-2 border-white ring-1 ring-zinc-200" id="user-avatar-wrapper">
+                <!-- Foto de Perfil com Lápis Direto da Galeria -->
+                <div class="relative cursor-pointer group" onclick="document.getElementById('file-input-avatar').click()" title="Alterar foto da galeria">
+                    <div class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-sm shadow-sm overflow-hidden border-2 border-white ring-1 ring-zinc-200">
                         <span id="user-avatar-text">UI</span>
-                        <img id="user-avatar-img" src="" class="w-full h-full object-cover hidden">
+                        <img id="user-avatar-img" src="" alt="Perfil" class="w-full h-full object-cover hidden">
                     </div>
-                    <!-- Ícone de Lápis sobre a foto -->
-                    <div class="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                        <i class="fa-solid fa-pencil text-white text-[10px]"></i>
+                    <!-- Ícone Lápis flutuante -->
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-orange-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-sm border border-white">
+                        <i class="fa-solid fa-pencil"></i>
                     </div>
-                    <!-- Input de ficheiro escondido -->
-                    <input type="file" id="file-input" accept="image/*" onchange="alterarFotoPerfil(this)">
+                    <!-- Input file invisível -->
+                    <input type="file" id="file-input-avatar" accept="image/*" class="hidden" onchange="carregarFotoGaleria(this)">
                 </div>
 
                 <div>
-                    <span class="text-xs text-zinc-400 block">Olá,</span>
-                    <div class="flex items-center gap-1.5 group">
-                        <h1 class="text-sm font-bold text-zinc-800 truncate max-w-[140px]" id="user-display-name">Usuário Inter</h1>
-                        <!-- Ícone de Lápis para alterar nome -->
-                        <i class="fa-solid fa-pencil text-zinc-400 text-[10px] cursor-pointer opacity-0 group-hover:opacity-100 transition" onclick="abrirModalAlterarNome()"></i>
+                    <span class="text-[11px] text-zinc-400 block leading-tight">Olá,</span>
+                    <div class="flex items-center gap-1.5 group cursor-pointer" onclick="abrirModalAlterarNome()">
+                        <h1 class="text-xs font-bold text-zinc-800 truncate max-w-[130px]" id="user-display-name">Usuário Inter</h1>
+                        <i class="fa-solid fa-pencil text-zinc-400 text-[9px]"></i>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 text-zinc-600 text-lg">
+            <div class="flex items-center space-x-3 text-zinc-600 text-base">
                 <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
-                <i class="fa-regular fa-bell cursor-pointer relative" onclick="alert('Sem novas notificações.')"></i>
+                <i class="fa-regular fa-bell cursor-pointer" onclick="alert('Sem novas notificações.')"></i>
             </div>
         </header>
 
-        <!-- Corpo com Scroll -->
-        <main class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar bg-zinc-50">
+        <!-- Corpo com Scroll Controlado -->
+        <main class="flex-1 overflow-y-auto p-4 space-y-3.5 hide-scrollbar bg-zinc-50">
             
             <!-- Card de Conta Digital -->
-            <div class="bg-white p-5 rounded-2xl shadow-xs border border-zinc-100">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs font-semibold text-zinc-400 tracking-wider">CONTA DIGITAL</span>
-                    <span class="text-xs bg-emerald-50 text-emerald-600 font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <i class="fa-solid fa-chart-line text-[10px]"></i> 100% CDI
+            <div class="bg-white p-4 rounded-2xl shadow-xs border border-zinc-100">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-[10px] font-semibold text-zinc-400 tracking-wider">CONTA DIGITAL</span>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-600 font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <i class="fa-solid fa-chart-line text-[9px]"></i> 100% CDI
                     </span>
                 </div>
                 <div class="flex justify-between items-center mb-1">
-                    <h2 class="text-2xl font-extrabold text-zinc-900" id="saldo-display">R$ 4.850,20</h2>
+                    <h2 class="text-xl font-extrabold text-zinc-900" id="saldo-display">R$ 4.850,20</h2>
                     <i class="fa-solid fa-chevron-right text-xs text-zinc-400"></i>
                 </div>
-                <p class="text-xs text-zinc-500">Rendimento total: <span class="text-emerald-600 font-medium">+R$ 38,40</span> este mês</p>
+                <p class="text-[11px] text-zinc-500">Rendimento total: <span class="text-emerald-600 font-medium">+R$ 38,40</span> este mês</p>
             </div>
 
             <!-- Atalhos / Ações Rápidas -->
-            <div class="grid grid-cols-4 gap-3">
-                <div onclick="abrirModalSimularPix()" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
+            <div class="grid grid-cols-4 gap-2.5">
+                <div onclick="abrirModalSimularPix()" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <span class="text-xs font-medium text-zinc-700">Pix</span>
+                    <span class="text-[11px] font-medium text-zinc-700">Pix</span>
                 </div>
-                <div onclick="alert('Secção de Cartões')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
+                <div onclick="abrirModalCartao()" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-credit-card"></i>
                     </div>
-                    <span class="text-xs font-medium text-zinc-700">Cartões</span>
+                    <span class="text-[11px] font-medium text-zinc-700">Cartões</span>
                 </div>
-                <div onclick="alert('Secção de Investimentos')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
+                <div onclick="alert('Secção de Investimentos')" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-chart-pie"></i>
                     </div>
-                    <span class="text-xs font-medium text-zinc-700">Investir</span>
+                    <span class="text-[11px] font-medium text-zinc-700">Investir</span>
                 </div>
-                <div onclick="alert('Inter Shop')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
+                <div onclick="alert('Inter Shop')" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-bag-shopping"></i>
                     </div>
-                    <span class="text-xs font-medium text-zinc-700">Inter Shop</span>
+                    <span class="text-[11px] font-medium text-zinc-700">Shop</span>
                 </div>
             </div>
 
             <!-- Últimas Transações -->
             <div class="bg-white p-4 rounded-2xl shadow-xs border border-zinc-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold text-zinc-800">Últimas Transações</h3>
-                    <span class="text-xs font-bold text-orange-600 cursor-pointer" onclick="abrirModalSimularPix()">Simular Transação</span>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-zinc-800">Últimas Transações</h3>
+                    <span class="text-[11px] font-bold text-orange-600 cursor-pointer" onclick="abrirModalSimularPix()">Simular Transação</span>
                 </div>
 
-                <div class="space-y-4" id="lista-transacoes">
-                    <!-- Transação Inicial 1 -->
-                    <div onclick="abrirComprovativo('Pix Enviado', '- R$ 150,00', 'Hoje, 14:20', 'Maria Souza da Silva', '***.456.789-**', 'Banco Nubank')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1.5 rounded-xl transition">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-arrow-up text-sm"></i>
+                <div class="space-y-3" id="lista-transacoes">
+                    <!-- Transação Exemplo -->
+                    <div onclick="abrirComprovativo('Pix Enviado', '- R$ 150,00', 'Hoje, 14:20', 'Maria Souza da Silva', '***.456.789-**', 'Banco Nubank')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-9 h-9 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-arrow-up text-xs"></i>
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-zinc-800">Pix Enviado</h4>
@@ -177,104 +185,149 @@
         <!-- Barra de Navegação Inferior -->
         <nav class="bg-white border-t border-zinc-200 py-2 px-6 flex justify-between items-center text-center shrink-0 z-10">
             <div class="flex flex-col items-center text-orange-600 cursor-pointer">
-                <i class="fa-solid fa-house text-lg"></i>
-                <span class="text-[10px] font-medium mt-1">Início</span>
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[9px] font-medium mt-0.5">Início</span>
             </div>
             <div onclick="abrirModalSimularPix()" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
-                <i class="fa-solid fa-bolt text-lg"></i>
-                <span class="text-[10px] font-medium mt-1">Pix</span>
+                <i class="fa-solid fa-bolt text-base"></i>
+                <span class="text-[9px] font-medium mt-0.5">Pix</span>
+            </div>
+            <div onclick="abrirModalCartao()" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
+                <i class="fa-solid fa-credit-card text-base"></i>
+                <span class="text-[9px] font-medium mt-0.5">Cartões</span>
             </div>
             <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
-                <i class="fa-solid fa-credit-card text-lg"></i>
-                <span class="text-[10px] font-medium mt-1">Cartões</span>
+                <i class="fa-solid fa-chart-pie text-base"></i>
+                <span class="text-[9px] font-medium mt-0.5">Investir</span>
             </div>
             <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
-                <i class="fa-solid fa-chart-pie text-lg"></i>
-                <span class="text-[10px] font-medium mt-1">Investir</span>
-            </div>
-            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
-                <i class="fa-solid fa-bag-shopping text-lg"></i>
-                <span class="text-[10px] font-medium mt-1">Shop</span>
+                <i class="fa-solid fa-bag-shopping text-base"></i>
+                <span class="text-[9px] font-medium mt-0.5">Shop</span>
             </div>
         </nav>
 
+        <!-- ================= MODAL CARTÃO FAKE ================= -->
+        <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
+            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200">
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+                    <h3 class="font-bold text-zinc-800 text-sm">Meu Cartão Inter</h3>
+                    <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalCartao()"></i>
+                </div>
+
+                <!-- Simulação Visual do Cartão Inter Laranja -->
+                <div class="w-full h-44 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-5 text-white flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold tracking-widest text-sm">INTER</span>
+                        <i class="fa-solid fa-wifi rotate-90 text-sm"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] uppercase opacity-80">Cartão Múltiplo (Débito/Crédito)</div>
+                        <div class="font-mono text-base tracking-widest" id="cartao-num">5271 •••• •••• 8902</div>
+                    </div>
+                    <div class="flex justify-between items-end text-xs">
+                        <div>
+                            <span class="text-[9px] block opacity-70">TITULAR</span>
+                            <span class="font-bold uppercase truncate max-w-[150px] block" id="cartao-titular">USUÁRIO INTER</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] block opacity-70">VALIDADE</span>
+                            <span class="font-bold">08/30</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] block opacity-70">CVV</span>
+                            <span class="font-bold font-mono">492</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <button onclick="alert('Dados do cartão copiados com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md">
+                        Copiar Número do Cartão
+                    </button>
+                    <button onclick="fecharModalCartao()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- ================= MODAL ALTERAR NOME ================= -->
-        <div id="modal-nome" class="absolute inset-0 bg-black/60 z-[60] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full rounded-2xl p-6 space-y-4 animate-in fade-in zoom-in duration-200">
-                <h3 class="font-bold text-zinc-800 text-lg">Alterar Nome de Exibição</h3>
-                <input type="text" id="input-novo-nome" placeholder="Digite o novo nome" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500">
-                <div class="flex gap-3 pt-2">
-                    <button onclick="fecharModalAlterarNome()" class="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition">Cancelar</button>
-                    <button onclick="confirmarAlterarNome()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition">Salvar</button>
+        <div id="modal-nome" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full rounded-2xl p-5 space-y-3.5 animate-in fade-in zoom-in duration-200">
+                <h3 class="font-bold text-zinc-800 text-sm">Alterar Nome de Titular</h3>
+                <input type="text" id="input-novo-nome" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
+                <div class="flex gap-2.5 pt-1">
+                    <button onclick="fecharModalAlterarNome()" class="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">Cancelar</button>
+                    <button onclick="confirmarAlterarNome()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs">Salvar</button>
                 </div>
             </div>
         </div>
 
         <!-- ================= MODAL SIMULAR PIX ================= -->
-        <div id="modal-pix" class="absolute inset-0 bg-black/60 z-50 hidden flex items-end justify-center">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
+        <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
+            <div class="bg-white w-full rounded-t-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-base">Simular Nova Transação</h3>
-                    <i class="fa-solid fa-xmark text-zinc-400 text-lg cursor-pointer" onclick="fecharModalSimularPix()"></i>
+                    <h3 class="font-bold text-zinc-800 text-sm">Simular Nova Transação / Pix</h3>
+                    <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalSimularPix()"></i>
                 </div>
                 
-                <div class="space-y-3">
+                <div class="space-y-2.5 text-xs">
                     <div>
-                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Tipo</label>
-                        <select id="sim-tipo" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500">
+                        <label class="font-semibold text-zinc-600 block mb-1">Tipo de Operação</label>
+                        <select id="sim-tipo" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                             <option value="enviado">Pix Enviado (-)</option>
                             <option value="recebido">Pix Recebido (+)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Valor (R$)</label>
-                        <input type="text" id="sim-valor" value="250,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500">
+                        <label class="font-semibold text-zinc-600 block mb-1">Valor (R$)</label>
+                        <input type="text" id="sim-valor" value="250,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Favorecido/Pagador</label>
-                        <input type="text" id="sim-nome" value="Empresa Teste Ltda" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500">
+                        <label class="font-semibold text-zinc-600 block mb-1">Favorecido / Pagador</label>
+                        <input type="text" id="sim-nome" value="Empresa Comercial Ltda" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-zinc-600 block mb-1">CPF/CNPJ</label>
-                        <input type="text" id="sim-cpf" value="00.000.000/0000-00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500">
+                        <label class="font-semibold text-zinc-600 block mb-1">CPF / CNPJ</label>
+                        <input type="text" id="sim-cpf" value="12.345.678/0001-99" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Instituição</label>
-                        <input type="text" id="sim-banco" value="Banco Inter" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500">
+                        <label class="font-semibold text-zinc-600 block mb-1">Instituição Bancária</label>
+                        <input type="text" id="sim-banco" value="Mercado Pago IP" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                 </div>
 
-                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition mt-2">
-                    Gerar Comprovativo
+                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1">
+                    Gerar Comprovativo e Atualizar Saldo
                 </button>
             </div>
         </div>
 
         <!-- ================= MODAL COMPROVATIVO ================= -->
-        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[55] hidden flex-col justify-between p-6 overflow-y-auto">
+        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[80] hidden flex-col justify-between p-6 overflow-y-auto">
             <div>
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
                     <div class="flex items-center space-x-2">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-6">
-                        <span class="text-xs font-bold text-zinc-400">Comprovativo</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5">
+                        <span class="text-xs font-bold text-zinc-400">Comprovativo Pix</span>
                     </div>
-                    <i class="fa-solid fa-xmark text-zinc-600 text-xl cursor-pointer" onclick="fecharComprovativo()"></i>
+                    <i class="fa-solid fa-xmark text-zinc-600 text-lg cursor-pointer" onclick="fecharComprovativo()"></i>
                 </div>
 
-                <div class="text-center py-6 border-b border-dashed border-zinc-200">
-                    <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3 text-xl" id="comp-icone-status">
+                <div class="text-center py-5 border-b border-dashed border-zinc-200">
+                    <div class="w-11 h-11 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-lg" id="comp-icone-status">
                         <i class="fa-solid fa-check"></i>
                     </div>
-                    <h3 class="text-sm font-semibold text-zinc-500" id="comp-titulo-status">Pix efetuado com sucesso</h3>
-                    <h2 class="text-2xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 0,00</h2>
-                    <p class="text-xs text-zinc-400 mt-1" id="comp-data">---</p>
+                    <h3 class="text-xs font-semibold text-zinc-500" id="comp-titulo-status">Pix efetuado com sucesso</h3>
+                    <h2 class="text-xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 0,00</h2>
+                    <p class="text-[11px] text-zinc-400 mt-0.5" id="comp-data">---</p>
                 </div>
 
-                <div class="py-4 space-y-3 text-xs">
-                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[10px] mb-2">Detalhes</div>
+                <div class="py-3.5 space-y-2.5 text-xs">
+                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[9px] mb-1">Detalhes da Transação</div>
                     <div class="flex justify-between">
                         <span class="text-zinc-500">Nome</span>
-                        <span class="font-bold text-zinc-800 text-right" id="comp-nome">---</span>
+                        <span class="font-bold text-zinc-800 text-right truncate max-w-[180px]" id="comp-nome">---</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-zinc-500">CPF/CNPJ</span>
@@ -284,30 +337,31 @@
                         <span class="text-zinc-500">Instituição</span>
                         <span class="font-medium text-zinc-800" id="comp-banco">---</span>
                     </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">Autenticação (EndToEnd)</span>
+                        <span class="font-mono text-[10px] text-zinc-600">E004169682026...</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="space-y-2 pt-4 border-t border-zinc-100">
-                <button onclick="alert('Guardado')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs">
+            <div class="space-y-2 pt-3 border-t border-zinc-100">
+                <button onclick="alert('Comprovativo guardado com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md">
                     Guardar Comprovativo
                 </button>
-                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition text-xs">
-                    Voltar
+                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                    Voltar ao Início
                 </button>
             </div>
         </div>
 
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts de Lógica Integrada -->
     <script>
-        // Estado Global
         let saldoAtual = 4850.20;
         let saldoVisivel = true;
 
-        // --- Inicialização ---
         window.onload = function() {
-            // Recupera dados salvos se existirem
             const savedName = localStorage.getItem('inter_nome');
             if(savedName) atualizarNomeNaTela(savedName);
             
@@ -315,14 +369,13 @@
             if(savedAvatar) definirAvatarImagem(savedAvatar);
         }
 
-        // --- Login Simulado ---
         function realizarLogin() {
-            const nome = document.getElementById('input-nome-login').value;
-            const saldoStr = document.getElementById('input-saldo').value.replace('.', '').replace(',', '.');
+            const nomeInput = document.getElementById('input-nome-login').value;
+            const saldoStr = document.getElementById('input-saldo').value.replace(/\./g, '').replace(',', '.');
             
-            if(nome) {
-                localStorage.setItem('inter_nome', nome);
-                atualizarNomeNaTela(nome);
+            if(nomeInput.trim() !== "") {
+                localStorage.setItem('inter_nome', nomeInput);
+                atualizarNomeNaTela(nomeInput);
             }
             
             if(!isNaN(parseFloat(saldoStr))) {
@@ -330,43 +383,26 @@
                 atualizarDisplaySaldo();
             }
 
-            // Animação de saída do login
             const loginScreen = document.getElementById('screen-login');
-            loginScreen.style.transform = 'translateY(-100%)';
-            setTimeout(() => loginScreen.style.display = 'none', 300);
+            loginScreen.style.opacity = '0';
+            loginScreen.style.pointerEvents = 'none';
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+            }, 300);
         }
 
-        // --- Gestão de Perfil (Nome e Foto) ---
         function atualizarNomeNaTela(nome) {
             document.getElementById('user-display-name').innerText = nome;
-            // Atualiza iniciais do avatar caso não haja imagem
-            if(document.getElementById('user-avatar-img').src === "") {
+            document.getElementById('cartao-titular').innerText = nome.toUpperCase();
+            if(document.getElementById('user-avatar-img').src === "" || document.getElementById('user-avatar-img').classList.contains('hidden')) {
                 const iniciais = nome.split(' ').filter(n=>n).map(n => n[0]).join('').substring(0, 2).toUpperCase();
                 document.getElementById('user-avatar-text').innerText = iniciais || 'UI';
             }
         }
 
-        function abrirModalAlterarNome() {
-            document.getElementById('input-novo-nome').value = document.getElementById('user-display-name').innerText;
-            document.getElementById('modal-nome').classList.remove('hidden');
-        }
-
-        function fecharModalAlterarNome() {
-            document.getElementById('modal-nome').classList.add('hidden');
-        }
-
-        function confirmarAlterarNome() {
-            const novoNome = document.getElementById('input-novo-nome').value;
-            if(novoNome) {
-                localStorage.setItem('inter_nome', novoNome);
-                atualizarNomeNaTela(novoNome);
-            }
-            fecharModalAlterarNome();
-        }
-
-        function alterarFotoPerfil(input) {
+        function carregarFotoGaleria(input) {
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = function (e) {
                     const dataURL = e.target.result;
                     localStorage.setItem('inter_avatar', dataURL);
@@ -384,18 +420,33 @@
             textElt.classList.add('hidden');
         }
 
-        // --- Gestão de Saldo ---
+        function abrirModalAlterarNome() {
+            document.getElementById('input-novo-nome').value = document.getElementById('user-display-name').innerText;
+            document.getElementById('modal-nome').classList.remove('hidden');
+        }
+
+        function fecharModalAlterarNome() {
+            document.getElementById('modal-nome').classList.add('hidden');
+        }
+
+        function confirmarAlterarNome() {
+            const novoNome = document.getElementById('input-novo-nome').value;
+            if(novoNome.trim() !== "") {
+                localStorage.setItem('inter_nome', novoNome);
+                atualizarNomeNaTela(novoNome);
+            }
+            fecharModalAlterarNome();
+        }
+
         function alternarVisibilidadeSaldo() {
             saldoVisivel = !saldoVisivel;
             const eyeIcon = document.getElementById('toggle-eye');
-            const display = document.getElementById('saldo-display');
-            
             if(saldoVisivel) {
                 eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
                 atualizarDisplaySaldo();
             } else {
                 eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-                display.innerText = 'R$ •••••••';
+                document.getElementById('saldo-display').innerText = 'R$ •••••••';
             }
         }
 
@@ -405,38 +456,42 @@
             }
         }
 
-        // --- Simulação Pix e Comprovativo ---
+        function abrirModalCartao() {
+            document.getElementById('modal-cartao').classList.remove('hidden');
+        }
+        function fecharModalCartao() {
+            document.getElementById('modal-cartao').classList.add('hidden');
+        }
+
         function abrirModalSimularPix() {
             document.getElementById('modal-pix').classList.remove('hidden');
         }
-
         function fecharModalSimularPix() {
             document.getElementById('modal-pix').classList.add('hidden');
         }
 
         function executarSimulacaoPix() {
             const tipo = document.getElementById('sim-tipo').value;
-            const valorStr = document.getElementById('sim-valor').value.replace('.', '').replace(',', '.');
+            const valorStr = document.getElementById('sim-valor').value.replace(/\./g, '').replace(',', '.');
             const valor = parseFloat(valorStr);
             const nome = document.getElementById('sim-nome').value;
             const cpf = document.getElementById('sim-cpf').value;
             const banco = document.getElementById('sim-banco').value;
 
-            if(isNaN(valor) || valor <= 0) { alert('Valor inválido.'); return; }
+            if(isNaN(valor) || valor <= 0) { alert('Insira um valor válido.'); return; }
 
             if(tipo === 'enviado') saldoAtual -= valor; else saldoAtual += valor;
             atualizarDisplaySaldo();
 
-            // Adicionar ao topo da lista
             const lista = document.getElementById('lista-transacoes');
             const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const valorF = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
             const itemHTML = `
-                <div onclick="abrirComprovativo('${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}', '${tipo === 'enviado' ? '- ' : '+ '}${valorF}', 'Hoje, ${hora}', '${nome}', '${cpf}', '${banco}')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1.5 rounded-xl transition">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full ${tipo === 'enviado' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-arrow-${tipo === 'enviado' ? 'up' : 'down'} text-sm"></i>
+                <div onclick="abrirComprovativo('${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}', '${tipo === 'enviado' ? '- ' : '+ '}${valorF}', 'Hoje, ${hora}', '${nome}', '${cpf}', '${banco}')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full ${tipo === 'enviado' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-${tipo === 'enviado' ? 'up' : 'down'} text-xs"></i>
                         </div>
                         <div>
                             <h4 class="text-xs font-bold text-zinc-800">${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}</h4>
@@ -461,4 +516,19 @@
 
             const iconeBox = document.getElementById('comp-icone-status');
             if(titulo.includes('Enviado')) {
-                iconeBox.className = "w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3 text-xl";
+                iconeBox.className = "w-11 h-11 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-2 text-lg";
+                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+            } else {
+                iconeBox.className = "w-11 h-11 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-lg";
+                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+            }
+
+            document.getElementById('modal-comprovativo').style.display = 'flex';
+        }
+
+        function fecharComprovativo() {
+            document.getElementById('modal-comprovativo').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
