@@ -1,592 +1,1052 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco Inter - Simulador Black & White</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistema Web Interativo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0a0a0c',
+                        surface: '#121216',
+                        surfaceLight: '#1a1a20',
+                        primary: '#8b5cf6',
+                        primaryHover: '#7c3aed',
+                        success: '#10b981',
+                        error: '#ef4444',
+                        warning: '#f59e0b'
+                    },
+                    animation: {
+                        pulseSlow: 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        glow: 'glow 4s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.1)' },
+                            '100%': { boxShadow: '0 0 30px rgba(139, 92, 246, 0.25)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #000000;
-            --surface-color: #111111;
-            --surface-hover: #1c1c1c;
-            --border-color: #333333;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1a1;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-family);
-        }
-
+        /* Custom Styles & Scrollbars */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #050507;
+            color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .app-container {
-            width: 100%;
-            max-width: 420px;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            height: 840px;
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
         }
-
-        /* Cabeçalho */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
         }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
         }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 16px;
+        .backdrop-blur-md {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
-
-        .greeting span {
-            font-size: 12px;
-            color: var(--text-secondary);
+        /* Modal transitions */
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
         }
-
-        .greeting h2 {
-            font-size: 16px;
-            font-weight: 600;
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
-
-        .header-icons button {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 20px;
-            cursor: pointer;
+        .modal-content {
+            transform: scale(0.94) translateY(10px);
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
         }
-
-        /* Área de Conteúdo Rolável */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
-
-        /* Card de Saldo */
-        .balance-card {
-            background-color: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
+        /* Toast global transitions */
+        #global-toast {
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            pointer-events: none;
         }
-
-        .balance-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-            font-size: 14px;
+        #global-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
-
-        .balance-amount {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+        /* Floating notification */
+        #floating-notification {
+            transform: translateY(-30px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            pointer-events: none;
         }
-
-        /* Atalhos Rápidos */
-        .shortcuts {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .shortcut-btn {
-            background-color: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .shortcut-btn:hover {
-            background-color: var(--border-color);
-        }
-
-        .shortcut-btn span {
-            font-size: 11px;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        .shortcut-icon {
-            font-size: 18px;
-        }
-
-        /* Seções e Extrato */
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .transaction-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            padding: 12px 16px;
-            border-radius: 12px;
-        }
-
-        .tx-info h4 {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .tx-info span {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .tx-value {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .tx-value.negative {
-            color: var(--text-primary);
-        }
-
-        .tx-value.positive {
-            color: var(--text-primary);
-        }
-
-        /* Modais / Telas Secundárias */
-        .modal {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
-            z-index: 10;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .modal-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            background-color: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
-            color: var(--text-primary);
-            font-size: 16px;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--text-primary);
-        }
-
-        .btn-primary {
-            width: 100%;
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.85;
-        }
-
-        /* Menu Inferior (Navegação) */
-        nav {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            background-color: var(--surface-color);
-            border-top: 1px solid var(--border-color);
-            padding: 12px 0;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .nav-item.active {
-            color: var(--text-primary);
-        }
-
-        .nav-icon {
-            font-size: 18px;
+        #floating-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-4 selection:bg-primary selection:text-white">
 
-    <div class="app-container">
-        <!-- Cabeçalho Principal -->
-        <header>
-            <div class="user-info">
-                <div class="avatar">U</div>
-                <div class="greeting">
-                    <span>Olá, seja bem-vindo</span>
-                    <h2 id="userName">Usuário</h2>
+    <!-- TOAST GLOBAL -->
+    <div id="global-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-4 py-3 bg-surface/95 border border-zinc-800 rounded-2xl shadow-2xl backdrop-blur-md max-w-[90vw]">
+        <span id="toast-icon" class="text-lg">✅</span>
+        <span id="toast-message" class="text-sm font-medium text-zinc-200">Mensagem do sistema</span>
+    </div>
+
+    <!-- NOTIFICAÇÃO FLUTUANTE (ESTILO APP) -->
+    <div id="floating-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-[90] w-[92%] max-w-[380px] p-3 bg-surface/90 border border-zinc-800/80 rounded-2xl shadow-xl backdrop-blur-md">
+        <div class="flex items-start gap-3">
+            <div id="fn-icon-container" class="w-10 h-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                    <h4 id="fn-title" class="text-xs font-semibold text-zinc-300 truncate">Sistema • Alerta</h4>
+                    <span class="text-[10px] text-zinc-500">Agora</span>
                 </div>
+                <p id="fn-message" class="text-xs text-zinc-400 mt-0.5 line-clamp-2">Notificação simulada do protótipo interativo.</p>
             </div>
-            <div class="header-icons">
-                <button onclick="toggleVisibility()">👁️</button>
-            </div>
-        </header>
+        </div>
+    </div>
 
-        <!-- Conteúdo do Dashboard -->
-        <div class="content">
-            <!-- Saldo -->
-            <div class="balance-card">
-                <div class="balance-header">
-                    <span>Conta Digital</span>
-                    <span>PJ / PF</span>
+    <!-- CONTAINER PRINCIPAL -->
+    <div id="main-container" class="w-full sm:max-w-[420px] min-h-screen sm:min-h-[auto] bg-darkBg sm:bg-surface border-0 sm:border border-zinc-800/80 sm:rounded-[32px] shadow-2xl animate-glow flex flex-col justify-between relative overflow-hidden p-5 sm:p-6">
+        
+        <!-- TOPO: PERFIL & CONFIGURAÇÕES -->
+        <div>
+            <div class="flex items-center justify-between mb-6">
+                <!-- Status da IA / Cápsula -->
+                <div class="flex items-center gap-2 px-3 py-1 bg-surfaceLight/80 border border-zinc-800 rounded-full">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+                    </span>
+                    <span id="profile-status-text" class="text-[11px] font-medium text-zinc-300 tracking-wide">Online • IA Neural Ativa</span>
                 </div>
-                <div class="balance-amount" id="balanceDisplay">R$ 5.430,20</div>
-            </div>
 
-            <!-- Atalhos de Ações -->
-            <div class="shortcuts">
-                <button class="shortcut-btn" onclick="openModal('pixModal')">
-                    <div class="shortcut-icon">⚡</div>
-                    <span>Pix</span>
-                </button>
-                <button class="shortcut-btn" onclick="openModal('payModal')">
-                    <div class="shortcut-icon">📄</div>
-                    <span>Pagar</span>
-                </button>
-                <button class="shortcut-btn" onclick="openModal('cardsModal')">
-                    <div class="shortcut-icon">💳</div>
-                    <span>Cartões</span>
-                </button>
-                <button class="shortcut-btn" onclick="openModal('investModal')">
-                    <div class="shortcut-icon">📈</div>
-                    <span>Investir</span>
+                <!-- Botão Configurações (Admin) -->
+                <button onclick="openAdminModal()" class="w-10 h-10 rounded-full bg-surfaceLight border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-700 active:scale-95 transition-all shadow-sm" aria-label="Painel Administrativo">
+                    <i class="fa-solid fa-gear text-sm"></i>
                 </button>
             </div>
 
-            <!-- Extrato Recente -->
-            <div class="section-title">
-                <span>Extrato</span>
-                <span style="font-size: 12px; color: var(--text-secondary); cursor: pointer;" onclick="viewAllExtrato()">Ver tudo</span>
-            </div>
-            
-            <div class="transaction-list" id="transactionList">
-                <!-- Preenchido via JavaScript -->
-            </div>
-        </div>
-
-        <!-- Menu Inferior -->
-        <nav>
-            <button class="nav-item active" onclick="switchTab('home')">
-                <span class="nav-icon">🏠</span>
-                <span>Início</span>
-            </button>
-            <button class="nav-item" onclick="openModal('pixModal')">
-                <span class="nav-icon">⚡</span>
-                <span>Pix</span>
-            </button>
-            <button class="nav-item" onclick="openModal('cardsModal')">
-                <span class="nav-icon">💳</span>
-                <span>Cartão</span>
-            </button>
-            <button class="nav-item" onclick="openModal('investModal')">
-                <span class="nav-icon">📊</span>
-                <span>Mais</span>
-            </button>
-        </nav>
-
-        <!-- MODAL: PIX -->
-        <div class="modal" id="pixModal">
-            <div class="modal-header">
-                <h3>Área Pix</h3>
-                <button class="close-btn" onclick="closeModal('pixModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label>Chave Pix, CPF, CNPJ ou E-mail</label>
-                <input type="text" class="form-control" id="pixKey" placeholder="Digite a chave destino...">
-            </div>
-            <div class="form-group">
-                <label>Valor (R$)</label>
-                <input type="number" class="form-control" id="pixValue" placeholder="0,00">
-            </div>
-            <button class="btn-primary" onclick="makePix()">Realizar Transferência Pix</button>
-        </div>
-
-        <!-- MODAL: PAGAR BOLETO -->
-        <div class="modal" id="payModal">
-            <div class="modal-header">
-                <h3>Pagar Conta</h3>
-                <button class="close-btn" onclick="closeModal('payModal')">&times;</button>
-            </div>
-            <div class="form-group">
-                <label>Código de Barras</label>
-                <input type="text" class="form-control" placeholder="Cole o código de barras...">
-            </div>
-            <div class="form-group">
-                <label>Valor do Documento</label>
-                <input type="number" class="form-control" placeholder="0,00">
-            </div>
-            <button class="btn-primary" onclick="alert('Pagamento simulado com sucesso!'); closeModal('payModal');">Efetuar Pagamento</button>
-        </div>
-
-        <!-- MODAL: CARTÕES -->
-        <div class="modal" id="cardsModal">
-            <div class="modal-header">
-                <h3>Meus Cartões</h3>
-                <button class="close-btn" onclick="closeModal('cardsModal')">&times;</button>
-            </div>
-            <div class="balance-card" style="margin-bottom: 20px;">
-                <div class="balance-header">
-                    <span>Cartão Múltiplo (Físico/Virtual)</span>
-                    <span>Mastercard</span>
-                </div>
-                <div class="balance-amount" style="font-size: 20px; margin-top: 10px;">**** **** **** 8920</div>
-                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Função: Crédito e Débito</p>
-            </div>
-            <button class="btn-primary" onclick="alert('Gerando novo cartão virtual...');">Gerar Cartão Virtual</button>
-        </div>
-
-        <!-- MODAL: INVESTIMENTOS -->
-        <div class="modal" id="investModal">
-            <div class="modal-header">
-                <h3>Investimentos</h3>
-                <button class="close-btn" onclick="closeModal('investModal')">&times;</button>
-            </div>
-            <div class="transaction-list">
-                <div class="transaction-item">
-                    <div class="tx-info">
-                        <h4>Renda Fixa IPCA+</h4>
-                        <span>Liquidez Diária</span>
+            <!-- PERFIL PRINCIPAL -->
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="relative mb-3">
+                    <div class="w-20 h-20 rounded-full p-[2px] bg-gradient-to-tr from-primary via-purple-400 to-zinc-700 shadow-lg">
+                        <img id="profile-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces" alt="Avatar do Perfil" class="w-full h-full rounded-full object-cover">
                     </div>
-                    <div class="tx-value positive">110% CDI</div>
                 </div>
-                <div class="transaction-item">
-                    <div class="tx-info">
-                        <h4>CDB Banco Inter</h4>
-                        <span>Resgate Imediato</span>
-                    </div>
-                    <div class="tx-value positive">100% CDI</div>
+                
+                <div class="flex items-center gap-1.5 justify-center mb-1">
+                    <h2 id="profile-name-display" class="text-lg font-bold text-white tracking-tight">Elena Vance</h2>
+                    <i id="profile-verified-icon" class="fa-solid fa-circle-check text-primary text-xs" title="Verificado"></i>
                 </div>
+                
+                <p id="profile-bio-display" class="text-xs text-zinc-400 max-w-[280px] leading-relaxed">Especialista em automação de sistemas inteligentes e arquiteturas web modulares.</p>
             </div>
+
+            <!-- INFORMATIVO DE SEGURANÇA -->
+            <div class="flex items-center gap-3 p-3 bg-surfaceLight/50 border border-zinc-800/60 rounded-2xl mb-6">
+                <div class="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <i class="fa-solid fa-shield-halved text-xs"></i>
+                </div>
+                <span id="profile-security-text" class="text-xs font-medium text-zinc-300">100% Seguro • Entrega por e-mail instantânea</span>
+            </div>
+        </div>
+
+        <!-- AÇÕES CENTRAIS -->
+        <div class="space-y-3 my-auto">
+            <!-- BOTÃO DE COMPRA / AÇÃO PRINCIPAL -->
+            <button onclick="openCheckoutModal()" class="w-full h-[54px] bg-white text-darkBg font-semibold text-sm rounded-2xl shadow-lg hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-between px-4 group">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-darkBg/10 flex items-center justify-center text-darkBg">
+                        <i id="main-btn-icon" class="fa-solid fa-bolt text-xs"></i>
+                    </div>
+                    <div class="text-left">
+                        <div id="main-btn-title" class="leading-tight">Acesso Completo Pro</div>
+                        <div id="main-btn-subtitle" class="text-[10px] text-zinc-600 font-normal">Licença vitalícia inclusa</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="main-btn-price" class="text-xs font-bold px-2.5 py-1 bg-darkBg/10 rounded-lg">R$ 97,00</span>
+                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+            </button>
+
+            <!-- BOTÃO DE SUPORTE -->
+            <button onclick="openSupportModal()" class="w-full h-[52px] bg-surfaceLight border border-zinc-800 text-zinc-200 font-medium text-xs rounded-2xl hover:bg-surfaceLight/80 hover:border-zinc-700 active:scale-[0.98] transition-all flex items-center justify-between px-4 group">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <i id="support-btn-icon" class="fa-solid fa-robot text-xs"></i>
+                    </div>
+                    <div class="text-left">
+                        <div id="support-btn-title" class="text-white">Suporte Neural-7</div>
+                        <div id="support-btn-subtitle" class="text-[10px] text-zinc-400">Atendimento 24/7 com IA</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-zinc-500 text-xs group-hover:translate-x-0.5 transition-transform"></i>
+            </button>
+        </div>
+
+        <!-- RODAPÉ -->
+        <div class="mt-6 text-center">
+            <p id="profile-footer-text" class="text-[11px] text-zinc-600">Protótipo Interativo Demonstrativo • Dados Locais</p>
         </div>
 
     </div>
 
+    <!-- ==================== MODAIS ==================== -->
+
+    <!-- MODAL DE CHECKOUT -->
+    <div id="modal-checkout" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="modal-content w-full max-w-[400px] bg-surface border border-zinc-800 rounded-3xl p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-y-auto">
+            <!-- Botão Fechar -->
+            <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-surfaceLight border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+
+            <!-- Indicador de Passos -->
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <div id="step-indicator-1" class="h-1.5 w-12 rounded-full bg-primary transition-all"></div>
+                <div id="step-indicator-2" class="h-1.5 w-12 rounded-full bg-zinc-800 transition-all"></div>
+                <div id="step-indicator-3" class="h-1.5 w-12 rounded-full bg-zinc-800 transition-all"></div>
+            </div>
+
+            <!-- PASSO 1: PAGAMENTO PIX / QR CODE -->
+            <div id="checkout-step-1" class="checkout-step space-y-5">
+                <div class="text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto mb-3">
+                        <i class="fa-solid fa-qrcode text-xl"></i>
+                    </div>
+                    <h3 id="co-title-display" class="text-base font-bold text-white">Pagamento Instantâneo</h3>
+                    <p id="co-desc-display" class="text-xs text-zinc-400 mt-1">Escaneie o QR Code ou copie a chave PIX abaixo para concluir.</p>
+                </div>
+
+                <!-- Cronômetro -->
+                <div class="flex items-center justify-center gap-2 py-2 bg-surfaceLight/50 border border-zinc-800 rounded-xl text-xs">
+                    <i class="fa-regular fa-clock text-warning"></i>
+                    <span class="text-zinc-400">Expira em:</span>
+                    <span id="checkout-timer" class="font-mono font-bold text-warning">04:59</span>
+                </div>
+
+                <!-- QR Code Fictício -->
+                <div class="bg-white p-4 rounded-2xl w-40 h-40 mx-auto flex items-center justify-center shadow-inner relative group">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PROTOTIPO_PAGAMENTO_DEMO_PIX" alt="QR Code PIX" class="w-full h-full rounded-lg">
+                    <div class="absolute inset-0 bg-black/5 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[10px] font-bold bg-black/80 text-white px-2 py-1 rounded">PIX SIMULADO</span>
+                    </div>
+                </div>
+
+                <!-- Chave PIX Copiável -->
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-medium text-zinc-400">Chave PIX Copia e Cola</label>
+                    <div class="flex gap-2">
+                        <input id="checkout-pix-code" type="text" readonly value="00020126580014br.gov.bcb.pix...prototipo" class="w-full bg-surfaceLight border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-zinc-300 font-mono focus:outline-none">
+                        <button onclick="copyPixCode()" class="px-4 bg-primary hover:bg-primaryHover text-white font-medium text-xs rounded-xl transition-all active:scale-95 shrink-0 flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="goToCheckoutStep(2)" class="w-full h-11 bg-white text-darkBg font-semibold text-xs rounded-xl hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <span>Já realizei o pagamento</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- PASSO 2: DADOS DO USUÁRIO -->
+            <div id="checkout-step-2" class="checkout-step hidden space-y-4">
+                <div class="text-center mb-2">
+                    <h3 class="text-base font-bold text-white">Dados de Identificação</h3>
+                    <p class="text-xs text-zinc-400 mt-1">Informe seus dados para envio do acesso.</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-medium text-zinc-400 mb-1">Nome Completo</label>
+                        <input id="form-name" type="text" placeholder="Ex: João da Silva" class="w-full bg-surfaceLight border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-primary focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-zinc-400 mb-1">E-mail para Entrega</label>
+                        <input id="form-email" type="email" placeholder="seu@email.com" class="w-full bg-surfaceLight border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-primary focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-zinc-400 mb-1">CPF (Opcional)</label>
+                        <input id="form-doc" type="text" placeholder="000.000.000-00" class="w-full bg-surfaceLight border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-primary focus:outline-none transition-colors">
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="goToCheckoutStep(1)" class="w-1/3 h-11 bg-surfaceLight border border-zinc-800 text-zinc-300 font-medium text-xs rounded-xl hover:bg-zinc-800 transition-all">Voltar</button>
+                    <button onclick="submitCheckoutForm()" class="w-2/3 h-11 bg-primary hover:bg-primaryHover text-white font-semibold text-xs rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                        <span>Avançar</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: SUCESSO -->
+            <div id="checkout-step-3" class="checkout-step hidden text-center space-y-4 py-4">
+                <div class="w-16 h-16 rounded-full bg-success/10 border border-success/30 flex items-center justify-center text-success mx-auto mb-2 animate-bounce">
+                    <i class="fa-solid fa-check text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Pedido Registrado!</h3>
+                <p class="text-xs text-zinc-400 max-w-[280px] mx-auto leading-relaxed">Este é um protótipo demonstrativo. O pedido foi simulado e adicionado à lista de pendências do painel administrativo com sucesso.</p>
+                <div class="pt-4">
+                    <button onclick="finishCheckout()" class="w-full h-11 bg-white text-darkBg font-semibold text-xs rounded-xl hover:bg-zinc-200 transition-all">Concluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SUPORTE COM IA -->
+    <div id="modal-support" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="modal-content w-full max-w-[400px] bg-surface border border-zinc-800 rounded-3xl shadow-2xl relative flex flex-col h-[500px] overflow-hidden">
+            <!-- Cabeçalho do Chat -->
+            <div class="p-4 bg-surfaceLight/80 border-b border-zinc-800 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-9 h-9 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary">
+                            <i class="fa-solid fa-robot text-sm"></i>
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-success border-2 border-surface rounded-full"></span>
+                    </div>
+                    <div>
+                        <h4 id="support-ai-name-display" class="text-xs font-bold text-white">IA Neural-7</h4>
+                        <span class="text-[10px] text-success">● Online e respondendo</span>
+                    </div>
+                </div>
+                <button onclick="closeSupportModal()" class="w-8 h-8 rounded-full bg-surface border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Área de Mensagens -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+                <div class="flex gap-2 items-start">
+                    <div class="w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                        <i class="fa-solid fa-robot text-[10px]"></i>
+                    </div>
+                    <div class="bg-surfaceLight border border-zinc-800/80 rounded-2xl p-3 text-zinc-300 max-w-[80%] leading-relaxed">
+                        Olá! Sou a assistente virtual Neural-7. Como posso ajudar você com o sistema hoje?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input de Envio -->
+            <div class="p-3 bg-surfaceLight/80 border-t border-zinc-800 shrink-0">
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Digite sua dúvida..." class="flex-1 bg-surface border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-primary focus:outline-none transition-colors">
+                    <button type="submit" class="w-10 h-10 bg-primary hover:bg-primaryHover text-white rounded-xl flex items-center justify-center transition-all active:scale-95 shrink-0">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADMINISTRATIVO (LOGIN & DASHBOARD) -->
+    <div id="modal-admin" class="modal-overlay fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        
+        <!-- TELA 1: LOGIN ADMINISTRATIVO -->
+        <div id="admin-login-screen" class="modal-content w-full max-w-[380px] bg-surface border border-zinc-800 rounded-3xl p-6 shadow-2xl relative text-center">
+            <button onclick="closeAdminModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-surfaceLight border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+
+            <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto mb-4">
+                <i class="fa-solid fa-lock text-xl"></i>
+            </div>
+            
+            <h3 class="text-base font-bold text-white">Painel Administrativo</h3>
+            <p class="text-xs text-zinc-400 mt-1 mb-6">Digite sua senha numérica exclusiva (Padrão: <span class="text-primary font-mono">1234</span>)</p>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <input id="admin-password-input" type="password" placeholder="••••" maxlength="6" class="w-full bg-surfaceLight border border-zinc-800 rounded-xl px-4 py-3 text-center text-lg tracking-widest text-white placeholder-zinc-600 focus:border-primary focus:outline-none transition-colors">
+                <button type="submit" class="w-full h-11 bg-primary hover:bg-primaryHover text-white font-semibold text-xs rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                    Acessar Painel
+                </button>
+            </form>
+        </div>
+
+        <!-- TELA 2: DASHBOARD COMPLETO -->
+        <div id="admin-dashboard-screen" class="modal-content hidden w-full max-w-[650px] bg-surface border border-zinc-800 rounded-3xl shadow-2xl relative flex flex-col h-[85vh] overflow-hidden">
+            
+            <!-- Cabeçalho do Dashboard -->
+            <div class="p-4 sm:p-5 bg-surfaceLight/80 border-b border-zinc-800 flex items-center justify-between shrink-0">
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <span>Dashboard Administrativo</span>
+                        <span class="text-[10px] font-normal px-2 py-0.5 bg-success/10 text-success border border-success/20 rounded-full">Ativo</span>
+                    </h3>
+                    <p class="text-[11px] text-zinc-400 mt-0.5">Monitoramento em tempo real e gerenciamento de configurações</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="lockAdminSession()" class="px-3 py-1.5 bg-surface border border-zinc-800 hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-lock text-[10px]"></i> Sair
+                    </button>
+                    <button onclick="closeAdminModal()" class="w-8 h-8 rounded-full bg-surface border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Abas de Navegação -->
+            <div class="flex border-b border-zinc-800 bg-surface/50 p-2 gap-2 overflow-x-auto shrink-0">
+                <button onclick="switchAdminTab('sales')" id="tab-btn-sales" class="flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-surfaceLight text-white shadow-sm border border-zinc-700">
+                    <i class="fa-solid fa-chart-line text-primary"></i> Vendas
+                </button>
+                <button onclick="switchAdminTab('pending')" id="tab-btn-pending" class="flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-zinc-400 hover:text-white bg-transparent border border-transparent">
+                    <i class="fa-solid fa-clock text-warning"></i> Pendentes <span id="badge-pending-count" class="px-1.5 py-0.2 bg-warning/20 text-warning rounded-full text-[10px]">0</span>
+                </button>
+                <button onclick="switchAdminTab('logs')" id="tab-btn-logs" class="flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-zinc-400 hover:text-white bg-transparent border border-transparent">
+                    <i class="fa-solid fa-shield-cat text-cyan-400"></i> Logs
+                </button>
+                <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-zinc-400 hover:text-white bg-transparent border border-transparent">
+                    <i class="fa-solid fa-sliders text-purple-400"></i> Ajustes
+                </button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-5">
+                
+                <!-- ABA 1: VENDAS -->
+                <div id="tab-content-sales" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3.5 bg-surfaceLight/50 border border-zinc-800/80 rounded-2xl">
+                            <div class="text-[11px] text-zinc-400">Total Aprovado</div>
+                            <div id="stat-total-sales" class="text-lg font-bold text-white mt-1">0</div>
+                        </div>
+                        <div class="p-3.5 bg-surfaceLight/50 border border-zinc-800/80 rounded-2xl">
+                            <div class="text-[11px] text-zinc-400">Faturamento Total</div>
+                            <div id="stat-total-revenue" class="text-lg font-bold text-success mt-1">R$ 0,00</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <h4 class="text-xs font-bold text-zinc-300">Histórico de Vendas</h4>
+                        <button onclick="clearSalesHistory()" class="text-[11px] text-error hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i> Limpar Histórico
+                        </button>
+                    </div>
+
+                    <div id="sales-list-container" class="space-y-2.5">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+
+                <!-- ABA 2: PENDENTES -->
+                <div id="tab-content-pending" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold text-zinc-300">Canal de Aprovação de Pedidos</h4>
+                        <span id="pending-count-label" class="text-[11px] text-zinc-500">0 Pendentes</span>
+                    </div>
+
+                    <div id="pending-list-container" class="space-y-2.5">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+
+                <!-- ABA 3: LOGS / USUÁRIOS -->
+                <div id="tab-content-logs" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold text-zinc-300">Registros Técnicos e Acessos</h4>
+                        <button onclick="clearLogs()" class="text-[11px] text-error hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i> Limpar Logs
+                        </button>
+                    </div>
+
+                    <div id="logs-list-container" class="space-y-2">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+
+                <!-- ABA 4: AJUSTES (CONFIGURABILIDADE EXTREMA) -->
+                <div id="tab-content-settings" class="hidden space-y-5">
+                    <form id="settings-form" onsubmit="saveAllSettings(event)" class="space-y-4 text-xs">
+                        
+                        <!-- Seção Perfil -->
+                        <div class="p-4 bg-surfaceLight/40 border border-zinc-800 rounded-2xl space-y-3">
+                            <h5 class="font-bold text-white border-b border-zinc-800 pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-user text-primary"></i> Perfil Principal
+                            </h5>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">Nome do Perfil</label>
+                                <input id="set-profile-name" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">URL da Imagem de Avatar</label>
+                                <input id="set-profile-avatar" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">Biografia</label>
+                                <textarea id="set-profile-bio" rows="2" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">Texto de Status</label>
+                                <input id="set-profile-status" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">Informativo de Segurança</label>
+                                <input id="set-profile-security" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Seção Botão Principal -->
+                        <div class="p-4 bg-surfaceLight/40 border border-zinc-800 rounded-2xl space-y-3">
+                            <h5 class="font-bold text-white border-b border-zinc-800 pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-bolt text-warning"></i> Botão Principal / Checkout
+                            </h5>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-zinc-400 mb-1">Título do Botão</label>
+                                    <input id="set-main-title" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-zinc-400 mb-1">Preço</label>
+                                    <input id="set-main-price" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-zinc-400 mb-1">Subtítulo do Botão</label>
+                                <input id="set-main-subtitle" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Seção Suporte & IA -->
+                        <div class="p-4 bg-surfaceLight/40 border border-zinc-800 rounded-2xl space-y-3">
+                            <h5 class="font-bold text-white border-b border-zinc-800 pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-robot text-cyan-400"></i> Suporte & IA
+                            </h5>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-zinc-400 mb-1">Título do Suporte</label>
+                                    <input id="set-support-title" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-zinc-400 mb-1">Nome da IA</label>
+                                    <input id="set-support-ainame" type="text" class="w-full bg-surface border border-zinc-800 rounded-xl px-3 py-2 text-white focus:border-primary focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full h-11 bg-primary hover:bg-primaryHover text-white font-semibold rounded-xl transition-all shadow-lg shadow-primary/20">
+                            Salvar e Aplicar Alterações
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==================== SCRIPT PRINCIPAL ==================== -->
     <script>
-        // Estado inicial da aplicação
-        let state = {
-            balance: 5430.20,
-            isVisible: true,
-            transactions: [
-                { title: "Pix Enviado", subtitle: "Para: Maria Silva", value: -150.00, date: "Hoje, 14:20" },
-                { title: "Depósito Recebido", subtitle: "Via Ted - Empresa X", value: 1200.00, date: "Ontem, 09:15" },
-                { title: "Pagamento de Fatura", subtitle: "Cartão de Crédito", value: -840.50, date: "26 Set" }
-            ]
+        // CONFIGURAÇÃO PADRÃO DO SISTEMA
+        const DEFAULT_CONFIG = {
+            profile: {
+                name: "Elena Vance",
+                bio: "Especialista em automação de sistemas inteligentes e arquiteturas web modulares.",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces",
+                status: "Online • IA Neural Ativa",
+                securityText: "100% Seguro • Entrega por e-mail instantânea",
+                footerText: "Protótipo Interativo Demonstrativo • Dados Locais"
+            },
+            mainButton: {
+                title: "Acesso Completo Pro",
+                subtitle: "Licença vitalícia inclusa",
+                price: "R$ 97,00",
+                icon: "fa-solid fa-bolt"
+            },
+            support: {
+                title: "Suporte Neural-7",
+                subtitle: "Atendimento 24/7 com IA",
+                aiName: "IA Neural-7"
+            },
+            checkout: {
+                title: "Pagamento Instantâneo",
+                description: "Escaneie o QR Code ou copie a chave PIX abaixo para concluir.",
+                timerMinutes: 5
+            },
+            admin: {
+                pin: "1234"
+            }
         };
 
-        // Renderiza transações na tela
-        function renderTransactions() {
-            const list = document.getElementById('transactionList');
-            list.innerHTML = '';
+        // DADOS E ESTADOS DO SISTEMA (PERSISTENTES VIA LOCALSTORAGE)
+        let CONFIG = JSON.parse(localStorage.getItem('SYS_CONFIG')) || DEFAULT_CONFIG;
+        let SALES_DATA = JSON.parse(localStorage.getItem('SYS_SALES')) || [
+            { id: "VEND-8832", name: "Carlos Eduardo", email: "carlos@email.com", value: "R$ 97,00", time: "Hoje, 14:20", status: "Aprovado" },
+            { id: "VEND-8831", name: "Mariana Souza", email: "mariana@email.com", value: "R$ 97,00", time: "Ontem, 19:45", status: "Aprovado" }
+        ];
+        let PENDING_DATA = JSON.parse(localStorage.getItem('SYS_PENDING')) || [
+            { id: "PEND-9011", name: "Roberto Dias", email: "roberto@email.com", value: "R$ 97,00", time: "Há 15 minutos" }
+        ];
+        let LOGS_DATA = JSON.parse(localStorage.getItem('SYS_LOGS')) || [
+            { id: "LOG-102", device: "Mobile • Chrome / iOS", time: "Hoje, 14:00" },
+            { id: "LOG-101", device: "Desktop • Windows / Firefox", time: "Ontem, 10:15" }
+        ];
+
+        let checkoutTimerInterval = null;
+
+        // INICIALIZAÇÃO AO CARREGAR A PÁGINA
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUI();
             
-            state.transactions.forEach(tx => {
-                const item = document.createElement('div');
-                item.className = 'transaction-item';
+            // Simular notificação flutuante de boas-vindas após 1.5s
+            setTimeout(() => {
+                showFloatingNotification("Novo visitante conectado ao protótipo.", "Sistema Online");
+            }, 1500);
+        });
+
+        // FUNÇÃO GLOBAL DE TOAST
+        function showToast(message, icon = "✅") {
+            const toast = document.getElementById('global-toast');
+            const iconEl = document.getElementById('toast-icon');
+            const msgEl = document.getElementById('toast-message');
+
+            iconEl.textContent = icon;
+            msgEl.textContent = message;
+
+            toast.classList.add('show');
+
+            if (window.toastTimeout) clearTimeout(window.toastTimeout);
+            window.toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // NOTIFICAÇÃO FLUTUANTE
+        function showFloatingNotification(message, title = "Aviso do Sistema") {
+            const fn = document.getElementById('floating-notification');
+            document.getElementById('fn-title').textContent = title;
+            document.getElementById('fn-message').textContent = message;
+
+            fn.classList.add('show');
+            setTimeout(() => {
+                fn.classList.remove('show');
+            }, 4000);
+        }
+
+        // RENDERIZAÇÃO DA INTERFACE COM BASE EM CONFIG
+        function renderUI() {
+            // Perfil
+            document.getElementById('profile-name-display').textContent = CONFIG.profile.name;
+            document.getElementById('profile-bio-display').textContent = CONFIG.profile.bio;
+            document.getElementById('profile-avatar').src = CONFIG.profile.avatar;
+            document.getElementById('profile-status-text').textContent = CONFIG.profile.status;
+            document.getElementById('profile-security-text').textContent = CONFIG.profile.securityText;
+            document.getElementById('profile-footer-text').textContent = CONFIG.profile.footerText;
+
+            // Botão Principal
+            document.getElementById('main-btn-title').textContent = CONFIG.mainButton.title;
+            document.getElementById('main-btn-subtitle').textContent = CONFIG.mainButton.subtitle;
+            document.getElementById('main-btn-price').textContent = CONFIG.mainButton.price;
+            document.getElementById('main-btn-icon').className = CONFIG.mainButton.icon;
+
+            // Suporte
+            document.getElementById('support-btn-title').textContent = CONFIG.support.title;
+            document.getElementById('support-btn-subtitle').textContent = CONFIG.support.subtitle;
+            document.getElementById('support-ai-name-display').textContent = CONFIG.support.aiName;
+
+            // Checkout
+            document.getElementById('co-title-display').textContent = CONFIG.checkout.title;
+            document.getElementById('co-desc-display').textContent = CONFIG.checkout.description;
+
+            // Preencher Formulário de Ajustes no Admin caso esteja aberto
+            document.getElementById('set-profile-name').value = CONFIG.profile.name;
+            document.getElementById('set-profile-avatar').value = CONFIG.profile.avatar;
+            document.getElementById('set-profile-bio').value = CONFIG.profile.bio;
+            document.getElementById('set-profile-status').value = CONFIG.profile.status;
+            document.getElementById('set-profile-security').value = CONFIG.profile.securityText;
+            document.getElementById('set-main-title').value = CONFIG.mainButton.title;
+            document.getElementById('set-main-price').value = CONFIG.mainButton.price;
+            document.getElementById('set-main-subtitle').value = CONFIG.mainButton.subtitle;
+            document.getElementById('set-support-title').value = CONFIG.support.title;
+            document.getElementById('set-support-ainame').value = CONFIG.support.aiName;
+        }
+
+        // SALVAR CONFIGURAÇÕES NO LOCALSTORAGE
+        function saveConfigStorage() {
+            localStorage.setItem('SYS_CONFIG', JSON.stringify(CONFIG));
+            localStorage.setItem('SYS_SALES', JSON.stringify(SALES_DATA));
+            localStorage.setItem('SYS_PENDING', JSON.stringify(PENDING_DATA));
+            localStorage.setItem('SYS_LOGS', JSON.stringify(LOGS_DATA));
+        }
+
+        // ==================== CONTROLE DE MODAIS ====================
+
+        // CHECKOUT MODAL
+        function openCheckoutModal() {
+            document.getElementById('modal-checkout').classList.add('active');
+            goToCheckoutStep(1);
+            startCheckoutTimer();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('modal-checkout').classList.remove('active');
+            if (checkoutTimerInterval) clearInterval(checkoutTimerInterval);
+        }
+
+        function goToCheckoutStep(stepNumber) {
+            document.querySelectorAll('.checkout-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`checkout-step-${stepNumber}`).classList.remove('hidden');
+
+            // Indicadores de passo
+            for (let i = 1; i <= 3; i++) {
+                const ind = document.getElementById(`step-indicator-${i}`);
+                if (i <= stepNumber) {
+                    ind.className = "h-1.5 w-12 rounded-full bg-primary transition-all";
+                } else {
+                    ind.className = "h-1.5 w-12 rounded-full bg-zinc-800 transition-all";
+                }
+            }
+        }
+
+        function startCheckoutTimer() {
+            if (checkoutTimerInterval) clearInterval(checkoutTimerInterval);
+            let totalSeconds = CONFIG.checkout.timerMinutes * 60;
+            const timerDisplay = document.getElementById('checkout-timer');
+
+            checkoutTimerInterval = setInterval(() => {
+                let minutes = Math.floor(totalSeconds / 60);
+                let seconds = totalSeconds % 60;
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 
-                const formattedValue = tx.value < TxsValueFormat(tx.value) : `+ R$ ${Math.abs(tx.value).toFixed(2)}`;
-                
-                item.innerHTML = `
-                    <div class="tx-info">
-                        <h4>${tx.title}</h4>
-                        <span>${tx.subtitle} • ${tx.date}</span>
+                if (totalSeconds <= 0) {
+                    clearInterval(checkoutTimerInterval);
+                    timerDisplay.textContent = "Expirado";
+                }
+                totalSeconds--;
+            }, 1000);
+        }
+
+        function copyPixCode() {
+            const input = document.getElementById('checkout-pix-code');
+            input.select();
+            navigator.clipboard.writeText(input.value).then(() => {
+                showToast("Chave PIX copiada com sucesso!", "📋");
+            }).catch(() => {
+                showToast("Erro ao copiar chave.", "⚠️");
+            });
+        }
+
+        function submitCheckoutForm() {
+            const name = document.getElementById('form-name').value.trim();
+            const email = document.getElementById('form-email').value.trim();
+
+            if (!name || !email) {
+                showToast("Preencha todos os campos obrigatórios!", "⚠️");
+                return;
+            }
+
+            // Adicionar aos pendentes automaticamente
+            const newPending = {
+                id: "PEND-" + Math.floor(1000 + Math.random() * 9000),
+                name: name,
+                email: email,
+                value: CONFIG.mainButton.price,
+                time: "Agora mesmo"
+            };
+            PENDING_DATA.unshift(newPending);
+            saveConfigStorage();
+
+            showToast("Pedido gerado com sucesso!", "✅");
+            goToCheckoutStep(3);
+        }
+
+        function finishCheckout() {
+            closeCheckoutModal();
+            showToast("Obrigado pela demonstração!", "✨");
+        }
+
+        // SUPORTE MODAL & IA
+        function openSupportModal() {
+            document.getElementById('modal-support').classList.add('active');
+        }
+
+        function closeSupportModal() {
+            document.getElementById('modal-support').classList.remove('active');
+        }
+
+        function handleChatSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatContainer = document.getElementById('chat-messages');
+
+            // Adicionar mensagem do usuário
+            chatContainer.innerHTML += `
+                <div class="flex gap-2 items-start justify-end">
+                    <div class="bg-primary text-white rounded-2xl p-3 max-w-[80%] leading-relaxed">
+                        ${escapeHtml(text)}
                     </div>
-                    <div class="tx-value ${tx.value < 0 ? 'negative' : 'positive'}">
-                        ${tx.value < 0 ? '- ' : '+ '}R$ ${Math.abs(tx.value).toFixed(2).replace('.', ',')}
+                </div>
+            `;
+            input.value = "";
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simular digitação da IA
+            setTimeout(() => {
+                chatContainer.innerHTML += `
+                    <div id="typing-indicator" class="flex gap-2 items-start">
+                        <div class="w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                            <i class="fa-solid fa-robot text-[10px]"></i>
+                        </div>
+                        <div class="bg-surfaceLight border border-zinc-800/80 rounded-2xl p-3 text-zinc-400 italic">
+                            Digitando...
+                        </div>
                     </div>
                 `;
-                list.appendChild(item);
-            });
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                setTimeout(() => {
+                    const typingEl = document.getElementById('typing-indicator');
+                    if (typingEl) typingEl.remove();
+
+                    let aiReply = "Compreendi sua dúvida. Como este é um protótipo interativo modular, você pode testar todas as funções livremente pelo painel administrativo!";
+                    if (text.toLowerCase().includes('pagamento') || text.toLowerCase().includes('pix')) {
+                        aiReply = "O pagamento é simulado via QR Code no passo 1 do Checkout. Ao avançar, o pedido vai direto para a aba de Pendentes no Admin.";
+                    }
+
+                    chatContainer.innerHTML += `
+                        <div class="flex gap-2 items-start">
+                            <div class="w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                                <i class="fa-solid fa-robot text-[10px]"></i>
+                            </div>
+                            <div class="bg-surfaceLight border border-zinc-800/80 rounded-2xl p-3 text-zinc-300 max-w-[80%] leading-relaxed">
+                                ${aiReply}
+                            </div>
+                        </div>
+                    `;
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1200);
+            }, 600);
         }
 
-        function TxsValueFormat(val) {
-            return val < 0;
-        }
+        // ==================== PAINEL ADMINISTRATIVO ====================
 
-        // Atualiza saldo na tela
-        function updateUI() {
-            const display = document.getElementById('balanceDisplay');
-            if (state.isVisible) {
-                display.innerText = `R$ ${state.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        function openAdminModal() {
+            document.getElementById('modal-admin').classList.add('active');
+            // Verificar se já está logado na sessão
+            if (sessionStorage.getItem('ADMIN_AUTH') === 'true') {
+                showAdminDashboard();
             } else {
-                display.innerText = 'R$ ••••••';
+                showAdminLogin();
             }
-            renderTransactions();
         }
 
-        // Alternar visibilidade do saldo
-        function toggleVisibility() {
-            state.isVisible = !state.isVisible;
-            updateUI();
+        function closeAdminModal() {
+            document.getElementById('modal-admin').classList.remove('active');
         }
 
-        // Controle de Modais
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
+        function showAdminLogin() {
+            document.getElementById('admin-login-screen').classList.remove('hidden');
+            document.getElementById('admin-dashboard-screen').classList.add('hidden');
+            document.getElementById('admin-password-input').value = "";
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+        function showAdminDashboard() {
+            document.getElementById('admin-login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard-screen').classList.remove('hidden');
+            renderDashboardData();
         }
 
-        // Ação de Pix Funcional
-        function makePix() {
-            const key = document.getElementById('pixKey').value;
-            const valInput = document.getElementById('pixValue').value;
-            const value = parseFloat(valInput);
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const pin = document.getElementById('admin-password-input').value.trim();
 
-            if (!key || isNaN(value) || value <= 0) {
-                alert('Por favor, preencha a chave Pix e um valor válido.');
+            if (!pin) {
+                showToast("⚠️ Digite a senha antes de entrar!", "🔒");
+                return;
+            }
+            if (!/^\d+$/.test(pin)) {
+                showToast("❌ A senha deve conter apenas números!", "🔒");
+                return;
+            }
+            if (pin !== CONFIG.admin.pin) {
+                showToast("🔒 Senha incorreta. Tente novamente!", "❌");
                 return;
             }
 
-            if (value > state.balance) {
-                alert('Saldo insuficiente para realizar esta transação.');
-                return;
-            }
+            sessionStorage.setItem('ADMIN_AUTH', 'true');
+            showToast("Acesso autorizado com sucesso!", "🔓");
+            showAdminDashboard();
+        }
 
-            // Atualiza saldo e adiciona histórico
-            state.balance -= value;
-            state.transactions.unshift({
-                title: "Pix Enviado",
-                subtitle: `Para: ${key}`,
-                value: -value,
-                date: "Agora"
+        function lockAdminSession() {
+            sessionStorage.removeItem('ADMIN_AUTH');
+            showToast("Sessão encerrada.", "👋");
+            showAdminLogin();
+        }
+
+        // NAVEGAÇÃO DAS ABAS DO ADMIN
+        function switchAdminTab(tabName) {
+            ['sales', 'pending', 'logs', 'settings'].forEach(t => {
+                document.getElementById(`tab-content-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                btn.className = "flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-zinc-400 hover:text-white bg-transparent border border-transparent";
             });
 
-            // Limpa campos e fecha modal
-            document.getElementById('pixKey').value = '';
-            document.getElementById('pixValue').value = '';
-            closeModal('pixModal');
-
-            updateUI();
-            alert('Pix realizado com sucesso!');
+            document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.className = "flex-1 min-w-[90px] py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-surfaceLight text-white shadow-sm border border-zinc-700";
         }
 
-        function viewAllExtrato() {
-            alert('Exibindo histórico completo de transações simuladas.');
+        // RENDERIZAR DADOS DO DASHBOARD
+        function renderDashboardData() {
+            // Contadores
+            document.getElementById('badge-pending-count').textContent = PENDING_DATA.length;
+            document.getElementById('pending-count-label').textContent = `${PENDING_DATA.length} Pendentes`;
+            document.getElementById('stat-total-sales').textContent = SALES_DATA.length;
+
+            // Calcular Faturamento Total
+            let totalRev = SALES_DATA.reduce((acc, item) => {
+                let num = parseFloat(item.value.replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
+                return acc + num;
+            }, 0);
+            document.getElementById('stat-total-revenue').textContent = totalRev.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            // Renderizar Vendas
+            const salesContainer = document.getElementById('sales-list-container');
+            if (SALES_DATA.length === 0) {
+                salesContainer.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs"><i class="fa-solid fa-folder-open text-lg mb-1"></i><p>Nenhuma venda registrada ainda.</p></div>`;
+            } else {
+                salesContainer.innerHTML = SALES_DATA.map(s => `
+                    <div class="p-3 bg-surfaceLight/40 border border-zinc-800 rounded-2xl flex items-center justify-between text-xs">
+                        <div>
+                            <div class="font-bold text-white">${escapeHtml(s.name)}</div>
+                            <div class="text-[10px] text-zinc-400">${escapeHtml(s.email)} • ${s.time}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-success">${s.value}</div>
+                            <span class="text-[9px] px-2 py-0.5 bg-success/10 text-success rounded-full">${s.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Renderizar Pendentes
+            const pendingContainer = document.getElementById('pending-list-container');
+            if (PENDING_DATA.length === 0) {
+                pendingContainer.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs"><i class="fa-solid fa-check-circle text-lg mb-1 text-success"></i><p>Nenhum pedido pendente no momento.</p></div>`;
+            } else {
+                pendingContainer.innerHTML = PENDING_DATA.map((p, idx) => `
+                    <div class="p-3.5 bg-surfaceLight/40 border border-zinc-800 rounded-2xl flex items-center justify-between text-xs">
+                        <div>
+                            <div class="font-bold text-white">${escapeHtml(p.name)}</div>
+                            <div class="text-[10px] text-zinc-400">${escapeHtml(p.email)} • ${p.time}</div>
+                            <div class="text-[10px] font-mono text-warning mt-0.5">${p.value}</div>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="approveOrder(${idx})" class="px-3 py-1.5 bg-success hover:bg-success/80 text-white font-medium rounded-xl transition-all shadow-sm">Aprovar</button>
+                            <button onclick="rejectOrder(${idx})" class="px-3 py-1.5 bg-error/20 border border-error/30 hover:bg-error/30 text-error font-medium rounded-xl transition-all">Recusar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Renderizar Logs
+            const logsContainer = document.getElementById('logs-list-container');
+            if (LOGS_DATA.length === 0) {
+                logsContainer.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs"><p>Nenhum registro encontrado.</p></div>`;
+            } else {
+                logsContainer.innerHTML = LOGS_DATA.map(l => `
+                    <div class="p-2.5 bg-surfaceLight/30 border border-zinc-800/60 rounded-xl flex items-center justify-between text-xs font-mono">
+                        <span class="text-zinc-300">${escapeHtml(l.device)}</span>
+                        <span class="text-[10px] text-zinc-500">${l.time}</span>
+                    </div>
+                `).join('');
+            }
         }
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        // AÇÕES DO CANAL DE APROVAÇÃO
+        function approveOrder(index) {
+            const order = PENDING_DATA.splice(index, 1)[0];
+            order.status = "Aprovado";
+            SALES_DATA.unshift(order);
+            saveConfigStorage();
+            renderDashboardData();
+            showToast("Operação aprovada com sucesso!", "✅");
+            showFloatingNotification(`Venda de ${order.name} aprovada.`, "Aprovação Concluída");
         }
 
-        // Inicialização
-        updateUI();
+        function rejectOrder(index) {
+            PENDING_DATA.splice(index, 1);
+            saveConfigStorage();
+            renderDashboardData();
+            showToast("Operação recusada.", "❌");
+        }
+
+        function clearSalesHistory() {
+            if (confirm("Deseja realmente limpar todo o histórico de vendas?")) {
+                SALES_DATA = [];
+                saveConfigStorage();
+                renderDashboardData();
+                showToast("Histórico de vendas limpo.", "🗑️");
+            }
+        }
+
+        function clearLogs() {
+            if (confirm("Deseja limpar todos os logs técnicos?")) {
+                LOGS_DATA = [];
+                saveConfigStorage();
+                renderDashboardData();
+                showToast("Logs limpos com sucesso.", "🗑️");
+            }
+        }
+
+        // SALVAR ALTERAÇÕES DE CONFIGURAÇÃO (ABA AJUSTES)
+        function saveAllSettings(event) {
+            event.preventDefault();
+
+            CONFIG.profile.name = document.getElementById('set-profile-name').value.trim();
+            CONFIG.profile.avatar = document.getElementById('set-profile-avatar').value.trim();
+            CONFIG.profile.bio = document.getElementById('set-profile-bio').value.trim();
+            CONFIG.profile.status = document.getElementById('set-profile-status').value.trim();
+            CONFIG.profile.securityText = document.getElementById('set-profile-security').value.trim();
+
+            CONFIG.mainButton.title = document.getElementById('set-main-title').value.trim();
+            CONFIG.mainButton.price = document.getElementById('set-main-price').value.trim();
+            CONFIG.mainButton.subtitle = document.getElementById('set-main-subtitle').value.trim();
+
+            CONFIG.support.title = document.getElementById('set-support-title').value.trim();
+            CONFIG.support.aiName = document.getElementById('set-support-ainame').value.trim();
+
+            saveConfigStorage();
+            renderUI();
+            showToast("Configurações atualizadas com sucesso!", "💾");
+        }
+
+        // UTILITÁRIO DE SEGURANÇA XSS
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
     </script>
 </body>
 </html>
