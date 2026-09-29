@@ -2,14 +2,17 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NotifyCash - VIP Experience</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --tema-cor: #8a05be;
-            --tema-gradiente: linear-gradient(135deg, #8a05be, #00d2ff);
-            --neon-glow: rgba(138, 5, 190, 0.6);
+            --nu-roxo: #8a05be;
+            --nu-roxo-claro: #a514e8;
+            --bg-black: #000000;
+            --bg-card: #0d0d12;
+            --borda-sutil: rgba(255, 255, 255, 0.1);
+            --neon-glow: rgba(138, 5, 190, 0.5);
         }
 
         * {
@@ -17,46 +20,73 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #030305;
+            background-color: var(--bg-black);
             color: #ffffff;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 40px 20px;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
-        .container {
+        /* Estrutura estilo App Centralizada */
+        .app-container {
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
+            height: 100%;
+            max-height: 850px;
+            background-color: var(--bg-black);
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            padding: 30px 20px;
+            position: relative;
+            overflow-y: auto;
+            border-radius: 36px;
+            box-shadow: 0 0 50px rgba(138, 5, 190, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Logotipo / Avatar VIP com Brilho Vivo */
+        .content-top {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* Avatar com Animação e Brilho */
         .logo-container {
-            width: 125px;
-            height: 125px;
+            width: 115px;
+            height: 115px;
             border-radius: 50%;
-            background: var(--tema-gradiente);
+            background: linear-gradient(135deg, var(--nu-roxo), #00d2ff);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 4px;
-            margin-bottom: 24px;
-            box-shadow: 0 0 35px var(--neon-glow);
-            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px var(--neon-glow);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 20px rgba(138, 5, 190, 0.4); transform: scale(1); }
+            100% { box-shadow: 0 0 35px rgba(0, 210, 255, 0.6); transform: scale(1.03); }
         }
 
         .logo-inner {
             width: 100%;
             height: 100%;
-            background-color: #000000;
+            background-color: #0b0b0f;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -70,126 +100,132 @@
             object-fit: cover;
         }
 
-        /* Títulos */
         .title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.2);
         }
 
         .subtitle {
-            font-size: 13px;
-            color: #a1a1aa;
+            font-size: 12px;
+            color: #71717a;
             font-weight: 600;
-            letter-spacing: 3px;
-            margin-bottom: 32px;
+            letter-spacing: 2.5px;
+            margin-bottom: 28px;
             text-align: center;
             text-transform: uppercase;
         }
 
-        /* Botão VIP de Compra Vivo */
+        /* Botão Nubank Roxo com Animação Fluida */
         .vip-buy-btn {
             width: 100%;
-            background: var(--tema-gradiente);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 18px;
-            padding: 20px 24px;
+            background: linear-gradient(135deg, var(--nu-roxo), var(--nu-roxo-claro));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #ffffff;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px var(--neon-glow);
+            box-shadow: 0 8px 25px rgba(138, 5, 190, 0.6);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .vip-buy-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px var(--neon-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(138, 5, 190, 0.8);
+        }
+
+        .vip-buy-btn:active {
+            transform: scale(0.97);
         }
 
         .nu-icon {
             background-color: #ffffff;
-            color: var(--tema-cor);
+            color: var(--nu-roxo);
             font-weight: 900;
-            font-size: 14px;
-            height: 32px;
-            width: 32px;
+            font-size: 13px;
+            height: 30px;
+            width: 30px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            margin-right: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .button-text {
             flex-grow: 1;
             text-align: center;
-            padding-right: 32px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            padding-right: 30px;
         }
 
-        /* Selos de Confiança Dinâmicos */
+        /* Selos de Confiança Personalizados */
         .security-badges {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
-            font-size: 13px;
-            color: #cbd5e1;
-            margin-bottom: 24px;
-            text-align: center;
-            width: 100%;
+            font-size: 12px;
+            color: #a1a1aa;
+            margin-bottom: 20px;
             font-weight: 500;
         }
 
-        /* Botão de Painel de Administração VIP */
+        /* Botão da Administração com Escudo Personalizado */
         .admin-btn {
             width: 100%;
-            background-color: #121218;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 14px;
-            padding: 16px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 16px;
+            padding: 15px 18px;
             display: flex;
             align-items: center;
-            color: #cbd5e1;
+            color: #d4d4d8;
             font-weight: 600;
             font-size: 14px;
-            transition: all 0.3s ease;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         .admin-btn:hover {
-            background-color: #1a1a24;
+            background-color: #16161f;
+            border-color: rgba(255, 255, 255, 0.2);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .admin-icon {
+        .admin-icon-box {
             color: #38bdf8;
-            font-size: 18px;
-            margin-right: 16px;
-            width: 24px;
-            text-align: center;
+            background: rgba(56, 189, 248, 0.1);
+            font-size: 16px;
+            height: 32px;
+            width: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
         }
 
-        /* ==================== MODAL DE ADMINISTRAÇÃO ==================== */
+        /* ==================== PAINEL ADMIN MODAL ==================== */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(12px);
+            background-color: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(14px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -197,6 +233,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            padding: 15px;
         }
 
         .modal-overlay.active {
@@ -205,15 +242,15 @@
         }
 
         .admin-modal {
-            background-color: #0b0b0f;
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            width: 92%;
-            max-width: 460px;
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
+            background-color: #08080c;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95);
+            transform: scale(0.92);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-height: 90vh;
             display: flex;
             flex-direction: column;
@@ -224,31 +261,31 @@
         }
 
         .modal-header-box {
-            background-color: #121217;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .modal-title-left {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: #ffffff;
         }
 
         .close-x-btn {
-            background: #1a1a24;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #181822;
+            border: 1px solid var(--borda-sutil);
             color: #ffffff;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -261,20 +298,20 @@
             background: #2a2a38;
         }
 
-        /* Abas */
+        /* Abas Estilizadas Dashboard */
         .admin-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 14px;
         }
 
         .tab-btn {
             flex: 1;
-            background-color: #121217;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            padding: 12px 10px;
-            font-size: 13px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            color: #71717a;
+            padding: 10px 6px;
+            font-size: 12px;
             font-weight: 600;
             border-radius: 12px;
             cursor: pointer;
@@ -283,7 +320,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .tab-btn.active {
@@ -294,19 +331,22 @@
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
         }
 
-        /* Conteúdo das Caixas */
-        .inner-content-box {
-            background-color: #121217;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-            max-height: 280px;
+        .tab-content-container {
             overflow-y: auto;
+            flex-grow: 1;
+            max-height: 340px;
+        }
+
+        .inner-content-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
         .section-title-inner {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 12px;
@@ -318,41 +358,41 @@
         }
 
         .metric-card {
-            background-color: #0b0b0f;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #040406;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: #94a3b8;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #a1a1aa;
         }
 
         .metric-card span:last-child {
             color: #ffffff;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .subtext-history {
-            font-size: 12px;
+            font-size: 11px;
             color: #71717a;
             text-align: center;
-            margin: 20px 0;
-            line-height: 1.5;
+            margin: 15px 0;
+            line-height: 1.4;
         }
 
         .action-sub-btn {
             width: 100%;
-            background-color: #1a1a24;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background-color: #181822;
+            border: 1px solid var(--borda-sutil);
             color: #ffffff;
             border-radius: 12px;
-            padding: 12px;
+            padding: 11px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: background 0.2s;
             text-align: center;
@@ -362,51 +402,52 @@
             background-color: #262636;
         }
 
-        /* Campos de Formulário na aba Ajustes */
+        /* Campos de Formulário no Dashboard de Ajustes */
         .admin-field {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .admin-field label {
             display: block;
-            font-size: 11px;
-            color: #cbd5e1;
-            margin-bottom: 4px;
+            font-size: 10px;
+            color: #a1a1aa;
+            margin-bottom: 3px;
             text-transform: uppercase;
             font-weight: 600;
         }
 
         .admin-field input {
             width: 100%;
-            background-color: #0b0b0f;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background-color: #040406;
+            border: 1px solid var(--borda-sutil);
             border-radius: 10px;
-            padding: 10px 12px;
+            padding: 9px 11px;
             color: #ffffff;
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
         }
 
         .admin-field input:focus {
-            border-color: var(--tema-cor);
+            border-color: var(--nu-roxo);
         }
 
         .exit-panel-btn {
             width: 100%;
-            background-color: #121217;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
             color: #ffffff;
             border-radius: 16px;
-            padding: 14px;
+            padding: 13px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
+            margin-top: 5px;
         }
 
         .exit-panel-btn:hover {
-            background-color: #1a1a24;
+            background-color: #181822;
         }
 
         .tab-pane {
@@ -416,45 +457,61 @@
         .tab-pane.active {
             display: block;
         }
+
+        /* Rodapé Fixo App */
+        .app-footer {
+            font-size: 11px;
+            color: #52525b;
+            text-align: center;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Logotipo -->
-        <div class="logo-container" id="perfilLogoContainer">
-            <div class="logo-inner">
-                <img id="perfilImg" src="https://i.imgur.com/34X35mB.png" alt="Logo">
+    <div class="app-container">
+        <div class="content-top" style="width: 100%;">
+            <!-- Logotipo -->
+            <div class="logo-container">
+                <div class="logo-inner">
+                    <img id="perfilImg" src="https://i.imgur.com/34X35mB.png" alt="Logo">
+                </div>
+            </div>
+
+            <!-- Títulos -->
+            <h1 class="title">ACESSE ESSE LINK</h1>
+            <p class="subtitle">LINK ABAIXO</p>
+
+            <!-- Botão VIP de Compra (Nubank Roxo Animado) -->
+            <div class="vip-buy-btn" onclick="realizarCompra()">
+                <div class="nu-icon" id="iconeBotaoCustom">nu</div>
+                <div class="button-text" id="textoBotaoCustom">
+                    QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨
+                </div>
+            </div>
+
+            <!-- Selos de Confiança Personalizados -->
+            <div class="security-badges" id="secaoSelos">
+                <span>🛡️ Compra 100% segura</span>
+                <span>•</span>
+                <span>⚡ Entrega por e-mail</span>
+            </div>
+
+            <!-- Botão Painel de Administração com Escudo Personalizado -->
+            <div class="admin-btn" onclick="pedirSenhaAdmin()">
+                <div class="admin-icon-box">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div style="flex-grow: 1; text-align: left;">
+                    Painel de Administração
+                </div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #52525b;"></i>
             </div>
         </div>
 
-        <!-- Títulos -->
-        <h1 class="title">ACESSE ESSE LINK</h1>
-        <p class="subtitle">LINK ABAIXO</p>
-
-        <!-- Botão VIP de Compra -->
-        <div class="vip-buy-btn" onclick="realizarCompra()">
-            <div class="nu-icon" id="iconeBotaoCustom">nu</div>
-            <div class="button-text" id="textoBotaoCustom">
-                QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨
-            </div>
-        </div>
-
-        <!-- Selos de Confiança Personalizados -->
-        <div class="security-badges" id="secaoSelos">
-            <span>🛡️ Compra 100% segura</span>
-            <span>•</span>
-            <span>⚡ Entrega por e-mail</span>
-        </div>
-
-        <!-- Botão Painel de Administração -->
-        <div class="admin-btn" onclick="pedirSenhaAdmin()">
-            <div class="admin-icon">
-                <i class="fa-solid fa-sliders"></i>
-            </div>
-            <div style="flex-grow: 1; text-align: left;">
-                Painel de Administração
-            </div>
+        <div class="app-footer">
+            SECURE ACCESS • v2.6
         </div>
     </div>
 
@@ -464,7 +521,7 @@
             <!-- Cabeçalho do Painel -->
             <div class="modal-header-box">
                 <div class="modal-title-left">
-                    <i class="fa-solid fa-gauge-high" style="color: #38bdf8;"></i>
+                    <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i>
                     <span>Painel Real-Time Global</span>
                 </div>
                 <div class="close-x-btn" onclick="fecharPainel()">
@@ -472,7 +529,7 @@
                 </div>
             </div>
 
-            <!-- Abas (Vendas, Cliques, Ajustes) -->
+            <!-- Abas do Dashboard -->
             <div class="admin-tabs">
                 <button class="tab-btn active" onclick="mudarAba('vendas')">
                     <i class="fa-solid fa-bag-shopping"></i> Vendas
@@ -492,13 +549,13 @@
                 <div class="tab-pane active" id="tab-vendas">
                     <div class="inner-content-box">
                         <div class="section-title-inner">
-                            <i class="fa-solid fa-receipt"></i> Gestão de Vendas & Pedidos
+                            <i class="fa-solid fa-receipt text-purple"></i> Gestão de Vendas & Pedidos
                         </div>
                         <div class="metric-card">
                             <span>Total de pedidos gerados:</span>
                             <span id="contadorPedidos">0</span>
                         </div>
-                        <div class="subtext-history">
+                        <div class="subtext-history" id="historicoVendasTexto">
                             Histórico de Pedidos Pix (Global):<br><br>
                             Nenhum pedido registado ainda.
                         </div>
@@ -512,19 +569,19 @@
                 <div class="tab-pane" id="tab-cliques">
                     <div class="inner-content-box">
                         <div class="section-title-inner">
-                            <i class="fa-solid fa-users"></i> Monitor de Tráfego
+                            <i class="fa-solid fa-users"></i> Monitor de Tráfego & Dashboard
                         </div>
                         <div class="metric-card">
                             <span>Total de cliques no site:</span>
                             <span id="contadorCliques">1</span>
                         </div>
-                        <div class="subtext-history" id="logsContainer">
-                            [23:10] Acesso detetado com sucesso.
+                        <div class="subtext-history" id="logsContainer" style="text-align: left; max-height: 120px; overflow-y: auto;">
+                            [Sistema] Acesso inicial detetado com sucesso.
                         </div>
                     </div>
                 </div>
 
-                <!-- Aba 3: Ajustes (Configurações Completas) -->
+                <!-- Aba 3: Ajustes -->
                 <div class="tab-pane" id="tab-ajustes">
                     <div class="inner-content-box">
                         <div class="section-title-inner">
@@ -535,26 +592,26 @@
                             <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/foto.png" oninput="atualizarFotoPreview()">
                         </div>
                         <div class="admin-field">
-                            <label>Ícone Personalizado do Botão (Texto ou Sigla)</label>
+                            <label>Ícone Personalizado do Botão</label>
                             <input type="text" id="inputIconeBotao" value="nu" placeholder="Ex: nu, VIP, $" oninput="atualizarIconeBotao()">
                         </div>
                         <div class="admin-field">
                             <label>Texto do Botão de Compra</label>
-                            <input type="text" id="inputTextoBotao" value="QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨" placeholder="Texto do botão" oninput="atualizarTextoBotao()">
+                            <input type="text" id="inputTextoBotao" value="QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨" oninput="atualizarTextoBotao()">
                         </div>
                         <div class="admin-field">
                             <label>Cor Principal e Neon</label>
-                            <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 38px; padding: 2px; cursor: pointer;">
+                            <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 36px; padding: 2px; cursor: pointer;">
                         </div>
                         <div class="admin-field">
-                            <label>Selos / Emojis de Confiança Editáveis</label>
+                            <label>Selos de Confiança Editáveis</label>
                             <input type="text" id="inputSelos" value="🛡️ Compra 100% segura • ⚡ Entrega por e-mail" oninput="atualizarSelos()">
                         </div>
                         <div class="admin-field">
                             <label>Alterar Senha do Painel</label>
                             <input type="password" id="inputNovaSenha" value="10" placeholder="Nova senha">
                         </div>
-                        <div class="action-sub-btn" style="background-color: #22c55e; color: #fff; margin-top: 10px;" onclick="salvarConfiguracoes()">
+                        <div class="action-sub-btn" style="background-color: #16a34a; color: #fff; margin-top: 8px;" onclick="salvarConfiguracoes()">
                             Guardar Alterações
                         </div>
                     </div>
@@ -562,25 +619,29 @@
 
             </div>
 
-            <!-- Botão Inferior de Fechar / Sair -->
+            <!-- Botão Fechar Painel -->
             <div class="exit-panel-btn" onclick="fecharPainel()">
                 Fechar / Sair do Painel
             </div>
         </div>
     </div>
 
-    <!-- Scripts de Controlo -->
+    <!-- Scripts de Funcionalidade 100% Integrada -->
     <script>
         let senhaAdminAtual = "10";
         let totalCliques = 1;
+        let totalPedidos = 0;
 
         function pedirSenhaAdmin() {
-            let senha = prompt("Insira a senha de administrador:");
-            if (senha === senhaAdminAtual) {
+            let senha = prompt("🔒 Insira a senha de administrador:");
+            if (senha === null) return; // Clicou em cancelar
+            
+            if (senha.trim() === senhaAdminAtual) {
                 abrirPainel();
                 registarLog("Painel administrativo aberto com sucesso.");
-            } else if (senha !== null) {
-                alert("Senha incorreta!");
+            } else {
+                alert("❌ Erro: Senha de administrador incorreta!");
+                registarLog("Tentativa de acesso negada (Senha incorreta).");
             }
         }
 
@@ -627,8 +688,8 @@
 
         function atualizarCorTema() {
             let cor = document.getElementById('inputCorTema').value;
-            document.documentElement.style.setProperty('--tema-cor', cor);
-            document.documentElement.style.setProperty('--tema-gradiente', `linear-gradient(135deg, ${cor}, #00d2ff)`);
+            document.documentElement.style.setProperty('--nu-roxo', cor);
+            document.documentElement.style.setProperty('--nu-roxo-claro', cor);
             document.documentElement.style.setProperty('--neon-glow', cor + '80');
         }
 
@@ -638,22 +699,37 @@
         }
 
         function limparHistorico() {
+            totalPedidos = 0;
             document.getElementById('contadorPedidos').innerText = "0";
-            alert("Histórico de pedidos limpo com sucesso!");
-            registarLog("Histórico de vendas limpo.");
+            document.getElementById('historicoVendasTexto').innerHTML = "Histórico de Pedidos Pix (Global):<br><br>Nenhum pedido registado ainda.";
+            alert("🧹 Histórico de pedidos limpo com sucesso!");
+            registarLog("Histórico de vendas reiniciado.");
         }
 
         function realizarCompra() {
             totalCliques++;
+            totalPedidos++;
             document.getElementById('contadorCliques').innerText = totalCliques;
-            registarLog("Utilizador clicou no botão de compra.");
-            alert("A iniciar processo de compra automatizada...");
+            document.getElementById('contadorPedidos').innerText = totalPedidos;
+            
+            let hora = new Date().toLocaleTimeString();
+            document.getElementById('historicoVendasTexto').innerHTML = `Histórico de Pedidos Pix (Global):<br><br><b style="color: #22c55e;">[${hora}] Novo Pix Gerado! (Pedido #${totalPedidos})</b>`;
+            
+            registarLog(`Novo clique e pedido #${totalPedidos} gerados.`);
+            
+            // Simulação de erro/aviso de checkout ou redirecionamento seguro
+            let confirmar = confirm("⚡ Redirecionar para o checkout automatizado via Pix Nubank?");
+            if (confirmar) {
+                // Aqui podes colocar o link real do teu checkout
+                alert("Redirecionando para o ambiente seguro de pagamento...");
+            }
         }
 
         function registarLog(mensagem) {
             let caixaLogs = document.getElementById('logsContainer');
             let hora = new Date().toLocaleTimeString();
             caixaLogs.innerHTML += `<br>[${hora}] ${mensagem}`;
+            caixaLogs.scrollTop = caixaLogs.scrollHeight;
         }
 
         function salvarConfiguracoes() {
@@ -661,7 +737,7 @@
             if(novaSenhaInput.trim() !== "") {
                 senhaAdminAtual = novaSenhaInput.trim();
             }
-            alert("Configurações salvas com sucesso!");
+            alert("✅ Configurações e nova senha guardadas com sucesso!");
             registarLog("Configurações atualizadas via painel.");
             fecharPainel();
         }
