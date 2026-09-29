@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NotifyCash - Links</title>
-    <!-- FontAwesome para ícones -->
+    <title>NotifyCash - VIP Experience</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,36 +14,36 @@
         }
 
         body {
-            background-color: #000000; /* Preto total */
+            background-color: #050505;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             min-height: 100vh;
             padding: 40px 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 440px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Logotipo / Avatar */
+        /* Logotipo / Avatar VIP */
         .logo-container {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #8a05be, #3a7bd5);
+            background: linear-gradient(135deg, #8a05be, #00d2ff);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 4px;
             margin-bottom: 24px;
-            box-shadow: 0 0 25px rgba(138, 5, 190, 0.3);
+            box-shadow: 0 0 30px rgba(138, 5, 190, 0.4);
         }
 
         .logo-inner {
@@ -53,10 +52,8 @@
             background-color: #000000;
             border-radius: 50%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
             overflow: hidden;
         }
 
@@ -68,7 +65,7 @@
 
         /* Títulos */
         .title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: 1px;
             margin-bottom: 8px;
@@ -76,96 +73,245 @@
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: #888888;
             font-weight: 600;
-            letter-spacing: 2px;
-            margin-bottom: 32px;
+            letter-spacing: 3px;
+            margin-bottom: 36px;
             text-align: center;
+            text-transform: uppercase;
         }
 
-        /* Botões de Link */
-        .link-button {
+        /* Botão VIP de Compra (Grande e Proporcionado) */
+        .vip-buy-btn {
             width: 100%;
-            background-color: #121212; /* Preto elegante para botões */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            padding: 16px 20px;
+            background: linear-gradient(135deg, #8a05be, #6200ee);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #ffffff;
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(138, 5, 190, 0.5);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .link-button:hover {
-            background-color: #1a1a1a;
-            transform: translateY(-2px);
-            border-color: rgba(138, 5, 190, 0.4);
+        .vip-buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(138, 5, 190, 0.8);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
-        .btn-icon {
-            font-size: 20px;
-            margin-right: 16px;
-            display: flex;
-            align-items: center;
-            width: 24px;
-            justify-content: center;
-        }
-
-        /* Estilo do ícone/logo do Nubank */
         .nu-icon {
-            background-color: #8a05be;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #8a05be;
             font-weight: 900;
-            font-size: 13px;
-            height: 26px;
-            width: 26px;
-            border-radius: 6px;
+            font-size: 14px;
+            height: 32px;
+            width: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            letter-spacing: -1px;
-        }
-
-        .admin-icon {
-            color: #3b82f6;
+            margin-right: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .button-text {
             flex-grow: 1;
             text-align: center;
-            padding-right: 24px;
+            padding-right: 32px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
-        /* Rodapé */
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 12px;
-            color: #666666;
-        }
-
-        .footer-links {
+        /* Selos de Segurança */
+        .security-badges {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: #a0aec0;
+            margin-bottom: 24px;
+            text-align: center;
+            width: 100%;
         }
 
-        .footer-links a {
-            color: #666666;
-            text-decoration: none;
+        .security-badges span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
+        .security-badges i {
+            color: #22c55e;
+        }
+
+        /* Botão de Painel de Administração VIP */
+        .admin-btn {
+            width: 100%;
+            background-color: #121216;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            color: #a0aec0;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .admin-btn:hover {
+            background-color: #1c1c24;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-icon {
+            color: #3b82f6;
+            font-size: 18px;
+            margin-right: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Modal do Painel de Administração (Centralizado e Fixado) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .admin-modal {
+            background-color: #111116;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .admin-modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 14px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #ffffff;
+        }
+
+        /* Secções do Painel */
+        .admin-section {
+            margin-bottom: 20px;
+        }
+
+        .admin-section label {
+            display: block;
+            font-size: 13px;
+            color: #a0aec0;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .admin-section input, .admin-section select {
+            width: 100%;
+            background-color: #1a1a22;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .admin-section input:focus {
+            border-color: #8a05be;
+        }
+
+        .logs-box {
+            background-color: #0b0b0e;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #22c55e;
+            height: 100px;
+            overflow-y: auto;
+        }
+
+        .save-settings-btn {
+            width: 100%;
+            background-color: #22c55e;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .save-settings-btn:hover {
+            background-color: #16a34a;
         }
     </style>
 </head>
@@ -173,10 +319,9 @@
 
     <div class="container">
         <!-- Logotipo -->
-        <div class="logo-container">
+        <div class="logo-container" id="perfilLogoContainer">
             <div class="logo-inner">
-                <!-- Podes colocar o link direto da imagem do teu logo aqui -->
-                <img src="https://via.placeholder.com/110/000000/8a05be?text=N" alt="NotifyCash Logo">
+                <img id="perfilImg" src="https://via.placeholder.com/120/000000/8a05be?text=N" alt="NotifyCash Logo">
             </div>
         </div>
 
@@ -184,58 +329,120 @@
         <h1 class="title">ACESSE ESSE LINK</h1>
         <p class="subtitle">LINK ABAIXO</p>
 
-        <!-- Botão de Compra com Logo do Nubank -->
-        <div class="link-button" onclick="realizarCompra()">
-            <div class="btn-icon">
-                <div class="nu-icon">nu</div>
-            </div>
+        <!-- Botão VIP de Compra -->
+        <div class="vip-buy-btn" onclick="realizarCompra()">
+            <div class="nu-icon">nu</div>
             <div class="button-text">
                 QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨
             </div>
         </div>
 
-        <!-- Botão Painel de Administração (Protegido por senha: 10) -->
-        <div class="link-button" onclick="acessarPainel()">
-            <div class="btn-icon admin-icon">
-                <i class="fa-solid fa-lock"></i>
+        <!-- Selos de Confiança -->
+        <div class="security-badges">
+            <span><i class="fa-solid fa-shield-check"></i> Compra 100% segura</span>
+            <span>•</span>
+            <span><i class="fa-solid fa-bolt"></i> Entrega por e-mail</span>
+        </div>
+
+        <!-- Botão Painel de Administração -->
+        <div class="admin-btn" onclick="pedirSenhaAdmin()">
+            <div class="admin-icon">
+                <i class="fa-solid fa-sliders"></i>
             </div>
-            <div class="button-text">
+            <div class="button-text" style="flex-grow: 1; text-align: left;">
                 Painel de Administração
             </div>
         </div>
     </div>
 
-    <!-- Rodapé -->
-    <footer>
-        <div class="footer-links">
-            <a href="#">Cookie Preferences</a>
-            <span>•</span>
-            <a href="#">Report</a>
-            <span>•</span>
-            <a href="#">Privacy</a>
-            <span>•</span>
-            <a href="#">About this account</a>
+    <!-- Modal do Painel de Administração (Centralizado) -->
+    <div class="modal-overlay" id="adminModalOverlay">
+        <div class="admin-modal">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-gauge-high" style="color: #8a05be;"></i> Painel Administrativo VIP</h2>
+                <button class="close-modal" onclick="fecharPainel()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="admin-section">
+                <label>Link URL da Foto de Perfil Permanente</label>
+                <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/sua-foto.png" oninput="atualizarFotoPreview()">
+            </div>
+
+            <div class="admin-section">
+                <label>Cor de Destaque / Tema</label>
+                <select id="selectCorTema" onchange="atualizarCorTema()">
+                    <option value="#8a05be">Roxo Nubank (Padrão)</option>
+                    <option value="#25d366">Verde Monetário</option>
+                    <option value="#3b82f6">Azul Tecnológico</option>
+                    <option value="#eab308">Dourado VIP</option>
+                </select>
+            </div>
+
+            <div class="admin-section">
+                <label>Monitoramento de Logs (Cliques & Utilizadores)</label>
+                <div class="logs-box" id="logsContainer">
+                    [11:02] Sistema iniciado com sucesso.<br>
+                    [11:02] Painel administrativo protegido carregado.
+                </div>
+            </div>
+
+            <button class="save-settings-btn" onclick="salvarConfiguracoes()">Salvar Alterações</button>
         </div>
-        <p>Junte-se a notifycash_ hoje</p>
-    </footer>
+    </div>
 
-    <!-- Scripts de Ação -->
+    <!-- Scripts de Interação -->
     <script>
-        function realizarCompra() {
-            // Ação ao clicar no botão de compra do Nubank (ex: abrir checkout, Pix ou redirecionar)
-            alert("A iniciar processo de aquisição via Nubank...");
-            // Exemplo de redirecionamento para o checkout ou WhatsApp de fechamento:
-            // window.location.href = "LINK_DO_SEU_CHECKOUT_OU_WHATSAPP";
-        }
-
-        function acessarPainel() {
-            let senha = prompt("Insira a senha do painel de administração:");
+        // Controlo de Acesso ao Painel com Senha '10'
+        function pedirSenhaAdmin() {
+            let senha = prompt("Insira a senha de administrador:");
             if (senha === "10") {
-                alert("Acesso autorizado! Bem-vindo ao painel.");
-                // window.location.href = "admin.html";
+                abrirPainel();
+                registarLog("Acesso autorizado ao painel administrativo.");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
+                registarLog("Tentativa de acesso negada (senha incorreta).");
             }
+        }
+
+        function abrirPainel() {
+            document.getElementById('adminModalOverlay').classList.add('active');
+        }
+
+        function fecharPainel() {
+            document.getElementById('adminModalOverlay').classList.remove('active');
+        }
+
+        // Funções de Customização em Tempo Real
+        function atualizarFotoPreview() {
+            let url = document.getElementById('inputLogoUrl').value;
+            if(url.trim() !== "") {
+                document.getElementById('perfilImg').src = url;
+            }
+        }
+
+        function atualizarCorTema() {
+            let cor = document.getElementById('selectCorTema').value;
+            document.getElementById('perfilLogoContainer').style.background = `linear-gradient(135deg, ${cor}, #00d2ff)`;
+            document.querySelector('.vip-buy-btn').style.background = `linear-gradient(135deg, ${cor}, #4c1d95)`;
+        }
+
+        function realizarCompra() {
+            registarLog("Utilizador clicou no botão de compra do Nubank.");
+            alert("A redirecionar para o checkout seguro...");
+            // Insere aqui a lógica personalizada para a compra futuramente
+        }
+
+        function registarLog(mensagem) {
+            let caixaLogs = document.getElementById('logsContainer');
+            let hora = new Date().toLocaleTimeString();
+            caixaLogs.innerHTML += `<br>[${hora}] ${mensagem}`;
+            caixaLogs.scrollTop = caixaLogs.scrollHeight;
+        }
+
+        function salvarConfiguracoes() {
+            alert("Configurações guardadas com sucesso!");
+            registarLog("Alterações aplicadas e salvas pelo administrador.");
+            fecharPainel();
         }
     </script>
 
