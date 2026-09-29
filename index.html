@@ -6,6 +6,11 @@
     <title>NotifyCash - VIP Experience</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --tema-cor: #8a05be;
+            --tema-gradiente: linear-gradient(135deg, #8a05be, #00d2ff);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -37,13 +42,14 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #8a05be, #00d2ff);
+            background: var(--tema-gradiente);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 4px;
             margin-bottom: 24px;
             box-shadow: 0 0 30px rgba(138, 5, 190, 0.4);
+            transition: background 0.3s ease;
         }
 
         .logo-inner {
@@ -82,10 +88,10 @@
             text-transform: uppercase;
         }
 
-        /* Botão VIP de Compra (Grande e Proporcionado) */
+        /* Botão VIP de Compra */
         .vip-buy-btn {
             width: 100%;
-            background: linear-gradient(135deg, #8a05be, #6200ee);
+            background: var(--tema-gradiente);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 18px;
             padding: 20px 24px;
@@ -99,19 +105,16 @@
             transition: all 0.3s ease;
             box-shadow: 0 8px 25px rgba(138, 5, 190, 0.5);
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
 
         .vip-buy-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(138, 5, 190, 0.8);
-            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .nu-icon {
             background-color: #ffffff;
-            color: #8a05be;
+            color: var(--tema-cor);
             font-weight: 900;
             font-size: 14px;
             height: 32px;
@@ -128,30 +131,19 @@
             flex-grow: 1;
             text-align: center;
             padding-right: 32px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
-        /* Selos de Segurança */
+        /* Selos Dinâmicos */
         .security-badges {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             font-size: 12px;
             color: #a0aec0;
             margin-bottom: 24px;
             text-align: center;
             width: 100%;
-        }
-
-        .security-badges span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .security-badges i {
-            color: #22c55e;
         }
 
         /* Botão de Painel de Administração VIP */
@@ -184,15 +176,15 @@
             text-align: center;
         }
 
-        /* Modal do Painel de Administração (Centralizado e Fixado) */
+        /* Modal do Painel de Administração Aprimorado */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,92 +200,139 @@
         }
 
         .admin-modal {
-            background-color: #111116;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            background: linear-gradient(145deg, #121218, #0a0a0f);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 92%;
+            max-width: 520px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 20px rgba(138, 5, 190, 0.2);
             transform: scale(0.95);
             transition: transform 0.3s ease;
             max-height: 90vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
 
         .modal-overlay.active .admin-modal {
             transform: scale(1);
         }
 
+        /* Cabeçalho do Painel com Botões de Voltar e Ações */
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 14px;
+            padding-bottom: 12px;
         }
 
-        .modal-header h2 {
-            font-size: 18px;
+        .top-action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-icon-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
+            transition: background 0.2s;
         }
 
-        .close-modal {
+        .action-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Abas do Painel (Usuários, Vendas, Configurações) */
+        .admin-tabs {
+            display: flex;
+            background-color: #0d0d12;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .tab-btn {
+            flex: 1;
             background: none;
             border: none;
-            color: #a0aec0;
-            font-size: 20px;
+            color: #888888;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.3s;
+            text-align: center;
         }
 
-        .close-modal:hover {
+        .tab-btn.active {
+            background-color: var(--tema-cor);
             color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
-        /* Secções do Painel */
+        /* Conteúdo das Abas */
+        .tab-content-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 350px;
+            padding-right: 4px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
         .admin-section {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .admin-section label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             color: #a0aec0;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
         }
 
-        .admin-section input, .admin-section select {
+        .admin-section input {
             width: 100%;
             background-color: #1a1a22;
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 10px;
-            padding: 12px 14px;
+            padding: 10px 14px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
-            transition: border-color 0.2s;
         }
 
         .admin-section input:focus {
-            border-color: #8a05be;
+            border-color: var(--tema-cor);
         }
 
-        .logs-box {
+        .data-list-box {
             background-color: #0b0b0e;
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 10px;
             padding: 12px;
-            font-family: monospace;
             font-size: 12px;
-            color: #22c55e;
-            height: 100px;
-            overflow-y: auto;
+            color: #cbd5e1;
+            min-height: 120px;
         }
 
         .save-settings-btn {
@@ -302,12 +341,12 @@
             color: #ffffff;
             border: none;
             border-radius: 10px;
-            padding: 14px;
+            padding: 12px;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.2s;
             margin-top: 10px;
+            transition: background 0.2s;
         }
 
         .save-settings-btn:hover {
@@ -321,7 +360,7 @@
         <!-- Logotipo -->
         <div class="logo-container" id="perfilLogoContainer">
             <div class="logo-inner">
-                <img id="perfilImg" src="https://via.placeholder.com/120/000000/8a05be?text=N" alt="NotifyCash Logo">
+                <img id="perfilImg" src="https://via.placeholder.com/120/000000/8a05be?text=N" alt="Logo">
             </div>
         </div>
 
@@ -338,10 +377,10 @@
         </div>
 
         <!-- Selos de Confiança -->
-        <div class="security-badges">
-            <span><i class="fa-solid fa-shield-check"></i> Compra 100% segura</span>
+        <div class="security-badges" id="secaoSelos">
+            <span>🛡️ Compra 100% segura</span>
             <span>•</span>
-            <span><i class="fa-solid fa-bolt"></i> Entrega por e-mail</span>
+            <span>⚡ Entrega por e-mail</span>
         </div>
 
         <!-- Botão Painel de Administração -->
@@ -349,58 +388,90 @@
             <div class="admin-icon">
                 <i class="fa-solid fa-sliders"></i>
             </div>
-            <div class="button-text" style="flex-grow: 1; text-align: left;">
+            <div style="flex-grow: 1; text-align: left;">
                 Painel de Administração
             </div>
         </div>
     </div>
 
-    <!-- Modal do Painel de Administração (Centralizado) -->
+    <!-- Modal do Painel de Administração -->
     <div class="modal-overlay" id="adminModalOverlay">
         <div class="admin-modal">
+            <!-- Cabeçalho com Botões de Ação no Topo -->
             <div class="modal-header">
-                <h2><i class="fa-solid fa-gauge-high" style="color: #8a05be;"></i> Painel Administrativo VIP</h2>
-                <button class="close-modal" onclick="fecharPainel()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="admin-section">
-                <label>Link URL da Foto de Perfil Permanente</label>
-                <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/sua-foto.png" oninput="atualizarFotoPreview()">
-            </div>
-
-            <div class="admin-section">
-                <label>Cor de Destaque / Tema</label>
-                <select id="selectCorTema" onchange="atualizarCorTema()">
-                    <option value="#8a05be">Roxo Nubank (Padrão)</option>
-                    <option value="#25d366">Verde Monetário</option>
-                    <option value="#3b82f6">Azul Tecnológico</option>
-                    <option value="#eab308">Dourado VIP</option>
-                </select>
-            </div>
-
-            <div class="admin-section">
-                <label>Monitoramento de Logs (Cliques & Utilizadores)</label>
-                <div class="logs-box" id="logsContainer">
-                    [11:02] Sistema iniciado com sucesso.<br>
-                    [11:02] Painel administrativo protegido carregado.
+                <h2 style="font-size: 16px;"><i class="fa-solid fa-gauge-high" style="color: var(--tema-cor);"></i> Painel VIP</h2>
+                <div class="top-action-btns">
+                    <button class="action-icon-btn" onclick="atualizarDadosPainel()"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+                    <button class="action-icon-btn" onclick="voltarAoSite()" style="background-color: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
                 </div>
             </div>
 
-            <button class="save-settings-btn" onclick="salvarConfiguracoes()">Salvar Alterações</button>
+            <!-- Abas de Navegação -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="mudarAba('usuarios')">Usuários</button>
+                <button class="tab-btn" onclick="mudarAba('vendas')">Vendas</button>
+                <button class="tab-btn" onclick="mudarAba('config')">Configurar</button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="tab-content-container">
+                <!-- Aba 1: Usuários / Logs -->
+                <div class="tab-pane active" id="tab-usuarios">
+                    <div class="admin-section">
+                        <label>Logs de Cliques & Utilizadores Ativos</label>
+                        <div class="data-list-box" id="logsContainer">
+                            [11:06] Sistema iniciado.<br>
+                            [11:06] Utilizador acedeu à página principal.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba 2: Vendas -->
+                <div class="tab-pane" id="tab-vendas">
+                    <div class="admin-section">
+                        <label>Registo de Vendas Realizadas</label>
+                        <div class="data-list-box">
+                            • Nenhuma venda registada recentemente.<br>
+                            • As transações automatizadas aparecerão aqui.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba 3: Configurações -->
+                <div class="tab-pane" id="tab-config">
+                    <div class="admin-section">
+                        <label>Link URL da Foto de Perfil Permanente</label>
+                        <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/foto.png" oninput="atualizarFotoPreview()">
+                    </div>
+                    <div class="admin-section">
+                        <label>Cor Principal do Painel</label>
+                        <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 40px; padding: 4px; cursor: pointer;">
+                    </div>
+                    <div class="admin-section">
+                        <label>Personalizar Selos / Emojis</label>
+                        <input type="text" id="inputSelos" value="🛡️ Compra 100% segura • ⚡ Entrega por e-mail" oninput="atualizarSelos()">
+                    </div>
+                    <div class="admin-section">
+                        <label>Alterar Senha do Painel</label>
+                        <input type="password" id="inputNovaSenha" value="10" placeholder="Nova senha (ex: 10)">
+                    </div>
+                    <button class="save-settings-btn" onclick="salvarConfiguracoes()">Guardar Alterações</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts de Interação -->
+    <!-- Scripts de Controlo -->
     <script>
-        // Controlo de Acesso ao Painel com Senha '10'
+        let senhaAdminAtual = "10";
+
         function pedirSenhaAdmin() {
             let senha = prompt("Insira a senha de administrador:");
-            if (senha === "10") {
+            if (senha === senhaAdminAtual) {
                 abrirPainel();
                 registarLog("Acesso autorizado ao painel administrativo.");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
-                registarLog("Tentativa de acesso negada (senha incorreta).");
             }
         }
 
@@ -408,11 +479,26 @@
             document.getElementById('adminModalOverlay').classList.add('active');
         }
 
-        function fecharPainel() {
+        function voltarAoSite() {
             document.getElementById('adminModalOverlay').classList.remove('active');
         }
 
-        // Funções de Customização em Tempo Real
+        function mudarAba(nomeAba) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            if(nomeAba === 'usuarios') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('tab-usuarios').classList.add('active');
+            } else if(nomeAba === 'vendas') {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('tab-vendas').classList.add('active');
+            } else if(nomeAba === 'config') {
+                document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                document.getElementById('tab-config').classList.add('active');
+            }
+        }
+
         function atualizarFotoPreview() {
             let url = document.getElementById('inputLogoUrl').value;
             if(url.trim() !== "") {
@@ -421,15 +507,24 @@
         }
 
         function atualizarCorTema() {
-            let cor = document.getElementById('selectCorTema').value;
-            document.getElementById('perfilLogoContainer').style.background = `linear-gradient(135deg, ${cor}, #00d2ff)`;
-            document.querySelector('.vip-buy-btn').style.background = `linear-gradient(135deg, ${cor}, #4c1d95)`;
+            let cor = document.getElementById('inputCorTema').value;
+            document.documentElement.style.setProperty('--tema-cor', cor);
+            document.documentElement.style.setProperty('--tema-gradiente', `linear-gradient(135deg, ${cor}, #00d2ff)`);
+        }
+
+        function atualizarSelos() {
+            let textoSelos = document.getElementById('inputSelos').value;
+            document.getElementById('secaoSelos').innerHTML = textoSelos;
+        }
+
+        function atualizarDadosPainel() {
+            alert("Dados e logs atualizados com sucesso!");
+            registarLog("Atualização manual do painel executada.");
         }
 
         function realizarCompra() {
-            registarLog("Utilizador clicou no botão de compra do Nubank.");
-            alert("A redirecionar para o checkout seguro...");
-            // Insere aqui a lógica personalizada para a compra futuramente
+            registarLog("Utilizador clicou para efetuar a compra.");
+            alert("A iniciar processo de compra automatizada...");
         }
 
         function registarLog(mensagem) {
@@ -440,9 +535,13 @@
         }
 
         function salvarConfiguracoes() {
-            alert("Configurações guardadas com sucesso!");
-            registarLog("Alterações aplicadas e salvas pelo administrador.");
-            fecharPainel();
+            let novaSenhaInput = document.getElementById('inputNovaSenha').value;
+            if(novaSenhaInput.trim() !== "") {
+                senhaAdminAtual = novaSenhaInput.trim();
+            }
+            alert("Configurações salvas com sucesso!");
+            registarLog("Configurações gerais atualizadas pelo administrador.");
+            voltarAoSite();
         }
     </script>
 
