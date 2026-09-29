@@ -187,7 +187,7 @@
                     </div>
                     <span class="text-[11px] font-medium text-zinc-700">Investir</span>
                 </div>
-                <div onclick="alert('Inter Shop')" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="abrirInterShop()" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-bag-shopping"></i>
                     </div>
@@ -238,11 +238,132 @@
                 <i class="fa-solid fa-chart-pie text-base"></i>
                 <span class="text-[9px] font-medium mt-0.5">Investir</span>
             </div>
-            <div onclick="alert('Inter Shop')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
+            <div onclick="abrirInterShop()" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-bag-shopping text-base"></i>
                 <span class="text-[9px] font-medium mt-0.5">Shop</span>
             </div>
         </nav>
+
+        <!-- ================= MODAL INTER SHOP (SMARTPHONES / IPHONES / ANDROIDS) ================= -->
+        <div id="modal-intershop" class="absolute inset-0 bg-white z-[85] hidden flex-col justify-between overflow-y-auto">
+            <div>
+                <!-- Topo Shop -->
+                <div class="bg-orange-600 px-5 pt-5 pb-4 text-white flex justify-between items-center sticky top-0 z-20 shadow-md">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <div>
+                            <h2 class="text-sm font-black tracking-wider">INTER SHOP</h2>
+                            <p class="text-[10px] opacity-90">Até 10% de Cashback na conta</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-xmark text-white text-lg cursor-pointer bg-black/20 w-8 h-8 rounded-full flex items-center justify-center" onclick="fecharInterShop()"></i>
+                </div>
+
+                <!-- Barra de Pesquisa Shop -->
+                <div class="p-4 bg-zinc-50 border-b border-zinc-100">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-xs text-zinc-400"></i>
+                        <input type="text" placeholder="Buscar iPhone, Samsung, Xiaomi..." class="w-full bg-white border border-zinc-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800 shadow-xs">
+                    </div>
+                </div>
+
+                <!-- Vitrine de Produtos (Smartphones) -->
+                <div class="p-4 space-y-3 pb-8">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-zinc-800">Smartphones em Destaque</h3>
+                        <span class="text-[10px] text-orange-600 font-bold">Frete Grátis</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3" id="vitrine-produtos">
+                        <!-- Produto 1: iPhone 15 Pro -->
+                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
+                                    <span class="absolute top-2 left-2 bg-orange-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">6% Cashback</span>
+                                    <i class="fa-solid fa-mobile-screen-button text-3xl text-zinc-400"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Apple iPhone 15 Pro Max 256GB Titânio Natural</h4>
+                            </div>
+                            <div class="pt-2 mt-2 border-t border-zinc-50">
+                                <span class="text-[10px] text-zinc-400 line-through block">R$ 8.999,00</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-extrabold text-orange-600">R$ 7.499,00</span>
+                                </div>
+                                <button onclick="comprarProdutoShop('Apple iPhone 15 Pro Max 256GB', 7499.00, 449.94)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 2: Samsung Galaxy S24 Ultra -->
+                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
+                                    <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">8% Cashback</span>
+                                    <i class="fa-solid fa-mobile-screen text-3xl text-zinc-400"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Samsung Galaxy S24 Ultra 5G 512GB Titânio Cinza</h4>
+                            </div>
+                            <div class="pt-2 mt-2 border-t border-zinc-50">
+                                <span class="text-[10px] text-zinc-400 line-through block">R$ 7.999,00</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-extrabold text-orange-600">R$ 6.299,00</span>
+                                </div>
+                                <button onclick="comprarProdutoShop('Samsung Galaxy S24 Ultra 512GB', 6299.00, 503.92)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 3: iPhone 14 -->
+                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
+                                    <span class="absolute top-2 left-2 bg-orange-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">5% Cashback</span>
+                                    <i class="fa-solid fa-mobile-screen-button text-3xl text-zinc-400"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Apple iPhone 14 128GB Meia-Noite</h4>
+                            </div>
+                            <div class="pt-2 mt-2 border-t border-zinc-50">
+                                <span class="text-[10px] text-zinc-400 line-through block">R$ 4.999,00</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-extrabold text-orange-600">R$ 3.899,00</span>
+                                </div>
+                                <button onclick="comprarProdutoShop('Apple iPhone 14 128GB', 3899.00, 194.95)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 4: Xiaomi Redmi Note 13 Pro -->
+                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
+                                    <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">10% Cashback</span>
+                                    <i class="fa-solid fa-mobile-screen text-3xl text-zinc-400"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Xiaomi Redmi Note 13 Pro+ 5G 256GB</h4>
+                            </div>
+                            <div class="pt-2 mt-2 border-t border-zinc-50">
+                                <span class="text-[10px] text-zinc-400 line-through block">R$ 2.799,00</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-extrabold text-orange-600">R$ 2.199,00</span>
+                                </div>
+                                <button onclick="comprarProdutoShop('Xiaomi Redmi Note 13 Pro+', 2199.00, 219.90)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-zinc-100">
+                <button onclick="fecharInterShop()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                    Voltar à Conta
+                </button>
+            </div>
+        </div>
 
         <!-- ================= MODAL CARTÃO FAKE ================= -->
         <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
@@ -514,14 +635,12 @@
         }
 
         function definirAvatarImagem(dataURL) {
-            // Atualiza avatar do cabeçalho principal
             const imgMain = document.getElementById('user-avatar-img');
             const textMain = document.getElementById('user-avatar-text');
             imgMain.src = dataURL;
             imgMain.classList.remove('hidden');
             textMain.classList.add('hidden');
 
-            // Atualiza avatar do ecrã de login
             const imgLogin = document.getElementById('login-avatar-img');
             const textLogin = document.getElementById('login-avatar-text');
             if(imgLogin && textLogin) {
@@ -572,6 +691,46 @@
 
         function abrirModalInvestimento() { document.getElementById('modal-investimento').classList.remove('hidden'); }
         function fecharModalInvestimento() { document.getElementById('modal-investimento').classList.add('hidden'); }
+
+        function abrirInterShop() { document.getElementById('modal-intershop').style.display = 'flex'; }
+        function fecharInterShop() { document.getElementById('modal-intershop').style.display = 'none'; }
+
+        function comprarProdutoShop(nomeProduto, valorProduto, cashbackProduto) {
+            if(saldoAtual < valorProduto) {
+                mostrarToast('Saldo insuficiente para esta compra.');
+                return;
+            }
+            saldoAtual -= valorProduto;
+            // Adiciona cashback de volta ao saldo
+            saldoAtual += cashbackProduto;
+            atualizarDisplaySaldo();
+            fecharInterShop();
+
+            const valorF = valorProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            const cashF = cashbackProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            adicionarNotificacaoSistema("Compra Aprovada - Inter Shop", `Adquiriu ${nomeProduto} por ${valorF}. Ganhou ${cashF} de cashback!`);
+            mostrarToast(`Compra efetuada! +${cashF} de cashback`);
+
+            // Regista transação no extrato
+            const lista = document.getElementById('lista-transacoes');
+            const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const itemHTML = `
+                <div onclick="abrirComprovativo('Inter Shop', '- ${valorF}', 'Hoje, ${hora}', '${nomeProduto}', '00.000.000/0001-00', 'Inter Shop S.A.')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-bag-shopping text-xs"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-zinc-800">Inter Shop</h4>
+                            <p class="text-[10px] text-zinc-400">Hoje, ${hora}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-rose-600">- ${valorF}</span>
+                </div>
+            `;
+            lista.insertAdjacentHTML('afterbegin', itemHTML);
+        }
 
         function executarInvestimento() {
             const valStr = document.getElementById('inv-valor').value.replace(/\./g, '').replace(',', '.');
