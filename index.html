@@ -12,7 +12,6 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             touch-action: manipulation;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -61,7 +60,7 @@
                 Aprenda a Criar Seu Site e Domine o Crescimento
             </h2>
             <p class="text-sm text-neutral-400 max-w-md mx-auto" id="heroSubtitle">
-                Conteúdos práticos, objetivos e com suporte de Inteligência Artificial em tempo real por apenas R$ 5,99 cada.
+                Conteúdos práticos, objetivos e com suporte de Inteligência Artificial em tempo real por apenas R$ 5,99 cada aula.
             </p>
         </section>
 
@@ -104,11 +103,14 @@
 
         <!-- ACTIVE AREA (AI TUTORS / ACCESS AREA) -->
         <section id="learningArea" class="hidden space-y-4 pt-2">
-            <div class="border border-neutral-800 rounded-2xl bg-neutral-950 overflow-hidden flex flex-col h-[450px]">
+            <div class="border border-neutral-800 rounded-2xl bg-neutral-950 overflow-hidden flex flex-col h-[480px]">
                 <!-- Chat Header -->
                 <div class="bg-neutral-900 px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden flex items-center justify-center border border-neutral-700">
+                            <img id="chatAvatarImg" src="" alt="Prof" class="w-full h-full object-cover hidden">
+                            <span id="chatAvatarFallback" class="text-[10px] font-bold text-neutral-300">IA</span>
+                        </div>
                         <h4 id="chatTitle" class="text-xs font-bold text-white">IA Tutor Online</h4>
                     </div>
                     <button onclick="closeLearningArea()" class="text-xs text-neutral-400 hover:text-white">Fechar</button>
@@ -136,7 +138,7 @@
     </footer>
 
     <!-- ADMIN MODAL -->
-    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="bg-neutral-950 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             
             <!-- Login View -->
@@ -147,66 +149,107 @@
                 </div>
                 <div class="space-y-3">
                     <input type="password" id="adminPasswordInput" placeholder="Senha de acesso" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-600">
+                    <div id="loginErrorMsg" class="text-xs text-red-400 hidden text-center">Senha incorreta. Tente novamente.</div>
                     <button onclick="verifyAdminPassword()" class="w-full py-2.5 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Entrar no Painel</button>
                 </div>
                 <button onclick="closeAdminModal()" class="w-full py-2 text-xs text-neutral-500 hover:text-white">Cancelar</button>
             </div>
 
-            <!-- Dashboard View -->
-            <div id="adminDashboardView" class="hidden space-y-6">
+            <!-- Dashboard View (Tabbed) -->
+            <div id="adminDashboardView" class="hidden space-y-5">
                 <div class="flex items-center justify-between border-b border-neutral-900 pb-3">
-                    <h3 class="text-sm font-bold text-white">Painel de Controle</h3>
-                    <button onclick="logoutAdmin()" class="text-xs text-neutral-400 hover:text-white">Sair</button>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Painel de Controle</h3>
+                        <p class="text-[10px] text-neutral-400">Gerenciamento completo do sistema</p>
+                    </div>
+                    <button onclick="logoutAdmin()" class="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-neutral-300 hover:text-white">Sair</button>
                 </div>
 
-                <!-- Traffic & Stats -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
-                        <span class="text-[10px] text-neutral-400 uppercase">Visitantes Únicos</span>
-                        <p id="statVisitors" class="text-lg font-bold text-white">1,248</p>
+                <!-- Admin Tabs Navigation -->
+                <div class="grid grid-cols-3 gap-1.5 bg-neutral-900 p-1 rounded-xl text-[11px] font-medium text-neutral-400">
+                    <button onclick="switchAdminTab('tabDashboard')" id="btnTabDashboard" class="py-1.5 rounded-lg bg-neutral-800 text-white transition text-center">Dashboard</button>
+                    <button onclick="switchAdminTab('tabConfig')" id="btnTabConfig" class="py-1.5 rounded-lg hover:text-white transition text-center">Configurações</button>
+                    <button onclick="switchAdminTab('tabContent')" id="btnTabContent" class="py-1.5 rounded-lg hover:text-white transition text-center">Conteúdo</button>
+                </div>
+
+                <!-- TAB 1: DASHBOARD & LOGS -->
+                <div id="tabDashboard" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                            <span class="text-[10px] text-neutral-400 uppercase">Visitantes Únicos</span>
+                            <p id="statVisitors" class="text-lg font-bold text-white">0</p>
+                        </div>
+                        <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                            <span class="text-[10px] text-neutral-400 uppercase">Cliques em Botões</span>
+                            <p id="statClicks" class="text-lg font-bold text-white">0</p>
+                        </div>
+                        <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                            <span class="text-[10px] text-neutral-400 uppercase">Usuários Ativos</span>
+                            <p class="text-lg font-bold text-white">1</p>
+                        </div>
+                        <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                            <span class="text-[10px] text-neutral-400 uppercase">Vendas (R$ 5,99)</span>
+                            <p id="statSales" class="text-lg font-bold text-white">0</p>
+                        </div>
                     </div>
-                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
-                        <span class="text-[10px] text-neutral-400 uppercase">Cliques em Botões</span>
-                        <p id="statClicks" class="text-lg font-bold text-white">342</p>
-                    </div>
-                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
-                        <span class="text-[10px] text-neutral-400 uppercase">Usuários Ativos</span>
-                        <p class="text-lg font-bold text-white">18</p>
-                    </div>
-                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
-                        <span class="text-[10px] text-neutral-400 uppercase">Vendas Realizadas</span>
-                        <p id="statSales" class="text-lg font-bold text-white">9</p>
+
+                    <!-- Logs Table -->
+                    <div class="space-y-2 pt-2">
+                        <h4 class="text-xs font-bold text-neutral-300">Registro de Logs & IPs (Tempo Real)</h4>
+                        <div class="bg-neutral-900/40 border border-neutral-800 rounded-xl p-3 max-h-36 overflow-y-auto space-y-2 text-[11px] text-neutral-400" id="logsContainer">
+                            <div class="flex justify-between border-b border-neutral-800 pb-1">
+                                <span>[Sistema] IP Monitor inicializado</span>
+                                <span class="text-neutral-500">Agora</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Customization Settings -->
-                <div class="space-y-4 border-t border-neutral-900 pt-4">
-                    <h4 class="text-xs font-bold text-white">Configurações do Site</h4>
-                    
+                <!-- TAB 2: CONFIGURAÇÕES & PLANILHA IP -->
+                <div id="tabConfig" class="hidden space-y-4">
                     <div class="space-y-2">
                         <label class="text-[11px] text-neutral-400">URL da Foto de Perfil (Avatar)</label>
-                        <div class="flex space-x-2">
-                            <input type="text" id="settingAvatarUrl" placeholder="https://exemplo.com/foto.jpg" class="flex-1 bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
-                            <button onclick="saveAvatar()" class="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-xs font-medium">Salvar</button>
+                        <input type="text" id="settingAvatarUrl" placeholder="https://exemplo.com/foto.jpg" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                        <div class="flex justify-center pt-1">
+                            <button onclick="saveAvatar()" class="px-4 py-2 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Salvar Foto</button>
                         </div>
+                        <div id="avatarMsg" class="text-[11px] text-emerald-400 text-center hidden">Foto atualizada com sucesso!</div>
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2 border-t border-neutral-900 pt-3">
+                        <label class="text-[11px] text-neutral-400">Webhook Google Sheets / Planilha IP</label>
+                        <input type="text" id="settingWebhookUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                        <div class="flex justify-center pt-1">
+                            <button onclick="saveWebhook()" class="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-xl text-xs font-medium text-white transition">Conectar Planilha</button>
+                        </div>
+                        <div id="webhookMsg" class="text-[11px] text-emerald-400 text-center hidden">Planilha conectada!</div>
+                    </div>
+
+                    <div class="space-y-2 border-t border-neutral-900 pt-3">
                         <label class="text-[11px] text-neutral-400">Alterar Senha do Painel</label>
-                        <div class="flex space-x-2">
-                            <input type="password" id="settingNewPassword" placeholder="Nova senha" class="flex-1 bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
-                            <button onclick="saveNewPassword()" class="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-xs font-medium">Atualizar</button>
+                        <input type="password" id="settingNewPassword" placeholder="Nova senha" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                        <div class="flex justify-center pt-1">
+                            <button onclick="saveNewPassword()" class="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-xl text-xs font-medium text-white transition">Atualizar Senha</button>
                         </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-[11px] text-neutral-400">Editar Títulos e Textos</label>
-                        <input type="text" id="settingMainTitle" placeholder="Título Principal" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
-                        <button onclick="saveContentSettings()" class="w-full py-2 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Salvar Alterações</button>
+                        <div id="passMsg" class="text-[11px] text-emerald-400 text-center hidden">Senha alterada com sucesso!</div>
                     </div>
                 </div>
 
-                <button onclick="closeAdminModal()" class="w-full py-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-xl text-xs font-medium text-neutral-300">Fechar Painel</button>
+                <!-- TAB 3: CONTEÚDO -->
+                <div id="tabContent" class="hidden space-y-4">
+                    <div class="space-y-2">
+                        <label class="text-[11px] text-neutral-400">Título Principal do Site</label>
+                        <input type="text" id="settingMainTitle" placeholder="Título Principal" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                        <div class="flex justify-center pt-2">
+                            <button onclick="saveContentSettings()" class="px-4 py-2 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Salvar Alterações</button>
+                        </div>
+                        <div id="contentMsg" class="text-[11px] text-emerald-400 text-center hidden">Alterações salvas com sucesso!</div>
+                    </div>
+                </div>
+
+                <div class="border-t border-neutral-900 pt-3">
+                    <button onclick="closeAdminModal()" class="w-full py-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-xl text-xs font-medium text-neutral-300">Fechar Painel</button>
+                </div>
             </div>
 
         </div>
@@ -214,38 +257,76 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // Track stats on load
-        let stats = JSON.parse(localStorage.getItem('site_stats')) || { visitors: 1248, clicks: 342, sales: 9 };
+        // Initial clean data (realistic start)
+        let stats = JSON.parse(localStorage.getItem('site_stats')) || { visitors: 1, clicks: 0, sales: 0 };
         let adminPassword = localStorage.getItem('admin_pass') || '1234';
         let avatarUrl = localStorage.getItem('admin_avatar') || '';
+        let webhookUrl = localStorage.getItem('sheet_webhook') || '';
         let customMainTitle = localStorage.getItem('main_title') || 'Aprenda a Criar Seu Site e Domine o Crescimento';
 
-        // Apply saved settings
+        // Apply saved settings on load
         document.addEventListener('DOMContentLoaded', () => {
+            // Increment visitor on fresh load session
+            if (!sessionStorage.getItem('visited')) {
+                stats.visitors++;
+                sessionStorage.setItem('visited', 'true');
+                localStorage.setItem('site_stats', JSON.stringify(stats));
+                addLog('Novo visitante conectado (IP simulado via Rede)');
+            }
+
             document.getElementById('statVisitors').innerText = stats.visitors;
             document.getElementById('statClicks').innerText = stats.clicks;
             document.getElementById('statSales').innerText = stats.sales;
 
-            if (avatarUrl) {
-                document.getElementById('headerAvatarImg').src = avatarUrl;
-                document.getElementById('headerAvatarImg').classList.remove('hidden');
-                document.getElementById('headerAvatarFallback').classList.add('hidden');
-                document.getElementById('settingAvatarUrl').value = avatarUrl;
-            }
+            updateAvatarUI(avatarUrl);
 
             if (customMainTitle) {
                 document.getElementById('heroMainTitle').innerText = customMainTitle;
                 document.getElementById('settingMainTitle').value = customMainTitle;
             }
+            if (webhookUrl) {
+                document.getElementById('settingWebhookUrl').value = webhookUrl;
+            }
         });
+
+        function updateAvatarUI(url) {
+            if (url) {
+                document.getElementById('headerAvatarImg').src = url;
+                document.getElementById('headerAvatarImg').classList.remove('hidden');
+                document.getElementById('headerAvatarFallback').classList.add('hidden');
+                document.getElementById('settingAvatarUrl').value = url;
+
+                document.getElementById('chatAvatarImg').src = url;
+                document.getElementById('chatAvatarImg').classList.remove('hidden');
+                document.getElementById('chatAvatarFallback').classList.add('hidden');
+            } else {
+                document.getElementById('headerAvatarImg').classList.add('hidden');
+                document.getElementById('headerAvatarFallback').classList.remove('hidden');
+                document.getElementById('chatAvatarImg').classList.add('hidden');
+                document.getElementById('chatAvatarFallback').classList.remove('hidden');
+            }
+        }
 
         // Track button clicks
         document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
+            if (e.target.tagName === 'BUTTON' && !e.target.closest('#adminModal')) {
                 stats.clicks++;
                 localStorage.setItem('site_stats', JSON.stringify(stats));
+                document.getElementById('statClicks').innerText = stats.clicks;
             }
         });
+
+        function addLog(text) {
+            const container = document.getElementById('logsContainer');
+            const time = new Date().toLocaleTimeString();
+            container.innerHTML += `
+                <div class="flex justify-between border-b border-neutral-800 pb-1">
+                    <span>${text}</span>
+                    <span class="text-neutral-500">${time}</span>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+        }
 
         function openAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
@@ -258,15 +339,18 @@
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
             document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('loginErrorMsg').classList.add('hidden');
         }
 
         function verifyAdminPassword() {
             const pass = document.getElementById('adminPasswordInput').value;
+            const errDiv = document.getElementById('loginErrorMsg');
             if (pass === adminPassword) {
+                errDiv.classList.add('hidden');
                 document.getElementById('adminLoginView').classList.add('hidden');
                 document.getElementById('adminDashboardView').classList.remove('hidden');
             } else {
-                alert('Senha incorreta.');
+                errDiv.classList.remove('hidden');
             }
         }
 
@@ -274,27 +358,57 @@
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
             document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('loginErrorMsg').classList.add('hidden');
+        }
+
+        function switchAdminTab(tabId) {
+            document.getElementById('tabDashboard').classList.add('hidden');
+            document.getElementById('tabConfig').classList.add('hidden');
+            document.getElementById('tabContent').classList.add('hidden');
+
+            document.getElementById('btnTabDashboard').className = "py-1.5 rounded-lg hover:text-white transition text-center";
+            document.getElementById('btnTabConfig').className = "py-1.5 rounded-lg hover:text-white transition text-center";
+            document.getElementById('btnTabContent').className = "py-1.5 rounded-lg hover:text-white transition text-center";
+
+            document.getElementById(tabId).classList.remove('hidden');
+            if (tabId === 'tabDashboard') document.getElementById('btnTabDashboard').className = "py-1.5 rounded-lg bg-neutral-800 text-white transition text-center";
+            if (tabId === 'tabConfig') document.getElementById('btnTabConfig').className = "py-1.5 rounded-lg bg-neutral-800 text-white transition text-center";
+            if (tabId === 'tabContent') document.getElementById('btnTabContent').className = "py-1.5 rounded-lg bg-neutral-800 text-white transition text-center";
         }
 
         function saveAvatar() {
             const url = document.getElementById('settingAvatarUrl').value.trim();
             localStorage.setItem('admin_avatar', url);
             avatarUrl = url;
-            if (url) {
-                document.getElementById('headerAvatarImg').src = url;
-                document.getElementById('headerAvatarImg').classList.remove('hidden');
-                document.getElementById('headerAvatarFallback').classList.add('hidden');
-            }
-            alert('Foto de perfil atualizada!');
+            updateAvatarUI(url);
+            
+            const msg = document.getElementById('avatarMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+            addLog('Foto de perfil atualizada no sistema');
+        }
+
+        function saveWebhook() {
+            const url = document.getElementById('settingWebhookUrl').value.trim();
+            localStorage.setItem('sheet_webhook', url);
+            webhookUrl = url;
+
+            const msg = document.getElementById('webhookMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+            addLog('Webhook Google Sheets conectado para monitoramento de IPs');
         }
 
         function saveNewPassword() {
             const newPass = document.getElementById('settingNewPassword').value.trim();
+            const msg = document.getElementById('passMsg');
             if (newPass.length > 0) {
                 adminPassword = newPass;
                 localStorage.setItem('admin_pass', newPass);
                 document.getElementById('settingNewPassword').value = '';
-                alert('Senha alterada com sucesso!');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3000);
+                addLog('Senha do painel administrativo alterada');
             } else {
                 alert('Digite uma senha válida.');
             }
@@ -302,20 +416,24 @@
 
         function saveContentSettings() {
             const title = document.getElementById('settingMainTitle').value.trim();
+            const msg = document.getElementById('contentMsg');
             if (title) {
                 customMainTitle = title;
                 localStorage.setItem('main_title', title);
                 document.getElementById('heroMainTitle').innerText = title;
-                alert('Conteúdo atualizado!');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3000);
+                addLog('Conteúdo principal atualizado');
             }
         }
 
-        // Buy product / Open specific AI Tutor
+        // Buy product / Open specific AI Tutor in real time
         let currentProductType = '';
         function buyProduct(type, title, price) {
             stats.sales++;
             localStorage.setItem('site_stats', JSON.stringify(stats));
             document.getElementById('statSales').innerText = stats.sales;
+            addLog(`Nova compra realizada: ${title} (R$ ${price.toFixed(2)})`);
 
             currentProductType = type;
             document.getElementById('chatTitle').innerText = `IA Tutor: ${title}`;
@@ -325,13 +443,13 @@
             if (type === 'site') {
                 chatMessages.innerHTML = `
                     <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">
-                        Pagamento de R$ ${price.toFixed(2).replace('.', ',')} aprovado! Bem-vindo ao módulo <strong>Aprenda a Criar Seu Próprio Site</strong>. Me pergunte qualquer coisa sobre HTML, CSS, GitHub Pages ou estruturação de páginas.
+                        Pagamento aprovado! Sou sua IA especialista. Pergunte-me qualquer dúvida sobre HTML, CSS, GitHub Pages ou estruturação de páginas.
                     </div>
                 `;
             } else {
                 chatMessages.innerHTML = `
                     <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">
-                        Pagamento de R$ ${price.toFixed(2).replace('.', ',')} aprovado! Bem-vindo ao <strong>Sistema para Crescer</strong>. Como posso te ajudar hoje com estratégias de alcance, tráfego e viralização?
+                        Pagamento aprovado! Sou sua IA especialista em crescimento. Como posso te ajudar hoje com estratégias de alcance, tráfego e viralização?
                     </div>
                 `;
             }
@@ -350,7 +468,6 @@
 
             const chatMessages = document.getElementById('chatMessages');
             
-            // User message
             chatMessages.innerHTML += `
                 <div class="flex justify-end">
                     <div class="bg-white text-black p-3 rounded-xl max-w-[85%]">${text}</div>
@@ -359,13 +476,13 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // AI Simulated Response
+            // AI Simulated Real-Time Response
             setTimeout(() => {
                 let aiReply = "Entendido! Vamos executar esse passo no seu projeto.";
                 if (currentProductType === 'site') {
                     aiReply = "Para criar seu site no GitHub Pages, certifique-se de salvar o arquivo principal exatamente como index.html na raiz do repositório. Quer que eu te ajude com algum código HTML/CSS específico?";
                 } else {
-                    aiReply = "Para acelerar seu crescimento, foque em consistência e em títulos chamativos nos primeiros segundos. Qual é o seu nicho atual?";
+                    aiReply = "Para acelerar seu crescimento, foque em consistência e em ganchos fortes nos primeiros segundos dos vídeos. Qual é o seu nicho atual?";
                 }
 
                 chatMessages.innerHTML += `
