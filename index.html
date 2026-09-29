@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -96,44 +97,69 @@
         <div class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL (TELA INICIAL ORIGINAL COMPACTA) - FIXO NO MEIO -->
-    <div class="w-[90%] max-w-[340px] bg-neutral-950 vip-card-glow rounded-[28px] p-5 shadow-2xl relative flex flex-col items-center border border-neutral-800/80 interactive-touch">
+    <!-- CONTAINER PRINCIPAL (ESTILO EXATO DA FOTO) - FIXO NO MEIO -->
+    <div class="w-[92%] max-w-[360px] bg-neutral-950 vip-card-glow rounded-[32px] p-5 shadow-2xl relative flex flex-col items-center border border-neutral-800/80 interactive-touch">
         
         <!-- Botão de Configuração / Admin -->
-        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-neutral-900 border border-neutral-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:border-neutral-500 transition active:scale-95 cursor-pointer shadow-md">
-            <i class="fa-solid fa-gear text-[11px]"></i>
+        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:border-neutral-500 transition active:scale-95 cursor-pointer shadow-md">
+            <i class="fa-solid fa-gear text-xs"></i>
         </button>
 
-        <!-- Perfil Original Compacto -->
-        <div class="w-20 h-20 rounded-full p-[2px] bg-gradient-to-b from-white via-zinc-500 to-transparent shadow-xl mb-3 mt-1">
+        <!-- Foto de Perfil Compacta e Proporcional -->
+        <div class="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-b from-white via-zinc-500 to-transparent shadow-xl mb-2.5 mt-1">
             <img id="homeProfileImg" src="https://i.postimg.cc/9F5WcckY/IMG-1942.jpg" alt="Perfil" class="w-full h-full object-cover rounded-full border-2 border-black">
         </div>
 
-        <div class="flex items-center gap-1.5 mb-1">
+        <!-- Nome e Selo -->
+        <div class="flex items-center gap-1.5 mb-2">
             <h1 id="homeProfileName" class="text-sm font-extrabold tracking-tight text-white">amaralreal7</h1>
             <span id="homeBadgeIcon" class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
         </div>
 
-        <p id="homeProfileBio" class="text-[11px] text-zinc-400 text-center font-medium px-2 mb-4">O maior chefe do 7</p>
+        <!-- Crachá de Status Online -->
+        <div class="bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-full flex items-center gap-2 mb-2 shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[10px] font-medium text-zinc-300 tracking-wide">Online • IA Neural Ativa</span>
+        </div>
 
-        <!-- Botões de Ação Principal -->
-        <div class="w-full space-y-2 mb-4">
-            <button onclick="abrirCheckout()" class="w-full h-11 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold px-3.5 rounded-xl flex items-center justify-between transition shadow-lg cursor-pointer">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center text-[11px] shadow">
+        <!-- Bio -->
+        <p id="homeProfileBio" class="text-[11px] text-zinc-400 text-center font-medium px-2 mb-3">O maior chefe do 7</p>
+
+        <!-- Pílula de Segurança -->
+        <div class="w-full bg-neutral-900/80 border border-neutral-800/80 py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 mb-3.5 shadow-sm">
+            <i class="fa-solid fa-shield-halved text-[10px] text-zinc-400"></i>
+            <span id="homeSecurity" class="text-[10px] text-zinc-400 font-medium">100% Seguro • Entrega por e-mail</span>
+        </div>
+
+        <!-- Botões de Ação Principal (Estilo Exato da Imagem) -->
+        <div class="w-full space-y-2.5 mb-3">
+            <!-- Botão 1: Acesso VIP -->
+            <button onclick="abrirCheckout()" class="w-full h-14 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black px-3.5 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center text-xs shadow shrink-0">
                         <i id="btnIcon1" class="fa-solid fa-bolt"></i>
                     </div>
-                    <span class="text-xs font-bold">Acesso VIP (R$ 5,99)</span>
+                    <div class="text-left">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black tracking-tight text-black">Acesso VIP (InfinitePay)</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.5 rounded-md">R$ 5,99</span>
+                        </div>
+                        <span class="text-[10px] text-zinc-600 font-medium block mt-0.5">Checkout Automatizado Instantâneo</span>
+                    </div>
                 </div>
                 <i class="fa-solid fa-chevron-right text-[11px] text-zinc-400"></i>
             </button>
 
-            <button onclick="abrirSuporteIA()" class="w-full h-11 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-3.5 rounded-xl flex items-center justify-between transition cursor-pointer shadow-md">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-neutral-950 border border-neutral-700 flex items-center justify-center text-[11px] text-purple-400 shadow">
+            <!-- Botão 2: Suporte com IA -->
+            <button onclick="abrirSuporteIA()" class="w-full h-14 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white px-3.5 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-neutral-950 border border-neutral-700/80 flex items-center justify-center text-xs text-purple-400 shadow shrink-0">
                         <i id="btnIcon2" class="fa-solid fa-robot"></i>
                     </div>
-                    <span class="text-xs font-bold">Suporte com IA</span>
+                    <div class="text-left">
+                        <span class="text-xs font-black tracking-tight text-white block">Suporte Inteligente 24H</span>
+                        <span class="text-[10px] text-zinc-400 font-medium block mt-0.5">Atendimento Neural com IA</span>
+                    </div>
                 </div>
                 <i class="fa-solid fa-chevron-right text-[11px] text-zinc-500"></i>
             </button>
@@ -440,6 +466,7 @@
             document.getElementById('homeProfileImg').src = db.profile.img;
             document.getElementById('homeProfileName').innerText = db.profile.name;
             document.getElementById('homeProfileBio').innerText = db.profile.bio;
+            document.getElementById('homeSecurity').innerText = db.profile.security || "100% Seguro • Entrega por e-mail";
             document.getElementById('homeFooter').innerText = db.profile.footer;
 
             document.getElementById('btnIcon1').className = db.profile.icon1 || "fa-solid fa-bolt";
@@ -741,7 +768,7 @@
             document.getElementById('configIcon1').value = db.profile.icon1 || "";
             document.getElementById('configIcon2').value = db.profile.icon2 || "";
             document.getElementById('configBadge').value = db.profile.badgeIcon || "";
-            document.getElementById('configPanelColor').value = db.profile.panelColor || "";
+            document.getElementById('configPanelColor').value = db.profile.panelColor || "#0a0a0a";
         }
 
         function aprovarPedido(index) {
