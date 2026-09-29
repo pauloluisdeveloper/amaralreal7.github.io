@@ -2,116 +2,166 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cópia Banco Inter</title>
-    <!-- Tailwind CSS para estilização rápida e moderna -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inter</title>
+    <!-- Configuração PWA para Adicionar ao Ecrã Inicial -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inter">
+    <meta name="theme-color" content="#FF7A00">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkludGVyIiwKICAic2hvcnRfbmFtZSI6ICJJbnRlciIsCi  wic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRjdBMDAiLAogICJ0aGVtZV9jb2xvciI6ICIjRkY3QTAwIiwKICAiaWNvbnMiOiB7CiAgICAic3JjIjogImh0dHBzOi8vdXBsb2Fkcy53aWtpbWVkaWEub3JnL3dpa2lwZWRpYS9jb21tb25zL2UvZTZMb2dvX2RvX2JhbmNvX0ludGVyXygyMDIzKS5zdmciLAogICAgInNpemVzIjogIjE5M3gxOTMiLAogICAgInR5cGUiOiAiaW1hZgevL3N2Zyt4bWwiCiAgfVp9">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome para ícones -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body class="flex justify-center items-center min-h-screen m-0 p-0">
 
-    <!-- Contentor Principal (Simulador de Telemóvel) -->
-    <div class="w-full max-w-md bg-gray-50 h-[844px] flex flex-col justify-between shadow-2xl relative overflow-hidden font-sans">
-        
+    <!-- Container Principal do Telemóvel -->
+    <div id="app-container" class="w-full max-w-md bg-white h-[100vh] sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
+
+        <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
+        <div id="screen-login" class="absolute inset-0 bg-white z-50 flex flex-col justify-between p-6 transition-transform duration-300">
+            <div class="pt-12 text-center">
+                <!-- Logo Oficial Atualizado Inter -->
+                <div class="flex justify-center mb-6">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter Logo" class="h-10">
+                </div>
+                <h2 class="text-xl font-bold text-zinc-800">Acesse sua conta</h2>
+                <p class="text-xs text-zinc-500 mt-1">Insira os dados da sua agência e conta</p>
+            </div>
+
+            <div class="space-y-4 my-auto">
+                <div>
+                    <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Titular</label>
+                    <input type="text" id="input-nome" value="Usuário Inter" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Agência</label>
+                        <input type="text" id="input-agencia" value="0001" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Conta</label>
+                        <input type="text" id="input-conta" value="1234567-8" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-zinc-600 block mb-1">Saldo Inicial (R$)</label>
+                    <input type="text" id="input-saldo" value="4.850,20" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                </div>
+            </div>
+
+            <div>
+                <button onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30">
+                    Entrar na Conta
+                </button>
+                <p class="text-[10px] text-center text-zinc-400 mt-4">Banco Inter S.A. • CNPJ: 00.416.968/0001-01</p>
+            </div>
+        </div>
+
+        <!-- ================= 2. HOME PRINCIPAL ================= -->
         <!-- Cabeçalho -->
-        <header class="px-6 pt-8 pb-4 bg-white flex justify-between items-center shadow-xs">
+        <header class="px-6 pt-6 pb-4 bg-white flex justify-between items-center z-10 shrink-0">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-lg">
+                <div class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-sm shadow-sm" id="user-avatar">
                     UI
                 </div>
                 <div>
-                    <span class="text-xs text-gray-500 block">Olá,</span>
-                    <h1 class="text-sm font-bold text-gray-800">Usuário Inter</h1>
+                    <span class="text-xs text-zinc-400 block">Olá,</span>
+                    <h1 class="text-sm font-bold text-zinc-800 truncate max-w-[140px]" id="user-display-name">Usuário Inter</h1>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 text-gray-600 text-lg">
-                <i class="fa-regular fa-eye cursor-pointer"></i>
-                <i class="fa-regular fa-bell cursor-pointer"></i>
+            <div class="flex items-center space-x-4 text-zinc-600 text-lg">
+                <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
+                <i class="fa-regular fa-bell cursor-pointer relative" onclick="alert('Sem novas notificações.')"></i>
             </div>
         </header>
 
-        <!-- Corpo da Página -->
-        <main class="flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Corpo com Scroll -->
+        <main class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar bg-zinc-50">
             
             <!-- Card de Conta Digital -->
-            <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
+            <div class="bg-white p-5 rounded-2xl shadow-xs border border-zinc-100">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs font-semibold text-gray-400 tracking-wider">CONTA DIGITAL</span>
+                    <span class="text-xs font-semibold text-zinc-400 tracking-wider">CONTA DIGITAL</span>
                     <span class="text-xs bg-emerald-50 text-emerald-600 font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
                         <i class="fa-solid fa-chart-line text-[10px]"></i> 100% CDI
                     </span>
                 </div>
                 <div class="flex justify-between items-center mb-1">
-                    <h2 class="text-2xl font-extrabold text-gray-900">R$ 4.850,20</h2>
-                    <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
+                    <h2 class="text-2xl font-extrabold text-zinc-900" id="saldo-display">R$ 4.850,20</h2>
+                    <i class="fa-solid fa-chevron-right text-xs text-zinc-400"></i>
                 </div>
-                <p class="text-xs text-gray-500">Rendimento total: <span class="text-emerald-600 font-medium">+R$ 38,40</span> este mês</p>
+                <p class="text-xs text-zinc-500">Rendimento total: <span class="text-emerald-600 font-medium">+R$ 38,40</span> este mês</p>
             </div>
 
             <!-- Atalhos / Ações Rápidas -->
             <div class="grid grid-cols-4 gap-3">
-                <!-- Pix -->
-                <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-gray-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="abrirModalSimularPix()" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <span class="text-xs font-medium text-gray-700">Pix</span>
+                    <span class="text-xs font-medium text-zinc-700">Pix</span>
                 </div>
-                <!-- Cartões -->
-                <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-gray-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="alert('Secção de Cartões')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
                         <i class="fa-solid fa-credit-card"></i>
                     </div>
-                    <span class="text-xs font-medium text-gray-700">Cartões</span>
+                    <span class="text-xs font-medium text-zinc-700">Cartões</span>
                 </div>
-                <!-- Investir -->
-                <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-gray-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="alert('Secção de Investimentos')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
                         <i class="fa-solid fa-chart-pie"></i>
                     </div>
-                    <span class="text-xs font-medium text-gray-700">Investir</span>
+                    <span class="text-xs font-medium text-zinc-700">Investir</span>
                 </div>
-                <!-- Inter Shop -->
-                <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-gray-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="alert('Inter Shop')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-2 text-lg">
                         <i class="fa-solid fa-bag-shopping"></i>
                     </div>
-                    <span class="text-xs font-medium text-gray-700">Inter Shop</span>
+                    <span class="text-xs font-medium text-zinc-700">Inter Shop</span>
                 </div>
             </div>
 
             <!-- Últimas Transações -->
-            <div class="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
+            <div class="bg-white p-4 rounded-2xl shadow-xs border border-zinc-100">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold text-gray-800">Últimas Transações</h3>
-                    <span class="text-xs font-bold text-orange-600 cursor-pointer">Ver extrato</span>
+                    <h3 class="text-sm font-bold text-zinc-800">Últimas Transações</h3>
+                    <span class="text-xs font-bold text-orange-600 cursor-pointer" onclick="abrirModalSimularPix()">Simular Transação</span>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-4" id="lista-transacoes">
                     <!-- Transação 1 -->
-                    <div class="flex items-center justify-between">
+                    <div onclick="abrirComprovativo('Pix Enviado', '- R$ 150,00', 'Hoje, 14:20', 'Maria Souza da Silva', '***.456.789-**', 'Banco Nubank')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1.5 rounded-xl transition">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
                                 <i class="fa-solid fa-arrow-up text-sm"></i>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold text-gray-800">Pix Enviado</h4>
-                                <p class="text-[10px] text-gray-400">Hoje, 14:20</p>
+                                <h4 class="text-xs font-bold text-zinc-800">Pix Enviado</h4>
+                                <p class="text-[10px] text-zinc-400">Hoje, 14:20</p>
                             </div>
                         </div>
                         <span class="text-xs font-bold text-rose-600">- R$ 150,00</span>
                     </div>
 
                     <!-- Transação 2 -->
-                    <div class="flex items-center justify-between">
+                    <div onclick="abrirComprovativo('Pix Recebido', '+ R$ 1.200,00', 'Ontem, 09:15', 'Carlos Eduardo Lima', '***.123.456-**', 'Banco Itaú')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1.5 rounded-xl transition">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
                                 <i class="fa-solid fa-arrow-down text-sm"></i>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold text-gray-800">Pix Recebido</h4>
-                                <p class="text-[10px] text-gray-400">Ontem, 09:15</p>
+                                <h4 class="text-xs font-bold text-zinc-800">Pix Recebido</h4>
+                                <p class="text-[10px] text-zinc-400">Ontem, 09:15</p>
                             </div>
                         </div>
                         <span class="text-xs font-bold text-emerald-600">+ R$ 1.200,00</span>
@@ -122,30 +172,264 @@
         </main>
 
         <!-- Barra de Navegação Inferior -->
-        <nav class="bg-white border-t border-gray-200 py-2 px-6 flex justify-between items-center text-center">
+        <nav class="bg-white border-t border-zinc-200 py-2 px-6 flex justify-between items-center text-center shrink-0 z-10">
             <div class="flex flex-col items-center text-orange-600 cursor-pointer">
                 <i class="fa-solid fa-house text-lg"></i>
                 <span class="text-[10px] font-medium mt-1">Início</span>
             </div>
-            <div class="flex flex-col items-center text-gray-400 cursor-pointer hover:text-orange-600 transition">
+            <div onclick="abrirModalSimularPix()" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-bolt text-lg"></i>
                 <span class="text-[10px] font-medium mt-1">Pix</span>
             </div>
-            <div class="flex flex-col items-center text-gray-400 cursor-pointer hover:text-orange-600 transition">
+            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-credit-card text-lg"></i>
                 <span class="text-[10px] font-medium mt-1">Cartões</span>
             </div>
-            <div class="flex flex-col items-center text-gray-400 cursor-pointer hover:text-orange-600 transition">
+            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-chart-pie text-lg"></i>
                 <span class="text-[10px] font-medium mt-1">Investir</span>
             </div>
-            <div class="flex flex-col items-center text-gray-400 cursor-pointer hover:text-orange-600 transition">
+            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-bag-shopping text-lg"></i>
                 <span class="text-[10px] font-medium mt-1">Shop</span>
             </div>
         </nav>
 
+        <!-- ================= 3. MODAL DE SIMULAR PIX / TRANSAÇÃO ================= -->
+        <div id="modal-pix" class="absolute inset-0 bg-black/60 z-50 hidden flex items-end justify-center">
+            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+                    <h3 class="font-bold text-zinc-800 text-base">Simular Nova Transação / Pix</h3>
+                    <i class="fa-solid fa-xmark text-zinc-400 text-lg cursor-pointer" onclick="fecharModalSimularPix()"></i>
+                </div>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Tipo de Operação</label>
+                        <select id="sim-tipo" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                            <option value="enviado">Pix Enviado (-)</option>
+                            <option value="recebido">Pix Recebido (+)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Valor (R$)</label>
+                        <input type="text" id="sim-valor" value="250,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Favorecido / Pagador</label>
+                        <input type="text" id="sim-nome" value="Empresa Comercial Ltda" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">CPF / CNPJ</label>
+                        <input type="text" id="sim-cpf" value="12.345.678/0001-99" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-600 block mb-1">Instituição / Banco</label>
+                        <input type="text" id="sim-banco" value="Mercado Pago IP" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                </div>
+
+                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition shadow-md shadow-orange-600/30 mt-2">
+                    Gerar Comprovativo e Atualizar Saldo
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= 4. MODAL DE COMPROVATIVO FAKE AUTÊNTICO ================= -->
+        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-50 hidden flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <!-- Topo do Comprovativo -->
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-6">
+                        <span class="text-xs font-bold text-zinc-400">Comprovativo Pix</span>
+                    </div>
+                    <i class="fa-solid fa-xmark text-zinc-600 text-xl cursor-pointer" onclick="fecharComprovativo()"></i>
+                </div>
+
+                <!-- Resumo do Comprovativo -->
+                <div class="text-center py-6 border-b border-dashed border-zinc-200">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3 text-xl" id="comp-icone-status">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="text-sm font-semibold text-zinc-500" id="comp-titulo-status">Pix efetuado com sucesso</h3>
+                    <h2 class="text-2xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 150,00</h2>
+                    <p class="text-xs text-zinc-400 mt-1" id="comp-data">Hoje, 29 de Setembro de 2026 às 18:00</p>
+                </div>
+
+                <!-- Detalhes do Pagamento -->
+                <div class="py-4 space-y-3 text-xs">
+                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[10px] mb-2">Detalhes da Transação</div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">Beneficiário / Pagador</span>
+                        <span class="font-bold text-zinc-800 text-right" id="comp-nome">Maria Souza</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">CPF / CNPJ</span>
+                        <span class="font-medium text-zinc-800" id="comp-cpf">***.456.789-**</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">Instituição Destino</span>
+                        <span class="font-medium text-zinc-800" id="comp-banco">Nubank</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">Agência / Conta</span>
+                        <span class="font-medium text-zinc-800">0001 / 89765-4</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-500">ID / Transação (EndToEnd)</span>
+                        <span class="font-mono text-[10px] text-zinc-600 truncate max-w-[180px]">E00416968202609291800X</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações do Comprovativo -->
+            <div class="space-y-2 pt-4 border-t border-zinc-100">
+                <button onclick="alert('Comprovativo guardado com sucesso no dispositivo!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md">
+                    Guardar Comprovativo
+                </button>
+                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition text-xs">
+                    Voltar ao Início
+                </button>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Scripts de Controle -->
+    <script>
+        let saldoAtual = 4850.20;
+        let saldoVisivel = true;
+
+        function realizarLogin() {
+            const nome = document.getElementById('input-nome').value;
+            const saldoStr = document.getElementById('input-saldo').value.replace('.', '').replace(',', '.');
+            
+            if(nome) {
+                document.getElementById('user-display-name').innerText = nome;
+                // Iniciais do Avatar
+                const iniciais = nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                document.getElementById('user-avatar').innerText = iniciais;
+            }
+            
+            if(!isNaN(parseFloat(saldoStr))) {
+                saldoAtual = parseFloat(saldoStr);
+                atualizarDisplaySaldo();
+            }
+
+            // Esconde ecrã de login suavemente
+            document.getElementById('screen-login').style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                document.getElementById('screen-login').style.display = 'none';
+            }, 300);
+        }
+
+        function alternarVisibilidadeSaldo() {
+            saldoVisivel = !saldoVisivel;
+            const eyeIcon = document.getElementById('toggle-eye');
+            if(saldoVisivel) {
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+                atualizarDisplaySaldo();
+            } else {
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+                document.getElementById('saldo-display').innerText = 'R$ •••••••';
+            }
+        }
+
+        function atualizarDisplaySaldo() {
+            if(saldoVisivel) {
+                document.getElementById('saldo-display').innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            }
+        }
+
+        function abrirModalSimularPix() {
+            document.getElementById('modal-pix').classList.remove('hidden');
+        }
+
+        function fecharModalSimularPix() {
+            document.getElementById('modal-pix').classList.add('hidden');
+        }
+
+        function executarSimulacaoPix() {
+            const tipo = document.getElementById('sim-tipo').value;
+            let valorStr = document.getElementById('sim-valor').value.replace('.', '').replace(',', '.');
+            let valor = parseFloat(valorStr);
+            const nome = document.getElementById('sim-nome').value;
+            const cpf = document.getElementById('sim-cpf').value;
+            const banco = document.getElementById('sim-banco').value;
+
+            if(isNaN(valor) || valor <= 0) {
+                alert('Insira um valor válido.');
+                return;
+            }
+
+            if(tipo === 'enviado') {
+                saldoAtual -= valor;
+            } else {
+                saldoAtual += valor;
+            }
+            atualizarDisplaySaldo();
+
+            // Adicionar à lista de transações recentes
+            const lista = document.getElementById('lista-transacoes');
+            const dataHoraFormatada = "Hoje, " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            const itemHTML = `
+                <div onclick="abrirComprovativo('${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}', '${tipo === 'enviado' ? '- ' : '+ '}${valorFormatado}', '${dataHoraFormatada}', '${nome}', '${cpf}', '${banco}')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1.5 rounded-xl transition">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full ${tipo === 'enviado' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-${tipo === 'enviado' ? 'up' : 'down'} text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-zinc-800">${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}</h4>
+                            <p class="text-[10px] text-zinc-400">${dataHoraFormatada}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold ${tipo === 'enviado' ? 'text-rose-600' : 'text-emerald-600'}">${tipo === 'enviado' ? '- ' : '+ '}${valorFormatado}</span>
+                </div>
+            `;
+            lista.insertAdjacentHTML('afterbegin', itemHTML);
+
+            fecharModalSimularPix();
+
+            // Abrir comprovativo gerado automaticamente
+            abrirComprovativo(
+                tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido',
+                (tipo === 'enviado' ? '- ' : '+ ') + valorFormatado,
+                dataHoraFormatada,
+                nome,
+                cpf,
+                banco
+            );
+        }
+
+        function abrirComprovativo(titulo, valor, data, nome, cpf, banco) {
+            document.getElementById('comp-titulo-status').innerText = titulo === 'Pix Enviado' ? 'Pix efetuado com sucesso' : 'Pix recebido com sucesso';
+            document.getElementById('comp-valor').innerText = valor;
+            document.getElementById('comp-data').innerText = data;
+            document.getElementById('comp-nome').innerText = nome;
+            document.getElementById('comp-cpf').innerText = cpf;
+            document.getElementById('comp-banco').innerText = banco;
+
+            const iconeBox = document.getElementById('comp-icone-status');
+            if(titulo.includes('Enviado')) {
+                iconeBox.className = "w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3 text-xl";
+                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+            } else {
+                iconeBox.className = "w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3 text-xl";
+                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+            }
+
+            document.getElementById('modal-comprovativo').style.display = 'flex';
+        }
+
+        function fecharComprovativo() {
+            document.getElementById('modal-comprovativo').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
