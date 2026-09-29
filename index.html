@@ -1,176 +1,127 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nubank - Painel Simulado</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+let saldoAtual = 10000000.00;
+let saldoVisivel = true;
 
-    <div class="iphone-frame">
-        <!-- Simulação da Dynamic Island do iPhone -->
-        <div class="dynamic-island"></div>
+// 1. Alterar Foto de Perfil via Galeria
+const fileInput = document.getElementById('file-input');
+const profilePic = document.getElementById('profile-pic');
 
-        <div class="nu-container">
-            <!-- HEADER / PERFIL -->
-            <header class="nu-header">
-                <div class="profile-top-row">
-                    <div class="profile-container">
-                        <div class="avatar-wrapper">
-                            <img id="profile-pic" src="https://via.placeholder.com/150" alt="Foto de Perfil">
-                            <label for="file-input" class="edit-badge" title="Editar foto">
-                                <i class="fa-solid fa-pencil"></i>
-                            </label>
-                            <input type="file" id="file-input" accept="image/*" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="header-icons">
-                        <i class="fa-regular fa-eye" id="toggle-visibility" title="Mostrar/Ocultar Saldo"></i>
-                        <i class="fa-regular fa-circle-question"></i>
-                        <i class="fa-regular fa-user"></i>
-                    </div>
-                </div>
-                <div class="greeting-row">
-                    <span id="profile-name">Olá, @_notificacaomilionaria</span>
-                </div>
-            </header>
+fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profilePic.src = e.target.result;
+            localStorage.setItem('nu_foto', e.target.result);
+        }
+        reader.readAsDataURL(file);
+    }
+});
 
-            <div class="scrollable-content">
-                <!-- CONTEÚDO DE CONTA -->
-                <section class="saldo-section">
-                    <div class="saldo-header">
-                        <h3>Conta</h3>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                    <div class="saldo-box" id="edit-saldo-btn" title="Clique para editar o saldo">
-                        <span class="currency">R$</span> <span id="saldo-value">10.000.000,00</span>
-                    </div>
-                </section>
+// Carregar dados salvos no localStorage
+window.addEventListener('DOMContentLoaded', () => {
+    const savedFoto = localStorage.getItem('nu_foto');
+    if (savedFoto) profilePic.src = savedFoto;
 
-                <!-- MENU HORIZONTAL (ATALHOS) -->
-                <section class="menu-horizontal">
-                    <div class="menu-item" onclick="abrirPixModal()">
-                        <div class="icon-circle"><i class="fa-solid fa-pix"></i></div>
-                        <span>Área Pix</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="icon-circle"><i class="fa-solid fa-barcode"></i></div>
-                        <span>Pagar</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="icon-circle"><i class="fa-solid fa-piggy-bank"></i></div>
-                        <span>Pegar emprestado</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div>
-                        <span>Recarga de celular</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="icon-circle"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-                        <span>Transferir</span>
-                    </div>
-                </section>
+    const savedSaldo = localStorage.getItem('nu_saldo');
+    if (savedSaldo !== null) {
+        saldoAtual = parseFloat(savedSaldo);
+        atualizarTelaSaldo();
+    }
+});
 
-                <!-- CARDS DE ATALHO (MEUS CARTÕES) -->
-                <section class="cards-section">
-                    <div class="card-pill">
-                        <i class="fa-regular fa-credit-card"></i>
-                        <span>Meus cartões</span>
-                    </div>
-                    <div class="card-carousel">
-                        <div class="info-card">
-                            <p>Pague boletos no crédito em até 12x, direto pelo app</p>
-                        </div>
-                        <div class="info-card">
-                            <p>Guarde dinheiro na caixinha e rendas mais que a poupança</p>
-                        </div>
-                    </div>
-                </section>
+// 2. Editar Saldo clicando em cima
+document.getElementById('edit-saldo-btn').addEventListener('click', () => {
+    let novoValor = prompt("Digite o novo valor do saldo:", saldoAtual);
+    if (novoValor !== null && novoValor.trim() !== "") {
+        novoValor = parseFloat(novoValor.replace(/\./g, '').replace(',', '.'));
+        if (!isNaN(novoValor)) {
+            saldoAtual = novoValor;
+            localStorage.setItem('nu_saldo', saldoAtual);
+            atualizarTelaSaldo();
+        } else {
+            alert("Por favor, digite um número válido.");
+        }
+    }
+});
 
-                <!-- CARTÃO DE CRÉDITO -->
-                <section class="credit-section">
-                    <div class="saldo-header">
-                        <h3>Cartão de crédito</h3>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                    <div class="fatura-info">
-                        <small>Fatura atual</small>
-                        <h2 id="fatura-value">R$ 888.888,88</h2>
-                        <small class="limite-txt">Limite disponível de R$ 819,91</small>
-                    </div>
-                </section>
+function atualizarTelaSaldo() {
+    const spanSaldo = document.getElementById('saldo-value');
+    if (saldoVisivel) {
+        spanSaldo.innerText = saldoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    } else {
+        spanSaldo.innerText = "••••";
+    }
+}
 
-                <!-- HISTÓRICO DE TRANSAÇÕES -->
-                <section class="historico-section">
-                    <h3>Histórico recente</h3>
-                    <div id="lista-historico">
-                        <div class="historico-item" onclick="gerarComprovante('Pix enviado', 'R$ 150,00', 'João Silva', 'E123456782026...')">
-                            <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
-                            <div class="hist-info">
-                                <strong>Pix enviado para João Silva</strong>
-                                <small>Hoje, 14:30</small>
-                            </div>
-                            <span class="hist-valor negativo">- R$ 150,00</span>
-                        </div>
-                    </div>
-                </section>
-            </div>
+// Ocultar / Mostrar Saldo (Ícone de Olho)
+document.getElementById('toggle-visibility').addEventListener('click', () => {
+    saldoVisivel = !saldoVisivel;
+    const icon = document.getElementById('toggle-visibility');
+    if (saldoVisivel) {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-regular', 'fa-eye');
+    } else {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-solid', 'fa-eye-slash');
+    }
+    atualizarTelaSaldo();
+});
 
-            <!-- BARRA DE NAVEGAÇÃO INFERIOR FLUTUANTE -->
-            <nav class="bottom-nav">
-                <div class="nav-item active"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-                <div class="nav-item"><i class="fa-solid fa-dollar-sign"></i></div>
-                <div class="nav-item"><i class="fa-solid fa-bag-shopping"></i></div>
-            </nav>
+// 3. Modais Pix
+function abrirPixModal() {
+    document.getElementById('pix-modal').style.display = 'flex';
+}
+
+function fecharPixModal() {
+    document.getElementById('pix-modal').style.display = 'none';
+}
+
+function realizarPixSimulado() {
+    const nomeDest = document.getElementById('pix-destinatario').value;
+    const valorPix = parseFloat(document.getElementById('pix-valor').value);
+
+    if (!nomeDest || isNaN(valorPix) || valorPix <= 0) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+    }
+
+    if (valorPix > saldoAtual) {
+        alert("Saldo insuficiente para esta simulação!");
+        return;
+    }
+
+    saldoAtual -= valorPix;
+    localStorage.setItem('nu_saldo', saldoAtual);
+    atualizarTelaSaldo();
+
+    const lista = document.getElementById('lista-historico');
+    const novoItem = document.createElement('div');
+    novoItem.className = 'historico-item';
+    const idTransacao = 'E' + Math.floor(Math.random() * 100000000000000);
+    novoItem.onclick = () => gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
+    
+    novoItem.innerHTML = `
+        <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
+        <div class="hist-info">
+            <strong>Pix enviado para ${nomeDest}</strong>
+            <small>Agora mesmo</small>
         </div>
-    </div>
+        <span class="hist-valor negativo">- R$ ${valorPix.toFixed(2).replace('.', ',')}</span>
+    `;
+    lista.prepend(novoItem);
 
-    <!-- MODAL DE PIX -->
-    <div id="pix-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharPixModal()">&times;</span>
-            <h3>Simular Pix</h3>
-            <p>Envie um Pix para testar o saldo e gerar comprovante oficial.</p>
-            <input type="text" id="pix-destinatario" placeholder="Nome do Recebedor (ex: Maria Souza)">
-            <input type="number" id="pix-valor" placeholder="Valor (ex: 50.00)">
-            <button class="btn-nu" onclick="realizarPixSimulado()">Pagar Pix</button>
-        </div>
-    </div>
+    fecharPixModal();
+    gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
+}
 
-    <!-- MODAL DE COMPROVANTE -->
-    <div id="comprovante-modal" class="modal">
-        <div class="modal-content comprovante-box">
-            <span class="close" onclick="fecharComprovante()">&times;</span>
-            <div class="comp-header">
-                <i class="fa-solid fa-circle-check"></i>
-                <h2>Transferência realizada</h2>
-                <p id="comp-data">Hoje, 16:00</p>
-            </div>
-            <div class="comp-details">
-                <div class="comp-row">
-                    <span>Valor</span>
-                    <strong id="comp-valor">R$ 0,00</strong>
-                </div>
-                <div class="comp-row">
-                    <span>Destinatário</span>
-                    <strong id="comp-dest">Nome</strong>
-                </div>
-                <div class="comp-row">
-                    <span>Instituição</span>
-                    <strong>Nu Pagamentos S.A.</strong>
-                </div>
-                <div class="comp-row">
-                    <span>ID / Transação</span>
-                    <strong id="comp-id">E90123...</strong>
-                </div>
-            </div>
-            <button class="btn-nu" onclick="fecharComprovante()">Concluído</button>
-        </div>
-    </div>
+// 4. Comprovante
+function gerarComprovante(tipo, valor, destinatario, idTransacao) {
+    document.getElementById('comp-valor').innerText = valor;
+    document.getElementById('comp-dest').innerText = destinatario;
+    document.getElementById('comp-id').innerText = idTransacao;
+    document.getElementById('comprovante-modal').style.display = 'flex';
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+function fecharComprovante() {
+    document.getElementById('comprovante-modal').style.display = 'none';
+}
