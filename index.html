@@ -176,7 +176,7 @@
             text-align: center;
         }
 
-        /* Modal do Painel de Administração Aprimorado */
+        /* ==================== ESTILO EXATO DO PAINEL ADMIN (REFERÊNCIA) ==================== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -200,94 +200,215 @@
         }
 
         .admin-modal {
-            background: linear-gradient(145deg, #121218, #0a0a0f);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: #0b0b0f;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
             width: 92%;
-            max-width: 520px;
+            max-width: 460px;
             border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 20px rgba(138, 5, 190, 0.2);
+            padding: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95);
             transform: scale(0.95);
             transition: transform 0.3s ease;
             max-height: 90vh;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .modal-overlay.active .admin-modal {
             transform: scale(1);
         }
 
-        /* Cabeçalho do Painel com Botões de Voltar e Ações */
-        .modal-header {
+        /* Cabeçalho do Painel IDÊNTICO à imagem */
+        .modal-header-box {
+            background-color: #121217;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .top-action-btns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-icon-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
+        .modal-title-left {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .modal-title-left i {
+            color: #a0aec0;
+            font-size: 16px;
+        }
+
+        .close-x-btn {
+            background: #1a1a24;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: background 0.2s;
         }
 
-        .action-icon-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .close-x-btn:hover {
+            background: #2a2a38;
         }
 
-        /* Abas do Painel (Usuários, Vendas, Configurações) */
+        /* Abas no Estilo Exato da Imagem (Vendas, Cliques, Ajustes) */
         .admin-tabs {
             display: flex;
-            background-color: #0d0d12;
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
+            background-color: transparent;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .tab-btn {
             flex: 1;
-            background: none;
-            border: none;
+            background-color: #121217;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #888888;
-            padding: 10px;
+            padding: 12px 10px;
             font-size: 13px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .tab-btn.active {
-            background-color: var(--tema-cor);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
         }
 
-        /* Conteúdo das Abas */
-        .tab-content-container {
-            flex-grow: 1;
+        /* Caixa de Conteúdo Interna Estilizada */
+        .inner-content-box {
+            background-color: #121217;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 16px;
+            max-height: 280px;
             overflow-y: auto;
-            max-height: 350px;
-            padding-right: 4px;
+        }
+
+        .section-title-inner {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-card {
+            background-color: #0b0b0f;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #a0aec0;
+        }
+
+        .metric-card span:last-child {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .subtext-history {
+            font-size: 12px;
+            color: #71717a;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .action-sub-btn {
+            width: 100%;
+            background-color: #1a1a24;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .action-sub-btn:hover {
+            background-color: #262636;
+        }
+
+        /* Campos de Formulário na aba Ajustes */
+        .admin-field {
+            margin-bottom: 12px;
+        }
+
+        .admin-field label {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .admin-field input {
+            width: 100%;
+            background-color: #0b0b0f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .admin-field input:focus {
+            border-color: var(--tema-cor);
+        }
+
+        /* Botão de Fechar / Sair do Painel Inferior */
+        .exit-panel-btn {
+            width: 100%;
+            background-color: #121217;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .exit-panel-btn:hover {
+            background-color: #1a1a24;
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .tab-pane {
@@ -296,61 +417,6 @@
 
         .tab-pane.active {
             display: block;
-        }
-
-        .admin-section {
-            margin-bottom: 16px;
-        }
-
-        .admin-section label {
-            display: block;
-            font-size: 12px;
-            color: #a0aec0;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .admin-section input {
-            width: 100%;
-            background-color: #1a1a22;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 10px 14px;
-            color: #ffffff;
-            font-size: 13px;
-            outline: none;
-        }
-
-        .admin-section input:focus {
-            border-color: var(--tema-cor);
-        }
-
-        .data-list-box {
-            background-color: #0b0b0e;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 12px;
-            color: #cbd5e1;
-            min-height: 120px;
-        }
-
-        .save-settings-btn {
-            width: 100%;
-            background-color: #22c55e;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-
-        .save-settings-btn:hover {
-            background-color: #16a34a;
         }
     </style>
 </head>
@@ -394,69 +460,105 @@
         </div>
     </div>
 
-    <!-- Modal do Painel de Administração -->
+    <!-- Modal do Painel de Administração (Design idêntico à imagem) -->
     <div class="modal-overlay" id="adminModalOverlay">
         <div class="admin-modal">
-            <!-- Cabeçalho com Botões de Ação no Topo -->
-            <div class="modal-header">
-                <h2 style="font-size: 16px;"><i class="fa-solid fa-gauge-high" style="color: var(--tema-cor);"></i> Painel VIP</h2>
-                <div class="top-action-btns">
-                    <button class="action-icon-btn" onclick="atualizarDadosPainel()"><i class="fa-solid fa-rotate"></i> Atualizar</button>
-                    <button class="action-icon-btn" onclick="voltarAoSite()" style="background-color: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+            <!-- Cabeçalho do Painel -->
+            <div class="modal-header-box">
+                <div class="modal-title-left">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>Painel Real-Time Global</span>
+                </div>
+                <div class="close-x-btn" onclick="fecharPainel()">
+                    <i class="fa-solid fa-xmark"></i>
                 </div>
             </div>
 
-            <!-- Abas de Navegação -->
+            <!-- Abas (Vendas, Cliques, Ajustes) -->
             <div class="admin-tabs">
-                <button class="tab-btn active" onclick="mudarAba('usuarios')">Usuários</button>
-                <button class="tab-btn" onclick="mudarAba('vendas')">Vendas</button>
-                <button class="tab-btn" onclick="mudarAba('config')">Configurar</button>
+                <button class="tab-btn active" onclick="mudarAba('vendas')">
+                    <i class="fa-solid fa-bag-shopping"></i> Vendas
+                </button>
+                <button class="tab-btn" onclick="mudarAba('cliques')">
+                    <i class="fa-solid fa-chart-line"></i> Cliques
+                </button>
+                <button class="tab-btn" onclick="mudarAba('ajustes')">
+                    <i class="fa-solid fa-sliders"></i> Ajustes
+                </button>
             </div>
 
             <!-- Conteúdo das Abas -->
             <div class="tab-content-container">
-                <!-- Aba 1: Usuários / Logs -->
-                <div class="tab-pane active" id="tab-usuarios">
-                    <div class="admin-section">
-                        <label>Logs de Cliques & Utilizadores Ativos</label>
-                        <div class="data-list-box" id="logsContainer">
-                            [11:06] Sistema iniciado.<br>
-                            [11:06] Utilizador acedeu à página principal.
+                
+                <!-- Aba 1: Vendas -->
+                <div class="tab-pane active" id="tab-vendas">
+                    <div class="inner-content-box">
+                        <div class="section-title-inner">
+                            <i class="fa-solid fa-receipt"></i> Gestão de Vendas & Pedidos
+                        </div>
+                        <div class="metric-card">
+                            <span>Total de pedidos gerados:</span>
+                            <span id="contadorPedidos">0</span>
+                        </div>
+                        <div class="subtext-history">
+                            Histórico de Pedidos Pix (Global):<br><br>
+                            Nenhum pedido registado ainda.
+                        </div>
+                        <div class="action-sub-btn" onclick="limparHistorico()">
+                            Limpar Histórico de Pedidos
                         </div>
                     </div>
                 </div>
 
-                <!-- Aba 2: Vendas -->
-                <div class="tab-pane" id="tab-vendas">
-                    <div class="admin-section">
-                        <label>Registo de Vendas Realizadas</label>
-                        <div class="data-list-box">
-                            • Nenhuma venda registada recentemente.<br>
-                            • As transações automatizadas aparecerão aqui.
+                <!-- Aba 2: Cliques -->
+                <div class="tab-pane" id="tab-cliques">
+                    <div class="inner-content-box">
+                        <div class="section-title-inner">
+                            <i class="fa-solid fa-users"></i> Monitor de Tráfego
+                        </div>
+                        <div class="metric-card">
+                            <span>Total de cliques no site:</span>
+                            <span id="contadorCliques">1</span>
+                        </div>
+                        <div class="subtext-history" id="logsContainer">
+                            [11:09] Acesso detetado com sucesso.
                         </div>
                     </div>
                 </div>
 
-                <!-- Aba 3: Configurações -->
-                <div class="tab-pane" id="tab-config">
-                    <div class="admin-section">
-                        <label>Link URL da Foto de Perfil Permanente</label>
-                        <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/foto.png" oninput="atualizarFotoPreview()">
+                <!-- Aba 3: Ajustes (Configurações do Site) -->
+                <div class="tab-pane" id="tab-ajustes">
+                    <div class="inner-content-box">
+                        <div class="section-title-inner">
+                            <i class="fa-solid fa-gear"></i> Configurações do Painel
+                        </div>
+                        <div class="admin-field">
+                            <label>Link URL da Foto de Perfil</label>
+                            <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/foto.png" oninput="atualizarFotoPreview()">
+                        </div>
+                        <div class="admin-field">
+                            <label>Cor Principal</label>
+                            <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 38px; padding: 2px; cursor: pointer;">
+                        </div>
+                        <div class="admin-field">
+                            <label>Selos / Emojis de Confiança</label>
+                            <input type="text" id="inputSelos" value="🛡️ Compra 100% segura • ⚡ Entrega por e-mail" oninput="atualizarSelos()">
+                        </div>
+                        <div class="admin-field">
+                            <label>Alterar Senha do Painel</label>
+                            <input type="password" id="inputNovaSenha" value="10" placeholder="Nova senha">
+                        </div>
+                        <div class="action-sub-btn" style="background-color: #22c55e; color: #fff; margin-top: 10px;" onclick="salvarConfiguracoes()">
+                            Guardar Alterações
+                        </div>
                     </div>
-                    <div class="admin-section">
-                        <label>Cor Principal do Painel</label>
-                        <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 40px; padding: 4px; cursor: pointer;">
-                    </div>
-                    <div class="admin-section">
-                        <label>Personalizar Selos / Emojis</label>
-                        <input type="text" id="inputSelos" value="🛡️ Compra 100% segura • ⚡ Entrega por e-mail" oninput="atualizarSelos()">
-                    </div>
-                    <div class="admin-section">
-                        <label>Alterar Senha do Painel</label>
-                        <input type="password" id="inputNovaSenha" value="10" placeholder="Nova senha (ex: 10)">
-                    </div>
-                    <button class="save-settings-btn" onclick="salvarConfiguracoes()">Guardar Alterações</button>
                 </div>
+
+            </div>
+
+            <!-- Botão Inferior de Fechar / Sair -->
+            <div class="exit-panel-btn" onclick="fecharPainel()">
+                Fechar / Sair do Painel
             </div>
         </div>
     </div>
@@ -464,12 +566,13 @@
     <!-- Scripts de Controlo -->
     <script>
         let senhaAdminAtual = "10";
+        let totalCliques = 1;
 
         function pedirSenhaAdmin() {
             let senha = prompt("Insira a senha de administrador:");
             if (senha === senhaAdminAtual) {
                 abrirPainel();
-                registarLog("Acesso autorizado ao painel administrativo.");
+                registarLog("Painel administrativo aberto.");
             } else if (senha !== null) {
                 alert("Senha incorreta!");
             }
@@ -479,7 +582,7 @@
             document.getElementById('adminModalOverlay').classList.add('active');
         }
 
-        function voltarAoSite() {
+        function fecharPainel() {
             document.getElementById('adminModalOverlay').classList.remove('active');
         }
 
@@ -487,15 +590,15 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
 
-            if(nomeAba === 'usuarios') {
+            if(nomeAba === 'vendas') {
                 document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('tab-usuarios').classList.add('active');
-            } else if(nomeAba === 'vendas') {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
                 document.getElementById('tab-vendas').classList.add('active');
-            } else if(nomeAba === 'config') {
+            } else if(nomeAba === 'cliques') {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('tab-cliques').classList.add('active');
+            } else if(nomeAba === 'ajustes') {
                 document.querySelectorAll('.tab-btn')[2].classList.add('active');
-                document.getElementById('tab-config').classList.add('active');
+                document.getElementById('tab-ajustes').classList.add('active');
             }
         }
 
@@ -517,13 +620,16 @@
             document.getElementById('secaoSelos').innerHTML = textoSelos;
         }
 
-        function atualizarDadosPainel() {
-            alert("Dados e logs atualizados com sucesso!");
-            registarLog("Atualização manual do painel executada.");
+        function limparHistorico() {
+            document.getElementById('contadorPedidos').innerText = "0";
+            alert("Histórico de pedidos limpo com sucesso!");
+            registarLog("Histórico de vendas limpo.");
         }
 
         function realizarCompra() {
-            registarLog("Utilizador clicou para efetuar a compra.");
+            totalCliques++;
+            document.getElementById('contadorCliques').innerText = totalCliques;
+            registarLog("Utilizador acedeu ao link de compra.");
             alert("A iniciar processo de compra automatizada...");
         }
 
@@ -531,7 +637,6 @@
             let caixaLogs = document.getElementById('logsContainer');
             let hora = new Date().toLocaleTimeString();
             caixaLogs.innerHTML += `<br>[${hora}] ${mensagem}`;
-            caixaLogs.scrollTop = caixaLogs.scrollHeight;
         }
 
         function salvarConfiguracoes() {
@@ -540,8 +645,8 @@
                 senhaAdminAtual = novaSenhaInput.trim();
             }
             alert("Configurações salvas com sucesso!");
-            registarLog("Configurações gerais atualizadas pelo administrador.");
-            voltarAoSite();
+            registarLog("Configurações atualizadas.");
+            fecharPainel();
         }
     </script>
 
