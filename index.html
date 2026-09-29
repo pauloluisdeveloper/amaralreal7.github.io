@@ -1,297 +1,378 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSIGHT - Painel</title>
-    <!-- Tailwind CSS CDN para estilização rápida e moderna -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome para os ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crescimento & Sites</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        :root {
-            --bg-cream: #F7F1E3;
-            --sidebar-cream: #F3EBD9;
-            --border-cream: #E5D9BD;
-            --text-brown: #5C4A34;
-            --accent-gold: #C5A059;
-        }
         body {
-            background-color: var(--bg-cream);
-            color: var(--text-brown);
+            background-color: #000000;
+            color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            touch-action: manipulation;
         }
-        .bg-cream-custom { background-color: var(--sidebar-cream); }
-        .border-cream-custom { border-color: var(--border-cream); }
-        .text-brown-custom { color: var(--text-brown); }
-        
-        /* Efeito de hover suave nos itens de menu */
-        .menu-item {
-            transition: all 0.2s ease;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
         }
-        .menu-item:hover {
-            background-color: rgba(197, 160, 89, 0.15);
-            padding-left: 1.25rem;
+        ::-webkit-scrollbar-track {
+            background: #000000;
         }
-        .menu-item.active {
-            background-color: rgba(197, 160, 89, 0.25);
-            border-left: 4px solid var(--accent-gold);
-            font-weight: 600;
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 2px;
         }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="bg-black text-white min-h-screen flex flex-col selection:bg-white selection:text-black">
 
-    <!-- Overlay para dispositivos móveis quando o menu estiver aberto -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden transition-opacity"></div>
-
-    <!-- SIDEBAR (Menu Lateral) -->
-    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-72 bg-cream-custom border-r border-cream-custom flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none">
-        
-        <!-- Topo: Logótipo -->
-        <div class="p-5 flex items-center justify-between border-b border-cream-custom">
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-neutral-900 px-4 py-3">
+        <div class="max-w-2xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B7355] to-[#C5A059] flex items-center justify-center shadow-md">
-                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
+                <div id="headerAvatarContainer" class="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center overflow-hidden">
+                    <img id="headerAvatarImg" src="" alt="Perfil" class="w-full h-full object-cover hidden">
+                    <span id="headerAvatarFallback" class="text-sm font-bold text-neutral-400">EU</span>
                 </div>
-                <span class="text-2xl font-black tracking-wider text-[#5C4A34]" style="font-family: serif;">INSIGHT</span>
-            </div>
-            <!-- Botão de fechar em mobile -->
-            <button id="close-sidebar" class="md:hidden text-[#5C4A34] hover:text-black">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-
-        <!-- Conteúdo do Menu com Scroll -->
-        <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6 text-sm">
-            
-            <!-- Secção: Painel Principal -->
-            <div>
-                <a href="#" onclick="switchTab('painel')" class="menu-item active flex items-center p-3 rounded-xl font-medium space-x-3">
-                    <i class="fa-solid fa-table-cells-large text-base"></i>
-                    <span>Painel</span>
-                </a>
-            </div>
-
-            <!-- Secção: Ferramentas -->
-            <div>
-                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Ferramentas</p>
-                <div class="space-y-1">
-                    <a href="#" onclick="switchTab('favoritos')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-regular fa-star text-base"></i>
-                        <span>Favoritos</span>
-                    </a>
-                    <a href="#" onclick="switchTab('novas')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
-                        <span>Ferramentas Novas</span>
-                    </a>
-                    <a href="#" onclick="switchTab('vip')" class="menu-item flex items-center justify-between p-3 rounded-xl">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-crown text-base"></i>
-                            <span>Ferramentas VIP</span>
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#8B7500] border border-[#D4AF37]/40">VIP</span>
-                    </a>
-                    <a href="#" onclick="switchTab('gratis')" class="menu-item flex items-center justify-between p-3 rounded-xl">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-screwdriver-wrench text-base"></i>
-                            <span>Ferramentas Grátis</span>
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-800 border border-emerald-500/30">FREE</span>
-                    </a>
+                <div>
+                    <h1 class="text-sm font-semibold tracking-tight text-white" id="brandTitle">Sistema & Sites</h1>
+                    <p class="text-[10px] text-neutral-500">Acesso Exclusivo</p>
                 </div>
             </div>
-
-            <!-- Secção: Comunidade -->
-            <div>
-                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Comunidade</p>
-                <div class="space-y-1">
-                    <a href="#" onclick="switchTab('comunidade')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-users text-base"></i>
-                        <span>Comunidade</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Secção: Conta -->
-            <div>
-                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Conta</p>
-                <div class="space-y-1">
-                    <a href="#" onclick="switchTab('configuracoes')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-gear text-base"></i>
-                        <span>Configurações</span>
-                    </a>
-                    <a href="#" onclick="switchTab('assinatura')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-credit-card text-base"></i>
-                        <span>Assinatura</span>
-                    </a>
-                    <a href="#" onclick="switchTab('sua-assinatura')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-shield-check text-base"></i>
-                        <span>Sua Assinatura</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Secção: Suporte -->
-            <div>
-                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Suporte</p>
-                <div class="space-y-1">
-                    <a href="#" onclick="switchTab('duvidas')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-regular fa-circle-question text-base"></i>
-                        <span>Dúvidas</span>
-                    </a>
-                    <a href="#" onclick="switchTab('ajuda')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-headset text-base"></i>
-                        <span>Ajuda</span>
-                    </a>
-                    <a href="#" onclick="switchTab('reportar')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
-                        <i class="fa-solid fa-bug text-base"></i>
-                        <span>Reportar Bug</span>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </aside>
-
-    <!-- CONTEÚDO PRINCIPAL DO SITE -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-white/50">
-        
-        <!-- Barra Superior -->
-        <header class="h-16 border-b border-cream-custom bg-white/70 backdrop-blur-md px-6 flex items-center justify-between z-20">
-            <div class="flex items-center space-x-4">
-                <button id="open-sidebar" class="md:hidden text-[#5C4A34] hover:text-black focus:outline-none">
-                    <i class="fa-solid fa-bars text-xl"></i>
+            <div class="flex items-center space-x-2">
+                <button onclick="openAdminModal()" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-lg text-xs font-medium text-neutral-300 transition active:scale-95">
+                    Painel
                 </button>
-                <h1 id="page-title" class="text-xl font-bold text-[#5C4A34]">Painel Principal</h1>
-            </div>
-            
-            <!-- Perfil do Utilizador -->
-            <div class="flex items-center space-x-3">
-                <span class="text-sm font-medium hidden sm:inline">Bem-vindo, Utilizador</span>
-                <div class="w-10 h-10 rounded-full bg-[#8B7355] text-white flex items-center justify-center font-bold shadow-inner">
-                    U
-                </div>
-            </div>
-        </header>
-
-        <!-- Área Dinâmica de Conteúdo -->
-        <div id="content-area" class="flex-1 overflow-y-auto p-6 md:p-8">
-            <!-- Conteúdo inicial do Painel -->
-            <div class="max-w-5xl mx-auto space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-sm font-semibold text-gray-500">Ferramentas Favoritas</span>
-                            <i class="fa-regular fa-star text-amber-600 text-lg"></i>
-                        </div>
-                        <h2 class="text-3xl font-bold">12</h2>
-                        <p class="text-xs text-emerald-600 mt-2 font-medium"><i class="fa-solid fa-arrow-up"></i> +2 esta semana</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-sm font-semibold text-gray-500">Estado da Assinatura</span>
-                            <i class="fa-solid fa-crown text-amber-600 text-lg"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold text-amber-700">VIP Ativo</h2>
-                        <p class="text-xs text-gray-500 mt-2">Expira em: 24/10/2026</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-sm font-semibold text-gray-500">Suporte Técnico</span>
-                            <i class="fa-solid fa-headset text-amber-600 text-lg"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold text-emerald-600">Online</h2>
-                        <p class="text-xs text-gray-500 mt-2">Tempo médio: 5 mins</p>
-                    </div>
-                </div>
-
-                <!-- Secção de Acesso Rápido -->
-                <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
-                    <h3 class="text-lg font-bold text-[#5C4A34] mb-4">Acesso Rápido às Ferramentas</h3>
-                    <p class="text-sm text-gray-600 mb-4">Selecione uma categoria no menu lateral ou clique numa das ferramentas em destaque abaixo para começar a utilizar o INSIGHT.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
-                            <div class="flex items-center space-x-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                </div>
-                                <h4 class="font-bold text-sm">Gerador de Ideias</h4>
-                            </div>
-                            <p class="text-xs text-gray-500">Crie insights e estratégias automáticas para o seu negócio.</p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
-                            <div class="flex items-center space-x-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
-                                    <i class="fa-solid fa-chart-line"></i>
-                                </div>
-                                <h4 class="font-bold text-sm">Análise de Métricas</h4>
-                            </div>
-                            <p class="text-xs text-gray-500">Monitore o desempenho e tráfego em tempo real.</p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
-                            <div class="flex items-center space-x-3 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center">
-                                    <i class="fa-solid fa-users"></i>
-                                </div>
-                                <h4 class="font-bold text-sm">Comunidade VIP</h4>
-                            </div>
-                            <p class="text-xs text-gray-500">Conecte-se com outros membros e partilhe experiências.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-2xl w-full mx-auto px-4 py-6 space-y-8 pb-20">
+
+        <!-- HERO SECTION -->
+        <section class="text-center space-y-4 py-4">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                <span>Método Direto ao Ponto</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight" id="heroMainTitle">
+                Aprenda a Criar Seu Site e Domine o Crescimento
+            </h2>
+            <p class="text-sm text-neutral-400 max-w-md mx-auto" id="heroSubtitle">
+                Conteúdos práticos, objetivos e com suporte de Inteligência Artificial em tempo real por apenas R$ 5,99 cada.
+            </p>
+        </section>
+
+        <!-- PRODUCTS / COURSES GRID -->
+        <section class="space-y-4">
+            <h3 class="text-xs font-semibold tracking-wider text-neutral-500 uppercase">Módulos Disponíveis</h3>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <!-- PRODUCT 1: CRIAR SITE -->
+                <div class="bg-neutral-950 border border-neutral-900 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-neutral-700 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-neutral-500 bg-neutral-900 px-2.5 py-1 rounded-md border border-neutral-800">Desenvolvimento</span>
+                            <span class="text-sm font-bold text-white product-price-1">R$ 5,99</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white product-title-1">Aprenda a Criar Seu Próprio Site</h4>
+                        <p class="text-xs text-neutral-400 product-desc-1">Do zero ao ar no GitHub Pages. Estrutura, código, visual e publicação sem complicações.</p>
+                    </div>
+                    <button onclick="buyProduct('site', 'Aprenda a Criar Seu Próprio Site', 5.99)" class="w-full py-2.5 bg-white text-black hover:bg-neutral-200 rounded-xl text-xs font-semibold transition active:scale-98">
+                        Adquirir Acesso (R$ 5,99)
+                    </button>
+                </div>
+
+                <!-- PRODUCT 2: SISTEMA PARA CRESCER -->
+                <div class="bg-neutral-950 border border-neutral-900 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-neutral-700 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-neutral-500 bg-neutral-900 px-2.5 py-1 rounded-md border border-neutral-800">Estratégia</span>
+                            <span class="text-sm font-bold text-white product-price-2">R$ 5,99</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white product-title-2">Sistema para Crescer</h4>
+                        <p class="text-xs text-neutral-400 product-desc-2">Técnicas avançadas de alcance, tráfego orgânico, retenção e conversão de seguidores.</p>
+                    </div>
+                    <button onclick="buyProduct('growth', 'Sistema para Crescer', 5.99)" class="w-full py-2.5 bg-white text-black hover:bg-neutral-200 rounded-xl text-xs font-semibold transition active:scale-98">
+                        Adquirir Acesso (R$ 5,99)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVE AREA (AI TUTORS / ACCESS AREA) -->
+        <section id="learningArea" class="hidden space-y-4 pt-2">
+            <div class="border border-neutral-800 rounded-2xl bg-neutral-950 overflow-hidden flex flex-col h-[450px]">
+                <!-- Chat Header -->
+                <div class="bg-neutral-900 px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                        <h4 id="chatTitle" class="text-xs font-bold text-white">IA Tutor Online</h4>
+                    </div>
+                    <button onclick="closeLearningArea()" class="text-xs text-neutral-400 hover:text-white">Fechar</button>
+                </div>
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+                    <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">
+                        Olá! Sou sua inteligência artificial especialista. Como posso te ajudar hoje nos seus estudos?
+                    </div>
+                </div>
+                <!-- Chat Input -->
+                <div class="p-3 bg-neutral-900 border-t border-neutral-800 flex space-x-2">
+                    <input type="text" id="chatInput" placeholder="Digite sua dúvida..." class="flex-1 bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                    <button onclick="sendChatMessage()" class="px-4 py-2 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Enviar</button>
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- JavaScript para interatividade (Menu Mobile e Troca de Abas) -->
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const openSidebarBtn = document.getElementById('open-sidebar');
-        const closeSidebarBtn = document.getElementById('close-sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
+    <!-- FOOTER -->
+    <footer class="border-t border-neutral-900 py-6 text-center text-xs text-neutral-600 space-y-1">
+        <p>Sistema protegido por criptografia e IA.</p>
+        <p>&copy; 2026 - Todos os direitos reservados.</p>
+    </footer>
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+    <!-- ADMIN MODAL -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-neutral-950 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            
+            <!-- Login View -->
+            <div id="adminLoginView" class="space-y-4">
+                <div class="text-center space-y-1">
+                    <h3 class="text-base font-bold text-white">Painel de Administração</h3>
+                    <p class="text-xs text-neutral-400">Área restrita. Acesso exclusivo do proprietário.</p>
+                </div>
+                <div class="space-y-3">
+                    <input type="password" id="adminPasswordInput" placeholder="Senha de acesso" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-600">
+                    <button onclick="verifyAdminPassword()" class="w-full py-2.5 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Entrar no Painel</button>
+                </div>
+                <button onclick="closeAdminModal()" class="w-full py-2 text-xs text-neutral-500 hover:text-white">Cancelar</button>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="adminDashboardView" class="hidden space-y-6">
+                <div class="flex items-center justify-between border-b border-neutral-900 pb-3">
+                    <h3 class="text-sm font-bold text-white">Painel de Controle</h3>
+                    <button onclick="logoutAdmin()" class="text-xs text-neutral-400 hover:text-white">Sair</button>
+                </div>
+
+                <!-- Traffic & Stats -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                        <span class="text-[10px] text-neutral-400 uppercase">Visitantes Únicos</span>
+                        <p id="statVisitors" class="text-lg font-bold text-white">1,248</p>
+                    </div>
+                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                        <span class="text-[10px] text-neutral-400 uppercase">Cliques em Botões</span>
+                        <p id="statClicks" class="text-lg font-bold text-white">342</p>
+                    </div>
+                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                        <span class="text-[10px] text-neutral-400 uppercase">Usuários Ativos</span>
+                        <p class="text-lg font-bold text-white">18</p>
+                    </div>
+                    <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl space-y-1">
+                        <span class="text-[10px] text-neutral-400 uppercase">Vendas Realizadas</span>
+                        <p id="statSales" class="text-lg font-bold text-white">9</p>
+                    </div>
+                </div>
+
+                <!-- Customization Settings -->
+                <div class="space-y-4 border-t border-neutral-900 pt-4">
+                    <h4 class="text-xs font-bold text-white">Configurações do Site</h4>
+                    
+                    <div class="space-y-2">
+                        <label class="text-[11px] text-neutral-400">URL da Foto de Perfil (Avatar)</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="settingAvatarUrl" placeholder="https://exemplo.com/foto.jpg" class="flex-1 bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                            <button onclick="saveAvatar()" class="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-xs font-medium">Salvar</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[11px] text-neutral-400">Alterar Senha do Painel</label>
+                        <div class="flex space-x-2">
+                            <input type="password" id="settingNewPassword" placeholder="Nova senha" class="flex-1 bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                            <button onclick="saveNewPassword()" class="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-xs font-medium">Atualizar</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[11px] text-neutral-400">Editar Títulos e Textos</label>
+                        <input type="text" id="settingMainTitle" placeholder="Título Principal" class="w-full bg-black border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-600 focus:outline-none">
+                        <button onclick="saveContentSettings()" class="w-full py-2 bg-white text-black rounded-xl text-xs font-semibold hover:bg-neutral-200 transition">Salvar Alterações</button>
+                    </div>
+                </div>
+
+                <button onclick="closeAdminModal()" class="w-full py-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-xl text-xs font-medium text-neutral-300">Fechar Painel</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Track stats on load
+        let stats = JSON.parse(localStorage.getItem('site_stats')) || { visitors: 1248, clicks: 342, sales: 9 };
+        let adminPassword = localStorage.getItem('admin_pass') || '1234';
+        let avatarUrl = localStorage.getItem('admin_avatar') || '';
+        let customMainTitle = localStorage.getItem('main_title') || 'Aprenda a Criar Seu Site e Domine o Crescimento';
+
+        // Apply saved settings
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('statVisitors').innerText = stats.visitors;
+            document.getElementById('statClicks').innerText = stats.clicks;
+            document.getElementById('statSales').innerText = stats.sales;
+
+            if (avatarUrl) {
+                document.getElementById('headerAvatarImg').src = avatarUrl;
+                document.getElementById('headerAvatarImg').classList.remove('hidden');
+                document.getElementById('headerAvatarFallback').classList.add('hidden');
+                document.getElementById('settingAvatarUrl').value = avatarUrl;
+            }
+
+            if (customMainTitle) {
+                document.getElementById('heroMainTitle').innerText = customMainTitle;
+                document.getElementById('settingMainTitle').value = customMainTitle;
+            }
+        });
+
+        // Track button clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                stats.clicks++;
+                localStorage.setItem('site_stats', JSON.stringify(stats));
+            }
+        });
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminModal').classList.add('flex');
         }
 
-        openSidebarBtn.addEventListener('click', toggleSidebar);
-        closeSidebarBtn.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('adminModal').classList.remove('flex');
+            document.getElementById('adminLoginView').classList.remove('hidden');
+            document.getElementById('adminDashboardView').classList.add('hidden');
+            document.getElementById('adminPasswordInput').value = '';
+        }
 
-        // Dados simulados para as páginas ao clicar no menu
-        const pageData = {
-            'painel': { title: 'Painel Principal', content: `<div class="max-w-5xl mx-auto space-y-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Favoritos</span><h2 class="text-3xl font-bold mt-2">12</h2></div><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Estado</span><h2 class="text-2xl font-bold text-amber-700 mt-2">VIP Ativo</h2></div><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Suporte</span><h2 class="text-2xl font-bold text-emerald-600 mt-2">Online</h2></div></div></div>` },
-            'favoritos': { title: 'Favoritos', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">As suas ferramentas favoritas aparecerão aqui guardadas para acesso rápido.</p></div>' },
-            'novas': { title: 'Ferramentas Novas', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Explore as funcionalidades e atualizações mais recentes adicionadas esta semana.</p></div>' },
-            'vip': { title: 'Ferramentas VIP', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Conteúdo exclusivo reservado para assinantes do plano VIP do INSIGHT.</p></div>' },
-            'gratis': { title: 'Ferramentas Grátis', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Lista completa de ferramentas gratuitas disponíveis para todos os utilizadores.</p></div>' },
-            'comunidade': { title: 'Comunidade', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Bem-vindo à comunidade INSIGHT. Participe nas discussões e interaja com outros utilizadores.</p></div>' },
-            'configuracoes': { title: 'Configurações', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Gerencie as preferências da sua conta, palavra-passe e notificações.</p></div>' },
-            'assinatura': { title: 'Assinatura', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Veja planos disponíveis, faça upgrades ou gira os seus pagamentos.</p></div>' },
-            'sua-assinatura': { title: 'Detalhes da Sua Assinatura', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">O seu plano atual é <strong>VIP</strong> com renovação automática ativa.</p></div>' },
-            'duvidas': { title: 'Dúvidas Frequentes', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Consulte as perguntas frequentes sobre o funcionamento das ferramentas.</p></div>' },
-            'ajuda': { title: 'Ajuda e Suporte', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Entre em contacto direto com a nossa equipa de suporte técnico.</p></div>' },
-            'reportar': { title: 'Reportar Bug', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Encontrou algum erro? Preencha o formulário para notificar a nossa equipa de desenvolvimento.</p></div>' }
-        };
+        function verifyAdminPassword() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass === adminPassword) {
+                document.getElementById('adminLoginView').classList.add('hidden');
+                document.getElementById('adminDashboardView').classList.remove('hidden');
+            } else {
+                alert('Senha incorreta.');
+            }
+        }
 
-        function switchTab(tabKey) {
-            // Atualizar classes ativas no menu
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        function logoutAdmin() {
+            document.getElementById('adminLoginView').classList.remove('hidden');
+            document.getElementById('adminDashboardView').classList.add('hidden');
+            document.getElementById('adminPasswordInput').value = '';
+        }
 
-            // Atualizar título e conteúdo
-            if (pageData[tabKey]) {
-                document.getElementById('page-title').innerText = pageData[tabKey].title;
-                document.getElementById('content-area').innerHTML = pageData[tabKey].content;
+        function saveAvatar() {
+            const url = document.getElementById('settingAvatarUrl').value.trim();
+            localStorage.setItem('admin_avatar', url);
+            avatarUrl = url;
+            if (url) {
+                document.getElementById('headerAvatarImg').src = url;
+                document.getElementById('headerAvatarImg').classList.remove('hidden');
+                document.getElementById('headerAvatarFallback').classList.add('hidden');
+            }
+            alert('Foto de perfil atualizada!');
+        }
+
+        function saveNewPassword() {
+            const newPass = document.getElementById('settingNewPassword').value.trim();
+            if (newPass.length > 0) {
+                adminPassword = newPass;
+                localStorage.setItem('admin_pass', newPass);
+                document.getElementById('settingNewPassword').value = '';
+                alert('Senha alterada com sucesso!');
+            } else {
+                alert('Digite uma senha válida.');
+            }
+        }
+
+        function saveContentSettings() {
+            const title = document.getElementById('settingMainTitle').value.trim();
+            if (title) {
+                customMainTitle = title;
+                localStorage.setItem('main_title', title);
+                document.getElementById('heroMainTitle').innerText = title;
+                alert('Conteúdo atualizado!');
+            }
+        }
+
+        // Buy product / Open specific AI Tutor
+        let currentProductType = '';
+        function buyProduct(type, title, price) {
+            stats.sales++;
+            localStorage.setItem('site_stats', JSON.stringify(stats));
+            document.getElementById('statSales').innerText = stats.sales;
+
+            currentProductType = type;
+            document.getElementById('chatTitle').innerText = `IA Tutor: ${title}`;
+            document.getElementById('learningArea').classList.remove('hidden');
+            
+            const chatMessages = document.getElementById('chatMessages');
+            if (type === 'site') {
+                chatMessages.innerHTML = `
+                    <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">
+                        Pagamento de R$ ${price.toFixed(2).replace('.', ',')} aprovado! Bem-vindo ao módulo <strong>Aprenda a Criar Seu Próprio Site</strong>. Me pergunte qualquer coisa sobre HTML, CSS, GitHub Pages ou estruturação de páginas.
+                    </div>
+                `;
+            } else {
+                chatMessages.innerHTML = `
+                    <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">
+                        Pagamento de R$ ${price.toFixed(2).replace('.', ',')} aprovado! Bem-vindo ao <strong>Sistema para Crescer</strong>. Como posso te ajudar hoje com estratégias de alcance, tráfego e viralização?
+                    </div>
+                `;
             }
 
-            // Fechar menu no telemóvel ao clicar
-            if (window.innerWidth < 768) {
-                toggleSidebar();
-            }
+            document.getElementById('learningArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeLearningArea() {
+            document.getElementById('learningArea').classList.add('hidden');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // User message
+            chatMessages.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-white text-black p-3 rounded-xl max-w-[85%]">${text}</div>
+                </div>
+            `;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // AI Simulated Response
+            setTimeout(() => {
+                let aiReply = "Entendido! Vamos executar esse passo no seu projeto.";
+                if (currentProductType === 'site') {
+                    aiReply = "Para criar seu site no GitHub Pages, certifique-se de salvar o arquivo principal exatamente como index.html na raiz do repositório. Quer que eu te ajude com algum código HTML/CSS específico?";
+                } else {
+                    aiReply = "Para acelerar seu crescimento, foque em consistência e em títulos chamativos nos primeiros segundos. Qual é o seu nicho atual?";
+                }
+
+                chatMessages.innerHTML += `
+                    <div class="bg-neutral-900 text-neutral-200 p-3 rounded-xl max-w-[85%]">${aiReply}</div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 600);
         }
     </script>
 </body>
