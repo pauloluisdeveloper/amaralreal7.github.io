@@ -1,127 +1,717 @@
-let saldoAtual = 10000000.00;
-let saldoVisivel = true;
-
-// 1. Alterar Foto de Perfil via Galeria
-const fileInput = document.getElementById('file-input');
-const profilePic = document.getElementById('profile-pic');
-
-fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            profilePic.src = e.target.result;
-            localStorage.setItem('nu_foto', e.target.result);
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nubank - Simulação</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        reader.readAsDataURL(file);
-    }
-});
 
-// Carregar dados salvos no localStorage
-window.addEventListener('DOMContentLoaded', () => {
-    const savedFoto = localStorage.getItem('nu_foto');
-    if (savedFoto) profilePic.src = savedFoto;
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-    const savedSaldo = localStorage.getItem('nu_saldo');
-    if (savedSaldo !== null) {
-        saldoAtual = parseFloat(savedSaldo);
-        atualizarTelaSaldo();
-    }
-});
+        .iphone-frame {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            max-height: 896px;
+            background-color: #ffffff;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-// 2. Editar Saldo clicando em cima
-document.getElementById('edit-saldo-btn').addEventListener('click', () => {
-    let novoValor = prompt("Digite o novo valor do saldo:", saldoAtual);
-    if (novoValor !== null && novoValor.trim() !== "") {
-        novoValor = parseFloat(novoValor.replace(/\./g, '').replace(',', '.'));
-        if (!isNaN(novoValor)) {
-            saldoAtual = novoValor;
+        @media(min-width: 450px) {
+            .iphone-frame {
+                border-radius: 40px;
+                border: 12px solid #2b2b2b;
+            }
+        }
+
+        .ios-status-bar {
+            background-color: #820ad1;
+            width: 100%;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .ios-status-bar .right-icons {
+            display: flex;
+            gap: 6px;
+            font-size: 12px;
+            align-items: center;
+        }
+
+        .nu-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 44px);
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        .nu-header {
+            background-color: #820ad1;
+            padding: 10px 20px 20px 20px;
+            color: white;
+        }
+
+        .profile-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 46px;
+            height: 46px;
+        }
+
+        #profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .edit-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #a822f0;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            cursor: pointer;
+            border: 1px solid white;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .greeting-row span {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        .scrollable-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section-box {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .section-header i {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .saldo-box {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .fatura-info h2 {
+            font-size: 22px;
+            color: #333;
+            margin: 4px 0;
+        }
+
+        .limite-txt {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .menu-horizontal {
+            display: flex;
+            gap: 12px;
+            padding: 15px 20px;
+            overflow-x: auto;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .menu-horizontal::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            min-width: 76px;
+        }
+
+        .icon-circle {
+            width: 65px;
+            height: 65px;
+            background-color: #f0f1f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .menu-item span {
+            font-size: 11px;
+            color: #333;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .cards-section {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-pill {
+            background-color: #f0f1f5;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .card-carousel {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+        }
+
+        .card-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .info-card {
+            background-color: #f0f1f5;
+            padding: 15px;
+            border-radius: 12px;
+            min-width: 240px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .historico-section {
+            padding: 20px;
+        }
+
+        .historico-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .historico-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8f8f8;
+            cursor: pointer;
+        }
+
+        .hist-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f1f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .hist-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hist-info strong {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .hist-info small {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .hist-valor {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 55px;
+            background-color: #ffffff;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .nav-item {
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #820ad1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 330px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .modal-content input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn-nu {
+            background-color: #820ad1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .comprovante-box {
+            text-align: center;
+        }
+
+        .comp-header i {
+            font-size: 45px;
+            color: #27ae60;
+            margin-bottom: 8px;
+        }
+
+        .comp-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .comp-header p {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .comp-details {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .comp-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .comp-row span {
+            color: #666;
+        }
+
+        .comp-row strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="iphone-frame">
+        <div class="ios-status-bar">
+            <span>12:01</span>
+            <div class="right-icons">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nu-container">
+            <header class="nu-header">
+                <div class="profile-top-row">
+                    <div class="profile-container">
+                        <div class="avatar-wrapper">
+                            <img id="profile-pic" src="https://via.placeholder.com/150" alt="Foto de Perfil">
+                            <label for="file-input" class="edit-badge" title="Editar foto">
+                                <i class="fa-solid fa-pencil"></i>
+                            </label>
+                            <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="header-icons">
+                        <i class="fa-regular fa-eye" id="toggle-visibility" title="Mostrar/Ocultar Saldo"></i>
+                        <i class="fa-regular fa-circle-question"></i>
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                </div>
+                <div class="greeting-row">
+                    <span id="profile-name">Olá, @_notificacaomilionaria</span>
+                </div>
+            </header>
+
+            <div class="scrollable-content">
+                <section class="section-box">
+                    <div class="section-header">
+                        <h3>Conta</h3>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="saldo-box" id="edit-saldo-btn" title="Clique para editar o saldo">
+                        <span class="currency">R$</span> <span id="saldo-value">10.000.000,00</span>
+                    </div>
+                </section>
+
+                <section class="menu-horizontal">
+                    <div class="menu-item" onclick="abrirPixModal()">
+                        <div class="icon-circle"><i class="fa-solid fa-pix"></i></div>
+                        <span>Área Pix</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-barcode"></i></div>
+                        <span>Pagar</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-piggy-bank"></i></div>
+                        <span>Pegar emprestado</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <span>Recarga de celular</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="icon-circle"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                        <span>Transferir</span>
+                    </div>
+                </section>
+
+                <section class="cards-section">
+                    <div class="card-pill">
+                        <i class="fa-regular fa-credit-card"></i>
+                        <span>Meus cartões</span>
+                    </div>
+                    <div class="card-carousel">
+                        <div class="info-card">
+                            <p>Pague boletos no crédito em até 12x, direto pelo app</p>
+                        </div>
+                        <div class="info-card">
+                            <p>Guarde dinheiro na caixinha e rendas mais que a poupança</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-box">
+                    <div class="section-header">
+                        <h3>Cartão de crédito</h3>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="fatura-info">
+                        <small>Fatura atual</small>
+                        <h2 id="fatura-value">R$ 888.888,88</h2>
+                        <small class="limite-txt">Limite disponível de R$ 819,91</small>
+                    </div>
+                </section>
+
+                <section class="historico-section">
+                    <h3>Histórico recente</h3>
+                    <div id="lista-historico">
+                        <div class="historico-item" onclick="gerarComprovante('Pix enviado', 'R$ 150,00', 'João Silva', 'E123456782026...')">
+                            <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                            <div class="hist-info">
+                                <strong>Pix enviado para João Silva</strong>
+                                <small>Hoje, 14:30</small>
+                            </div>
+                            <span class="hist-valor">- R$ 150,00</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <nav class="bottom-nav">
+                <div class="nav-item active"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <div class="nav-item"><i class="fa-solid fa-dollar-sign"></i></div>
+                <div class="nav-item"><i class="fa-solid fa-bag-shopping"></i></div>
+            </nav>
+        </div>
+    </div>
+
+    <div id="pix-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharPixModal()">&times;</span>
+            <h3>Simular Pix</h3>
+            <p>Envie um Pix para abater no saldo e gerar o comprovante.</p>
+            <input type="text" id="pix-destinatario" placeholder="Nome do Recebedor (ex: Maria Souza)">
+            <input type="number" id="pix-valor" placeholder="Valor (ex: 50.00)">
+            <button class="btn-nu" onclick="realizarPixSimulado()">Pagar Pix</button>
+        </div>
+    </div>
+
+    <div id="comprovante-modal" class="modal">
+        <div class="modal-content comprovante-box">
+            <span class="close" onclick="fecharComprovante()">&times;</span>
+            <div class="comp-header">
+                <i class="fa-solid fa-circle-check"></i>
+                <h2>Transferência realizada</h2>
+                <p>Hoje, 16:00</p>
+            </div>
+            <div class="comp-details">
+                <div class="comp-row">
+                    <span>Valor</span>
+                    <strong id="comp-valor">R$ 0,00</strong>
+                </div>
+                <div class="comp-row">
+                    <span>Destinatário</span>
+                    <strong id="comp-dest">Nome</strong>
+                </div>
+                <div class="comp-row">
+                    <span>Instituição</span>
+                    <strong>Nu Pagamentos S.A.</strong>
+                </div>
+                <div class="comp-row">
+                    <span>ID / Transação</span>
+                    <strong id="comp-id">E90123...</strong>
+                </div>
+            </div>
+            <button class="btn-nu" onclick="fecharComprovante()">Concluído</button>
+        </div>
+    </div>
+
+    <script>
+        let saldoAtual = 10000000.00;
+        let saldoVisivel = true;
+
+        const fileInput = document.getElementById('file-input');
+        const profilePic = document.getElementById('profile-pic');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePic.src = e.target.result;
+                    localStorage.setItem('nu_foto', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedFoto = localStorage.getItem('nu_foto');
+            if (savedFoto) profilePic.src = savedFoto;
+
+            const savedSaldo = localStorage.getItem('nu_saldo');
+            if (savedSaldo !== null) {
+                saldoAtual = parseFloat(savedSaldo);
+                atualizarTelaSaldo();
+            }
+        });
+
+        document.getElementById('edit-saldo-btn').addEventListener('click', () => {
+            let novoValor = prompt("Digite o novo valor do saldo:", saldoAtual);
+            if (novoValor !== null && novoValor.trim() !== "") {
+                novoValor = parseFloat(novoValor.replace(/\./g, '').replace(',', '.'));
+                if (!isNaN(novoValor)) {
+                    saldoAtual = novoValor;
+                    localStorage.setItem('nu_saldo', saldoAtual);
+                    atualizarTelaSaldo();
+                } else {
+                    alert("Por favor, digite um número válido.");
+                }
+            }
+        });
+
+        function atualizarTelaSaldo() {
+            const spanSaldo = document.getElementById('saldo-value');
+            if (saldoVisivel) {
+                spanSaldo.innerText = saldoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            } else {
+                spanSaldo.innerText = "••••";
+            }
+        }
+
+        document.getElementById('toggle-visibility').addEventListener('click', () => {
+            saldoVisivel = !saldoVisivel;
+            const icon = document.getElementById('toggle-visibility');
+            if (saldoVisivel) {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-regular', 'fa-eye');
+            } else {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-solid', 'fa-eye-slash');
+            }
+            atualizarTelaSaldo();
+        });
+
+        function abrirPixModal() {
+            document.getElementById('pix-modal').style.display = 'flex';
+        }
+
+        function fecharPixModal() {
+            document.getElementById('pix-modal').style.display = 'none';
+        }
+
+        function realizarPixSimulado() {
+            const nomeDest = document.getElementById('pix-destinatario').value;
+            const valorPix = parseFloat(document.getElementById('pix-valor').value);
+
+            if (!nomeDest || isNaN(valorPix) || valorPix <= 0) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+
+            if (valorPix > saldoAtual) {
+                alert("Saldo insuficiente para esta simulação!");
+                return;
+            }
+
+            saldoAtual -= valorPix;
             localStorage.setItem('nu_saldo', saldoAtual);
             atualizarTelaSaldo();
-        } else {
-            alert("Por favor, digite um número válido.");
+
+            const lista = document.getElementById('lista-historico');
+            const novoItem = document.createElement('div');
+            novoItem.className = 'historico-item';
+            const idTransacao = 'E' + Math.floor(Math.random() * 100000000000000);
+            novoItem.onclick = () => gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
+            
+            novoItem.innerHTML = `
+                <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                <div class="hist-info">
+                    <strong>Pix enviado para ${nomeDest}</strong>
+                    <small>Agora mesmo</small>
+                </div>
+                <span class="hist-valor">- R$ ${valorPix.toFixed(2).replace('.', ',')}</span>
+            `;
+            lista.prepend(novoItem);
+
+            fecharPixModal();
+            gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
         }
-    }
-});
 
-function atualizarTelaSaldo() {
-    const spanSaldo = document.getElementById('saldo-value');
-    if (saldoVisivel) {
-        spanSaldo.innerText = saldoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-    } else {
-        spanSaldo.innerText = "••••";
-    }
-}
+        function gerarComprovante(tipo, valor, destinatario, idTransacao) {
+            document.getElementById('comp-valor').innerText = valor;
+            document.getElementById('comp-dest').innerText = destinatario;
+            document.getElementById('comp-id').innerText = idTransacao;
+            document.getElementById('comprovante-modal').style.display = 'flex';
+        }
 
-// Ocultar / Mostrar Saldo (Ícone de Olho)
-document.getElementById('toggle-visibility').addEventListener('click', () => {
-    saldoVisivel = !saldoVisivel;
-    const icon = document.getElementById('toggle-visibility');
-    if (saldoVisivel) {
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-regular', 'fa-eye');
-    } else {
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-solid', 'fa-eye-slash');
-    }
-    atualizarTelaSaldo();
-});
-
-// 3. Modais Pix
-function abrirPixModal() {
-    document.getElementById('pix-modal').style.display = 'flex';
-}
-
-function fecharPixModal() {
-    document.getElementById('pix-modal').style.display = 'none';
-}
-
-function realizarPixSimulado() {
-    const nomeDest = document.getElementById('pix-destinatario').value;
-    const valorPix = parseFloat(document.getElementById('pix-valor').value);
-
-    if (!nomeDest || isNaN(valorPix) || valorPix <= 0) {
-        alert("Preencha todos os campos corretamente.");
-        return;
-    }
-
-    if (valorPix > saldoAtual) {
-        alert("Saldo insuficiente para esta simulação!");
-        return;
-    }
-
-    saldoAtual -= valorPix;
-    localStorage.setItem('nu_saldo', saldoAtual);
-    atualizarTelaSaldo();
-
-    const lista = document.getElementById('lista-historico');
-    const novoItem = document.createElement('div');
-    novoItem.className = 'historico-item';
-    const idTransacao = 'E' + Math.floor(Math.random() * 100000000000000);
-    novoItem.onclick = () => gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
-    
-    novoItem.innerHTML = `
-        <div class="hist-icon"><i class="fa-solid fa-arrow-up"></i></div>
-        <div class="hist-info">
-            <strong>Pix enviado para ${nomeDest}</strong>
-            <small>Agora mesmo</small>
-        </div>
-        <span class="hist-valor negativo">- R$ ${valorPix.toFixed(2).replace('.', ',')}</span>
-    `;
-    lista.prepend(novoItem);
-
-    fecharPixModal();
-    gerarComprovante('Pix enviado', `R$ ${valorPix.toFixed(2).replace('.', ',')}`, nomeDest, idTransacao);
-}
-
-// 4. Comprovante
-function gerarComprovante(tipo, valor, destinatario, idTransacao) {
-    document.getElementById('comp-valor').innerText = valor;
-    document.getElementById('comp-dest').innerText = destinatario;
-    document.getElementById('comp-id').innerText = idTransacao;
-    document.getElementById('comprovante-modal').style.display = 'flex';
-}
-
-function fecharComprovante() {
-    document.getElementById('comprovante-modal').style.display = 'none';
-}
+        function fecharComprovante() {
+            document.getElementById('comprovante-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
