@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NotifyCash - Links</title>
-    <!-- Importação de fontes e ícones (FontAwesome para o ícone do WhatsApp) -->
+    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,7 +15,7 @@
         }
 
         body {
-            background-color: #0b0f19;
+            background-color: #000000; /* Preto total */
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -33,24 +33,24 @@
             align-items: center;
         }
 
-        /* Estilo do Logotipo / Avatar */
+        /* Logotipo / Avatar */
         .logo-container {
             width: 110px;
             height: 110px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            background: linear-gradient(135deg, #8a05be, #3a7bd5);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 4px;
             margin-bottom: 24px;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 25px rgba(138, 5, 190, 0.3);
         }
 
         .logo-inner {
             width: 100%;
             height: 100%;
-            background-color: #111827;
+            background-color: #000000;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
@@ -66,7 +66,7 @@
             object-fit: cover;
         }
 
-        /* Textos descritivos */
+        /* Títulos */
         .title {
             font-size: 22px;
             font-weight: 800;
@@ -77,18 +77,18 @@
 
         .subtitle {
             font-size: 14px;
-            color: #9ca3af;
+            color: #888888;
             font-weight: 600;
             letter-spacing: 2px;
             margin-bottom: 32px;
             text-align: center;
         }
 
-        /* Botão de Link */
+        /* Botões de Link */
         .link-button {
             width: 100%;
-            background-color: #121824;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #121212; /* Preto elegante para botões */
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 14px;
             padding: 16px 20px;
             display: flex;
@@ -97,37 +97,58 @@
             color: #ffffff;
             font-weight: 600;
             font-size: 15px;
+            margin-bottom: 14px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
         }
 
         .link-button:hover {
-            background-color: #1a2234;
+            background-color: #1a1a1a;
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(138, 5, 190, 0.4);
         }
 
-        .whatsapp-icon {
-            font-size: 24px;
-            color: #25d366;
+        .btn-icon {
+            font-size: 20px;
             margin-right: 16px;
             display: flex;
             align-items: center;
+            width: 24px;
+            justify-content: center;
+        }
+
+        /* Estilo do ícone/logo do Nubank */
+        .nu-icon {
+            background-color: #8a05be;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 13px;
+            height: 26px;
+            width: 26px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: -1px;
+        }
+
+        .admin-icon {
+            color: #3b82f6;
         }
 
         .button-text {
             flex-grow: 1;
             text-align: center;
-            padding-right: 24px; /* Para compensar o ícone e centralizar perfeitamente o texto */
+            padding-right: 24px;
         }
 
-        /* Rodapé igual ao Linktree */
+        /* Rodapé */
         footer {
             margin-top: 40px;
             text-align: center;
             font-size: 12px;
-            color: #9ca3af;
+            color: #666666;
         }
 
         .footer-links {
@@ -139,7 +160,7 @@
         }
 
         .footer-links a {
-            color: #9ca3af;
+            color: #666666;
             text-decoration: none;
         }
 
@@ -154,8 +175,8 @@
         <!-- Logotipo -->
         <div class="logo-container">
             <div class="logo-inner">
-                <!-- Podes substituir o src pela imagem do teu logo ou usar texto/ícone -->
-                <img src="https://via.placeholder.com/110/111827/00d2ff?text=N" alt="NotifyCash Logo">
+                <!-- Podes colocar o link direto da imagem do teu logo aqui -->
+                <img src="https://via.placeholder.com/110/000000/8a05be?text=N" alt="NotifyCash Logo">
             </div>
         </div>
 
@@ -163,15 +184,25 @@
         <h1 class="title">ACESSE ESSE LINK</h1>
         <p class="subtitle">LINK ABAIXO</p>
 
-        <!-- Botão com Link do WhatsApp -->
-        <a href="https://wa.me/SEUNUMERO" target="_blank" class="link-button">
-            <div class="whatsapp-icon">
-                <i class="fa-brands fa-whatsapp"></i>
+        <!-- Botão de Compra com Logo do Nubank -->
+        <div class="link-button" onclick="realizarCompra()">
+            <div class="btn-icon">
+                <div class="nu-icon">nu</div>
             </div>
             <div class="button-text">
                 QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨
             </div>
-        </a>
+        </div>
+
+        <!-- Botão Painel de Administração (Protegido por senha: 10) -->
+        <div class="link-button" onclick="acessarPainel()">
+            <div class="btn-icon admin-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="button-text">
+                Painel de Administração
+            </div>
+        </div>
     </div>
 
     <!-- Rodapé -->
@@ -187,6 +218,26 @@
         </div>
         <p>Junte-se a notifycash_ hoje</p>
     </footer>
+
+    <!-- Scripts de Ação -->
+    <script>
+        function realizarCompra() {
+            // Ação ao clicar no botão de compra do Nubank (ex: abrir checkout, Pix ou redirecionar)
+            alert("A iniciar processo de aquisição via Nubank...");
+            // Exemplo de redirecionamento para o checkout ou WhatsApp de fechamento:
+            // window.location.href = "LINK_DO_SEU_CHECKOUT_OU_WHATSAPP";
+        }
+
+        function acessarPainel() {
+            let senha = prompt("Insira a senha do painel de administração:");
+            if (senha === "10") {
+                alert("Acesso autorizado! Bem-vindo ao painel.");
+                // window.location.href = "admin.html";
+            } else if (senha !== null) {
+                alert("Senha incorreta!");
+            }
+        }
+    </script>
 
 </body>
 </html>
