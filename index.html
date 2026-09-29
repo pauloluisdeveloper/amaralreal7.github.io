@@ -32,23 +32,29 @@
             height: 100vh;
             margin: 0;
             padding: 0;
-            background-color: #020202;
+            background-color: #000000;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: #ffffff;
             -webkit-font-smoothing: antialiased;
             overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none; /* Bloqueia o touch global e rolagem no fundo */
         }
 
         body {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 12px;
+        }
+
+        /* Permite touch interno apenas nos cards, modais e áreas interativas */
+        .interactive-touch {
+            touch-action: pan-y;
         }
 
         input, select, textarea {
             font-size: 16px !important;
+            touch-action: manipulation;
         }
 
         .custom-scroll::-webkit-scrollbar {
@@ -71,7 +77,7 @@
 </head>
 <body class="bg-black text-white select-none">
 
-    <!-- TOAST DE NOTIFICAÇÃO VIP FLUTUANTE (Sem poluir o meio da tela) -->
+    <!-- TOAST DE NOTIFICAÇÃO VIP FLUTUANTE -->
     <div id="vipToast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-neutral-900/95 backdrop-blur-xl border border-white/10 text-white px-5 py-3 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.9)] text-xs z-[99999] transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-3">
         <span id="toastEmoji" class="text-base">✨</span>
         <span id="toastMessage" class="font-semibold tracking-wide">Sistema Operacional Ativo</span>
@@ -94,31 +100,31 @@
         <div class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL (BIO LINK / HOME VIP) -->
-    <div class="w-full max-w-[400px] bg-neutral-950 vip-card-glow rounded-[32px] p-6 shadow-2xl relative flex flex-col gap-5 border border-neutral-800/80 mx-auto my-auto">
+    <!-- CONTAINER PRINCIPAL (BIO LINK / HOME VIP) - CRAVADO NO MEIO -->
+    <div class="w-full max-w-[390px] bg-neutral-950 vip-card-glow rounded-[32px] p-5 shadow-2xl relative flex flex-col gap-4 border border-neutral-800/80 mx-auto my-auto interactive-touch">
         
         <!-- Botão de Configuração / Admin -->
-        <button onclick="abrirAdminModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-neutral-900 border border-neutral-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:border-neutral-500 transition active:scale-95 cursor-pointer shadow-md">
+        <button onclick="abrirAdminModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700/60 flex items-center justify-center text-zinc-400 hover:text-white hover:border-neutral-500 transition active:scale-95 cursor-pointer shadow-md">
             <i class="fa-solid fa-gear text-xs"></i>
         </button>
 
         <!-- Perfil -->
         <div class="flex flex-col items-center w-full pt-1">
-            <div class="w-20 h-20 rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-500 to-transparent shadow-xl mb-3">
+            <div class="w-18 h-18 rounded-full p-[3px] bg-gradient-to-b from-white via-zinc-500 to-transparent shadow-xl mb-2.5">
                 <img id="homeProfileImg" src="https://i.postimg.cc/9F5WcckY/IMG-1942.jpg" alt="Perfil" class="w-full h-full object-cover rounded-full border-2 border-black">
             </div>
 
             <div class="flex items-center gap-1.5 mb-1">
                 <h1 id="homeProfileName" class="text-base font-extrabold tracking-tight text-white">amaralreal7</h1>
-                <span class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
+                <span id="homeBadgeIcon" class="text-white text-xs" title="Verificado"><i class="fa-solid fa-circle-check"></i></span>
             </div>
 
-            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 mb-2.5">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 mb-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span class="text-[10px] font-semibold text-zinc-300">Online • IA Neural Ativa</span>
             </div>
 
-            <p id="homeProfileBio" class="text-xs text-zinc-400 text-center font-medium px-2 mb-3">O maior chefe do 7</p>
+            <p id="homeProfileBio" class="text-xs text-zinc-400 text-center font-medium px-2 mb-2.5">O maior chefe do 7</p>
 
             <div class="flex items-center justify-center gap-2 text-[11px] font-medium text-zinc-300 bg-neutral-900/60 px-4 py-2 rounded-xl border border-neutral-800/80 w-full shadow-inner">
                 <i class="fa-solid fa-shield-halved text-white text-xs"></i>
@@ -127,11 +133,11 @@
         </div>
 
         <!-- Botões de Ação Principal -->
-        <div class="w-full flex flex-col gap-3">
-            <button onclick="abrirCheckout()" class="w-full h-13 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold px-4 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
+        <div class="w-full flex flex-col gap-2.5">
+            <button onclick="abrirCheckout()" class="w-full h-12 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold px-4 rounded-2xl flex items-center justify-between transition shadow-lg cursor-pointer">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center text-sm shadow">
-                        <i class="fa-solid fa-bolt"></i>
+                    <div class="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center text-xs shadow">
+                        <i id="btnIcon1" class="fa-solid fa-bolt"></i>
                     </div>
                     <div class="text-left">
                         <div class="flex items-center gap-1">
@@ -144,10 +150,10 @@
                 <i class="fa-solid fa-chevron-right text-xs text-zinc-400"></i>
             </button>
 
-            <button onclick="abrirSuporteIA()" class="w-full h-13 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-4 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
+            <button onclick="abrirSuporteIA()" class="w-full h-12 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.98] border border-neutral-800 text-white font-bold px-4 rounded-2xl flex items-center justify-between transition cursor-pointer shadow-md">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-neutral-950 border border-neutral-700 flex items-center justify-center text-sm text-purple-400 shadow">
-                        <i class="fa-solid fa-robot"></i>
+                    <div class="w-8 h-8 rounded-xl bg-neutral-950 border border-neutral-700 flex items-center justify-center text-xs text-purple-400 shadow">
+                        <i id="btnIcon2" class="fa-solid fa-robot"></i>
                     </div>
                     <div class="text-left">
                         <span class="text-xs font-bold block">Suporte Inteligente 24H</span>
@@ -163,175 +169,172 @@
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT VIP (PIX + FORMULÁRIO) -->
-    <div id="modalCheckout" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-6 shadow-2xl relative modal-enter max-h-[90vh] overflow-y-auto custom-scroll">
-            <button onclick="fecharCheckout()" class="absolute top-5 right-5 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
+    <!-- MODAL CHECKOUT VIP -->
+    <div id="modalCheckout" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4 interactive-touch">
+        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[390px] rounded-[28px] p-5 shadow-2xl relative modal-enter max-h-[85vh] overflow-y-auto custom-scroll">
+            <button onclick="fecharCheckout()" class="absolute top-4 right-4 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
             <!-- Passo 1: QR Code & Pix -->
-            <div id="checkoutStep1" class="space-y-4">
+            <div id="checkoutStep1" class="space-y-3.5">
                 <div class="text-center">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-base mx-auto mb-2">
+                    <div class="w-10 h-10 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-sm mx-auto mb-2">
                         <i class="fa-solid fa-qrcode text-purple-400"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white">Pagamento Pix • InfinitePay</h3>
                     <p class="text-xs text-zinc-400">Escaneie o QR Code ou copie o código</p>
                 </div>
 
-                <!-- Cronômetro -->
-                <div class="bg-neutral-900 border border-neutral-800 p-3 rounded-2xl text-center">
+                <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-2xl text-center">
                     <span class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wider block mb-0.5">Tempo Restante</span>
-                    <span id="pixTimer" class="text-lg font-extrabold text-emerald-400">04:59</span>
+                    <span id="pixTimer" class="text-base font-extrabold text-emerald-400">04:59</span>
                 </div>
 
-                <!-- QR Code Box -->
-                <div class="bg-white p-3 rounded-2xl w-40 h-40 mx-auto shadow-lg flex items-center justify-center">
-                    <img id="qrCodeImage" src="" alt="QR Code Pix" class="w-full h-full object-contain">
+                <div class="bg-white p-2.5 rounded-2xl w-36 h-36 mx-auto shadow-lg flex items-center justify-center">
+                    <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix..." alt="QR Code Pix" class="w-full h-full object-contain">
                 </div>
 
-                <div class="space-y-1.5">
+                <div class="space-y-1">
                     <label class="block text-[11px] text-zinc-400">Chave Pix Copia e Cola:</label>
-                    <input type="text" id="pixCopiaECola" readonly class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[11px] text-zinc-300 text-center select-all focus:outline-none">
-                    <button onclick="copiarPix()" class="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-md">
+                    <input type="text" id="pixCopiaECola" value="00020126580014br.gov.bcb.pix0136amaralreal7-infinitepay-vip-599" readonly class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-[11px] text-zinc-300 text-center select-all focus:outline-none">
+                    <button onclick="copiarPix()" class="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-md">
                         <i class="fa-solid fa-copy mr-1.5"></i> Copiar Código Pix
                     </button>
                 </div>
 
-                <button onclick="irParaPassoDados()" class="w-full h-12 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer mt-1">
+                <button onclick="irParaPassoDados()" class="w-full h-11 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">
                     Já Realizei o Pagamento <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </div>
 
-            <!-- Passo 2: Formulário do Cliente (Com Data Manual) -->
-            <div id="checkoutStep2" class="hidden space-y-3.5">
+            <!-- Passo 2: Formulário do Cliente -->
+            <div id="checkoutStep2" class="hidden space-y-3">
                 <div class="text-center mb-1">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-base mx-auto mb-2">
+                    <div class="w-10 h-10 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white text-sm mx-auto mb-2">
                         <i class="fa-solid fa-user-check text-emerald-400"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white">Confirmação de Dados</h3>
                     <p class="text-xs text-zinc-400">Preencha exatamente para liberação</p>
                 </div>
 
-                <div class="space-y-3">
+                <div class="space-y-2.5">
                     <div>
                         <label class="block text-[11px] font-medium text-zinc-300 mb-1">Nome Completo</label>
-                        <input type="text" id="clientName" placeholder="Ex: Lucas Gabriel" class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input type="text" id="clientName" placeholder="Ex: Lucas Gabriel" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                     </div>
                     <div>
                         <label class="block text-[11px] font-medium text-zinc-300 mb-1">Data de Nascimento (DD/MM/AAAA)</label>
-                        <input type="text" id="clientDob" placeholder="25/08/1998" maxlength="10" oninput="maskDate(this)" class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input type="text" id="clientDob" placeholder="25/08/1998" maxlength="10" oninput="maskDate(this)" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                     </div>
                     <div>
                         <label class="block text-[11px] font-medium text-zinc-300 mb-1">CPF</label>
-                        <input type="text" id="clientCpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input type="text" id="clientCpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                     </div>
                     <div>
                         <label class="block text-[11px] font-medium text-zinc-300 mb-1">E-mail para Entrega</label>
-                        <input type="email" id="clientEmail" placeholder="seuemail@dominio.com" class="w-full h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input type="email" id="clientEmail" placeholder="seuemail@dominio.com" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                     </div>
 
-                    <div class="flex gap-2 pt-2">
-                        <button onclick="voltarPassoPix()" class="w-1/3 h-11 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Voltar</button>
-                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-11 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">Enviar para Análise</button>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="voltarPassoPix()" class="w-1/3 h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Voltar</button>
+                        <button onclick="enviarPedidoCliente()" class="w-2/3 h-10 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow-lg cursor-pointer">Enviar para Análise</button>
                     </div>
                 </div>
             </div>
 
             <!-- Passo 3: Sucesso -->
-            <div id="checkoutStep3" class="hidden text-center py-6 space-y-4">
-                <div class="w-16 h-16 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
+            <div id="checkoutStep3" class="hidden text-center py-5 space-y-3">
+                <div class="w-14 h-14 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-lg shadow-inner">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <h3 class="text-base font-bold text-white">Pedido Enviado com Sucesso!</h3>
+                <h3 class="text-sm font-bold text-white">Pedido Enviado com Sucesso!</h3>
                 <p class="text-xs text-zinc-400 leading-relaxed px-2">Seus dados e comprovante estão sob monitoramento da IA e aguardam aprovação no painel administrativo.</p>
-                <button onclick="fecharCheckout()" class="w-full h-11 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800 mt-2">Concluir</button>
+                <button onclick="fecharCheckout()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl text-xs transition cursor-pointer border border-neutral-800 mt-2">Concluir</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL SUPORTE COM IA NEURAL ATIVA -->
-    <div id="modalSuporte" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[400px] rounded-[28px] p-5 shadow-2xl relative h-[420px] flex flex-col justify-between modal-enter">
-            <div class="flex items-center justify-between border-b border-neutral-800/80 pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xs">
+    <!-- MODAL SUPORTE COM IA -->
+    <div id="modalSuporte" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4 interactive-touch">
+        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[390px] rounded-[28px] p-4 shadow-2xl relative h-[400px] flex flex-col justify-between modal-enter">
+            <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xs">
                         <i class="fa-solid fa-robot"></i>
                     </div>
                     <div>
                         <h4 class="text-xs font-bold text-white">IA Neural-7 (Ativa)</h4>
-                        <span class="text-[9px] text-emerald-400 font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online em tempo real</span>
+                        <span class="text-[9px] text-emerald-400 font-medium">Online em tempo real</span>
                     </div>
                 </div>
-                <button onclick="fecharSuporteIA()" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
+                <button onclick="fecharSuporteIA()" class="text-zinc-400 hover:text-white w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Chat Container -->
-            <div id="chatMessages" class="flex-1 overflow-y-auto custom-scroll my-3 space-y-2.5 pr-1 text-xs">
-                <div class="bg-neutral-900 border border-neutral-800/80 p-3 rounded-2xl text-zinc-300 leading-relaxed">
-                    🤖 Olá! Sou a IA Neural-7 programada para gerenciar este sistema de vendas. Posso tirar dúvidas sobre pagamentos, status de entrega ou checar dados para você. Como posso ajudar?
+            <div id="chatMessages" class="flex-1 overflow-y-auto custom-scroll my-2.5 space-y-2 pr-1 text-xs">
+                <div class="bg-neutral-900 border border-neutral-800/80 p-2.5 rounded-2xl text-zinc-300 leading-relaxed">
+                    🤖 Olá! Sou a IA Neural-7. Posso tirar dúvidas sobre pagamentos e status de entrega. Como posso ajudar?
                 </div>
             </div>
 
-            <div class="border-t border-neutral-800/80 pt-3 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Pergunte algo para a IA..." class="flex-1 h-11 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 text-xs text-white focus:outline-none focus:border-purple-500" onkeypress="if(event.key==='Enter') enviarMensagemIA()">
-                <button onclick="enviarMensagemIA()" class="h-11 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow">Enviar</button>
+            <div class="border-t border-neutral-800/80 pt-2.5 flex gap-2">
+                <input type="text" id="chatInput" placeholder="Pergunte algo para a IA..." class="flex-1 h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500" onkeypress="if(event.key==='Enter') enviarMensagemIA()">
+                <button onclick="enviarMensagemIA()" class="h-10 px-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE ADMINISTRAÇÃO & DASHBOARD SUPREMA -->
-    <div id="modalAdmin" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-neutral-800 w-full max-w-[430px] rounded-[30px] p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden modal-enter transition-all duration-300">
+    <!-- MODAL DE ADMINISTRAÇÃO & DASHBOARD - TRAVADO E CENTRALIZADO -->
+    <div id="modalAdmin" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4 interactive-touch">
+        <div id="adminPanelCard" class="bg-neutral-950 border border-neutral-800 w-full max-w-[410px] rounded-[30px] p-5 shadow-2xl relative flex flex-col max-h-[88vh] overflow-hidden modal-enter transition-all duration-300">
             
-            <button onclick="fecharAdminModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer z-50">
+            <button onclick="fecharAdminModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-xs cursor-pointer z-50">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- TELA DE LOGIN (Senha Estritamente Numérica com Feedback Emoticon) -->
-            <div id="adminLoginBox" class="py-8 text-center flex flex-col items-center justify-center">
-                <div class="w-14 h-14 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center text-white text-lg mx-auto mb-3 shadow-inner">
+            <!-- TELA DE LOGIN NUMÉRICA -->
+            <div id="adminLoginBox" class="py-6 text-center flex flex-col items-center justify-center">
+                <div class="w-12 h-12 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center text-white text-base mx-auto mb-3 shadow-inner">
                     <i class="fa-solid fa-lock text-purple-400"></i>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1">Painel Administrativo</h3>
-                <p class="text-xs text-zinc-400 mb-6 font-medium">Digite sua senha numérica exclusiva</p>
+                <h3 class="text-sm font-bold text-white mb-1">Painel Administrativo</h3>
+                <p class="text-xs text-zinc-400 mb-5 font-medium">Digite sua senha numérica exclusiva</p>
                 
-                <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[240px] h-12 bg-neutral-900 border border-neutral-800 rounded-2xl px-4 text-white text-center tracking-[0.5em] text-lg mb-2 focus:outline-none focus:border-purple-500 transition">
-                <div id="loginErrorMsg" class="text-xs font-semibold text-rose-400 mb-4 hidden h-5"></div>
+                <input type="password" id="adminPasswordInput" inputmode="numeric" pattern="[0-9]*" placeholder="••••" class="w-full max-w-[220px] h-11 bg-neutral-900 border border-neutral-800 rounded-2xl px-4 text-white text-center tracking-[0.5em] text-base mb-2 focus:outline-none focus:border-purple-500 transition">
+                <div id="loginErrorMsg" class="text-xs font-semibold text-rose-400 mb-3 hidden h-4"></div>
                 
-                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[240px] h-12 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-2xl text-xs transition shadow-lg cursor-pointer">Acessar Sistema</button>
+                <button type="button" onclick="tentarLoginAdmin()" class="w-full max-w-[220px] h-11 bg-white hover:bg-zinc-200 active:scale-[0.98] text-black font-extrabold rounded-2xl text-xs transition shadow-lg cursor-pointer">Acessar Sistema</button>
             </div>
 
-            <!-- DASHBOARD COMPACTA E 100% FUNCIONAL -->
+            <!-- DASHBOARD SUPREMA COM ABAS E REFRESH -->
             <div id="adminDashboard" class="hidden flex flex-col h-full">
                 <!-- Cabeçalho -->
-                <div class="flex items-center justify-between border-b border-neutral-800/80 pb-3 mb-3 shrink-0 pr-8">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center justify-center text-white text-xs">
+                <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2.5 mb-2.5 shrink-0 pr-8">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center justify-center text-white text-xs">
                             <i class="fa-solid fa-chart-line text-emerald-400"></i>
                         </div>
                         <div>
                             <h3 class="text-xs font-bold text-white">Dashboard Neural-7</h3>
-                            <span class="text-[9px] text-emerald-400 font-medium">🟢 Monitoramento em tempo real</span>
+                            <span class="text-[9px] text-emerald-400 font-medium">🟢 Monitoramento ativo</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 4 Abas Uniformes -->
-                <div class="grid grid-cols-4 gap-1.5 mb-3 shrink-0">
-                    <button onclick="mudarTabAdmin(0)" id="tabBtn0" class="h-9 bg-white text-black font-bold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow">
+                <div class="grid grid-cols-4 gap-1.5 mb-2.5 shrink-0">
+                    <button onclick="mudarTabAdmin(0)" id="tabBtn0" class="h-8 bg-white text-black font-bold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow">
                         <i class="fa-solid fa-bag-shopping"></i> Vendas
                     </button>
-                    <button onclick="mudarTabAdmin(1)" id="tabBtn1" class="h-9 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
+                    <button onclick="mudarTabAdmin(1)" id="tabBtn1" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
                         <i class="fa-solid fa-clock"></i> Pendentes
                     </button>
-                    <button onclick="mudarTabAdmin(2)" id="tabBtn2" class="h-9 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
+                    <button onclick="mudarTabAdmin(2)" id="tabBtn2" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
                         <i class="fa-solid fa-users"></i> IPs
                     </button>
-                    <button onclick="mudarTabAdmin(3)" id="tabBtn3" class="h-9 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
+                    <button onclick="mudarTabAdmin(3)" id="tabBtn3" class="h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800">
                         <i class="fa-solid fa-sliders"></i> Ajustes
                     </button>
                 </div>
@@ -340,83 +343,91 @@
                 <div id="adminCarousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-3 flex-1 items-stretch py-1" onscroll="sincronizarScrollTab()">
                     
                     <!-- Aba 0: Vendas Aprovadas & Faturamento -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
+                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3.5 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
-                            <div class="flex items-center justify-between mb-2.5">
+                            <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs font-bold text-white uppercase tracking-wider">Histórico de Vendas</span>
-                                <button onclick="renderizarAdminData()" class="w-7 h-7 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-lg text-xs hover:text-white"><i class="fa-solid fa-rotate"></i></button>
+                                <button onclick="renderizarAdminData()" class="px-2.5 py-1 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-lg text-[10px] hover:text-white flex items-center gap-1">
+                                    <i class="fa-solid fa-rotate text-[9px]"></i> Atualizar
+                                </button>
                             </div>
-                            <div class="grid grid-cols-2 gap-2 mb-3">
-                                <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl">
+                            <div class="grid grid-cols-2 gap-2 mb-2.5">
+                                <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl">
                                     <span class="text-[10px] text-zinc-400 block">Total Aprovado</span>
                                     <span id="statVendasCount" class="text-base font-extrabold text-emerald-400">0</span>
                                 </div>
-                                <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl">
+                                <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl">
                                     <span class="text-[10px] text-zinc-400 block">Faturamento</span>
                                     <span id="statFaturamento" class="text-base font-extrabold text-purple-400">R$ 0,00</span>
                                 </div>
                             </div>
-                            <div id="listaVendasAprovadas" class="space-y-2 max-h-[140px] overflow-y-auto custom-scroll pr-1"></div>
+                            <div id="listaVendasAprovadas" class="space-y-2 max-h-[130px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <button onclick="limparVendasAprovadas()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Histórico</button>
+                        <button onclick="limparVendasAprovadas()" class="w-full h-9 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Histórico</button>
                     </div>
 
                     <!-- Aba 1: Canal de Aprovação -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
+                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3.5 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
-                            <div class="flex items-center justify-between mb-2.5">
-                                <span class="text-xs font-bold text-white uppercase tracking-wider">Canal de Aprovação Pix</span>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-white uppercase tracking-wider">Aprovação Pix</span>
                                 <span id="statPendentesCount" class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded-full text-[10px] font-bold">0 Pendentes</span>
                             </div>
-                            <div id="listaPedidosPendentes" class="space-y-2 max-h-[170px] overflow-y-auto custom-scroll pr-1"></div>
+                            <div id="listaPedidosPendentes" class="space-y-2 max-h-[160px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <span class="text-[10px] text-zinc-500 text-center block pt-1">Aprovar libera o acesso e soma nas vendas oficiais.</span>
+                        <span class="text-[10px] text-zinc-500 text-center block pt-1">Aprovar libera o acesso e soma nas vendas.</span>
                     </div>
 
-                    <!-- Aba 2: Logs de IP em Tempo Real -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
+                    <!-- Aba 2: Logs de IP -->
+                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3.5 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
                         <div>
-                            <div class="flex items-center justify-between mb-2.5">
+                            <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs font-bold text-white uppercase tracking-wider">Rastreamento de IP</span>
-                                <span id="statIpCount" class="text-xs font-bold text-zinc-400">0 IPs</span>
+                                <button onclick="renderizarAdminData()" class="px-2.5 py-1 bg-neutral-900 border border-neutral-700 text-zinc-300 rounded-lg text-[10px] hover:text-white flex items-center gap-1">
+                                    <i class="fa-solid fa-rotate text-[9px]"></i> Atualizar
+                                </button>
                             </div>
-                            <div id="listaIpsContainer" class="space-y-2 max-h-[160px] overflow-y-auto custom-scroll pr-1"></div>
+                            <div id="listaIpsContainer" class="space-y-2 max-h-[150px] overflow-y-auto custom-scroll pr-1"></div>
                         </div>
-                        <button onclick="limparIps()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Logs</button>
+                        <button onclick="limparIps()" class="w-full h-9 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition border border-neutral-800 mt-2">Limpar Logs</button>
                     </div>
 
-                    <!-- Aba 3: Ajustes -->
-                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-4 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
-                        <div class="space-y-2.5">
-                            <span class="text-xs font-bold text-white uppercase tracking-wider block mb-1">Configurações do Bio Link</span>
+                    <!-- Aba 3: Ajustes e Customizações -->
+                    <div class="w-full min-w-full shrink-0 snap-center bg-neutral-900/40 border border-neutral-800/80 p-3.5 rounded-2xl flex flex-col justify-between overflow-y-auto custom-scroll">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-white uppercase tracking-wider block mb-1">Customização do Sistema</span>
                             <div>
-                                <label class="block text-[10px] text-zinc-400 mb-1">URL da Foto de Perfil</label>
-                                <input type="text" id="configImg" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <label class="block text-[10px] text-zinc-400 mb-0.5">Ícone Botão 1 (FontAwesome)</label>
+                                <input type="text" id="configIcon1" placeholder="fa-solid fa-bolt" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-zinc-400 mb-1">Nome do Perfil</label>
-                                <input type="text" id="configName" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <label class="block text-[10px] text-zinc-400 mb-0.5">Ícone Botão 2 (FontAwesome)</label>
+                                <input type="text" id="configIcon2" placeholder="fa-solid fa-robot" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-zinc-400 mb-1">Biografia</label>
-                                <input type="text" id="configBio" class="w-full h-10 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <label class="block text-[10px] text-zinc-400 mb-0.5">Selo / Ícone do Perfil</label>
+                                <input type="text" id="configBadge" placeholder="fa-solid fa-circle-check" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-zinc-400 mb-0.5">Cor do Painel Admin (Hex ou RGB)</label>
+                                <input type="text" id="configPanelColor" placeholder="#0a0a0a" class="w-full h-9 bg-neutral-900 border border-neutral-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                         </div>
-                        <button onclick="salvarConfigAdmin()" class="w-full h-10 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow cursor-pointer mt-2">Salvar Configurações</button>
+                        <button onclick="salvarConfigAdminCustom()" class="w-full h-9 bg-white hover:bg-zinc-200 text-black font-extrabold rounded-xl text-xs transition shadow cursor-pointer mt-2">Salvar Customizações</button>
                     </div>
 
                 </div>
 
-                <div class="pt-3 border-t border-neutral-800/80 shrink-0 mt-2">
-                    <button type="button" onclick="fecharAdminModal()" class="w-full h-10 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Fechar Painel</button>
+                <div class="pt-2.5 border-t border-neutral-800/80 shrink-0 mt-2">
+                    <button type="button" onclick="fecharAdminModal()" class="w-full h-9 bg-neutral-900 hover:bg-neutral-800 text-zinc-300 font-semibold rounded-xl text-xs transition cursor-pointer border border-neutral-800">Fechar Painel</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPTS DO SISTEMA OPERACIONAL -->
+    <!-- SCRIPTS -->
     <script>
-        const SENHA_MESTRE = "7777"; // Senha numérica exclusiva
+        const SENHA_MESTRE = "7777";
 
         let db = {
             profile: {
@@ -424,7 +435,11 @@
                 bio: "O maior chefe do 7",
                 img: "https://i.postimg.cc/9F5WcckY/IMG-1942.jpg",
                 security: "100% Seguro • Entrega por e-mail",
-                footer: "amaralreal7.system"
+                footer: "amaralreal7.system",
+                icon1: "fa-solid fa-bolt",
+                icon2: "fa-solid fa-robot",
+                badgeIcon: "fa-solid fa-circle-check",
+                panelColor: "#0a0a0a"
             },
             vendasAprovadas: [],
             pedidosPendentes: [],
@@ -452,6 +467,11 @@
             document.getElementById('homeProfileBio').innerText = db.profile.bio;
             document.getElementById('homeSecurityText').innerText = db.profile.security;
             document.getElementById('homeFooter').innerText = db.profile.footer;
+
+            document.getElementById('btnIcon1').className = db.profile.icon1 || "fa-solid fa-bolt";
+            document.getElementById('btnIcon2').className = db.profile.icon2 || "fa-solid fa-robot";
+            document.getElementById('homeBadgeIcon').innerHTML = `<i class="${db.profile.badgeIcon || 'fa-solid fa-circle-check'}"></i>`;
+            document.getElementById('adminPanelCard').style.backgroundColor = db.profile.panelColor || "#0a0a0a";
         }
 
         function showToast(msg, emoji = "✨") {
@@ -466,7 +486,6 @@
             }, 3200);
         }
 
-        // Rastreamento de IP Real
         async function capturarIpVisitante() {
             try {
                 let res = await fetch('https://api.ipify.org?format=json');
@@ -486,61 +505,59 @@
                         time: agora
                     });
                 }
-                if (db.visitorIps.length > 30) db.visitorIps.pop();
                 salvarDb();
             } catch(e) {}
         }
 
-        // Notificação Apple/Nubank simulada
         function iniciarNotificacoesApple() {
-            setTimeout(() => {
-                const el = document.getElementById('appleNotification');
-                el.classList.remove('opacity-0', 'pointer-events-none');
-                el.classList.add('opacity-100');
+            setInterval(() => {
+                const notif = document.getElementById('appleNotification');
+                notif.classList.remove('opacity-0', 'pointer-events-none');
+                notif.classList.add('opacity-100');
                 setTimeout(() => {
-                    el.classList.remove('opacity-100');
-                    el.classList.add('opacity-0', 'pointer-events-none');
+                    notif.classList.remove('opacity-100');
+                    notif.classList.add('opacity-0', 'pointer-events-none');
                 }, 4000);
-            }, 5000);
+            }, 25000);
         }
 
-        // Checkout & Cronômetro
-        let pixTimerInterval = null;
+        let timerInterval = null;
         function abrirCheckout() {
+            document.getElementById('modalCheckout').classList.remove('hidden');
             document.getElementById('checkoutStep1').classList.remove('hidden');
             document.getElementById('checkoutStep2').classList.add('hidden');
             document.getElementById('checkoutStep3').classList.add('hidden');
-            document.getElementById('modalCheckout').classList.remove('hidden');
-
-            let pixKey = "00020126580014br.gov.bcb.pix0136amaralreal7-infinitepay-599-auth5204000053039865802BR5910amaralreal6009Sao Paulo6304C7B8";
-            document.getElementById('qrCodeImage').src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(pixKey);
-            document.getElementById('pixCopiaECola').value = pixKey;
-
-            // Iniciar contagem regressiva
-            clearInterval(pixTimerInterval);
-            let tempo = 300;
-            const timerEl = document.getElementById('pixTimer');
-            pixTimerInterval = setInterval(() => {
-                let m = Math.floor(tempo / 60);
-                let s = tempo % 60;
-                timerEl.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-                if (--tempo < 0) {
-                    clearInterval(pixTimerInterval);
-                    timerEl.innerText = "Expirado";
-                }
-            }, 1000);
+            iniciarCronometroPix(300);
         }
 
         function fecharCheckout() {
             document.getElementById('modalCheckout').classList.add('hidden');
-            clearInterval(pixTimerInterval);
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function iniciarCronometroPix(duracao) {
+            if (timerInterval) clearInterval(timerInterval);
+            let timer = duracao;
+            const display = document.getElementById('pixTimer');
+            timerInterval = setInterval(() => {
+                let minutos = parseInt(timer / 60, 10);
+                let segundos = parseInt(timer % 60, 10);
+                minutos = minutos < 10 ? "0" + minutos : minutos;
+                segundos = segundos < 10 ? "0" + segundos : segundos;
+                display.textContent = minutos + ":" + segundos;
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    display.textContent = "Expirado";
+                }
+            }, 1000);
         }
 
         function copiarPix() {
             const input = document.getElementById('pixCopiaECola');
             input.select();
+            input.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(input.value);
-            showToast("Chave Pix copiada com sucesso!", "📋");
+            showToast("Código Pix copiado com sucesso!", "📋");
         }
 
         function irParaPassoDados() {
@@ -557,9 +574,9 @@
             let v = input.value.replace(/\D/g, "");
             if (v.length > 8) v = v.slice(0, 8);
             if (v.length >= 5) {
-                v = v.replace(/(\d{2})(\d{2})(\d{1,4})/, "$1/$2/$3");
+                v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, "$1/$2/$3");
             } else if (v.length >= 3) {
-                v = v.replace(/(\d{2})(\d{1,2})/, "$1/$2");
+                v = v.replace(/^(\d{2})(\d{0,2})/, "$1/$2");
             }
             input.value = v;
         }
@@ -574,35 +591,34 @@
         }
 
         function enviarPedidoCliente() {
-            let name = document.getElementById('clientName').value.trim();
-            let dob = document.getElementById('clientDob').value.trim();
-            let cpf = document.getElementById('clientCpf').value.trim();
-            let email = document.getElementById('clientEmail').value.trim();
+            const name = document.getElementById('clientName').value.trim();
+            const dob = document.getElementById('clientDob').value.trim();
+            const cpf = document.getElementById('clientCpf').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
 
-            if (!name || dob.length < 10 || cpf.length < 14 || !email) {
+            if (!name || !dob || !cpf || !email) {
                 showToast("Preencha todos os campos corretamente!", "⚠️");
                 return;
             }
 
-            let novoPedido = {
-                id: 'PED_' + Math.floor(Math.random() * 89999 + 10000),
+            const novoPedido = {
+                id: 'VIP_' + Math.floor(Math.random() * 8999 + 1000),
                 name: name,
                 dob: dob,
                 cpf: cpf,
                 email: email,
-                value: "R$ 5,99",
+                valor: 'R$ 5,99',
                 time: new Date().toLocaleTimeString('pt-BR')
             };
 
-            if (!Array.isArray(db.pedidosPendentes)) db.pedidosPendentes = [];
             db.pedidosPendentes.unshift(novoPedido);
             salvarDb();
 
             document.getElementById('checkoutStep2').classList.add('hidden');
             document.getElementById('checkoutStep3').classList.remove('hidden');
+            showToast("Pedido enviado para análise!", "🚀");
         }
 
-        // Suporte com IA Neural Ativa
         function abrirSuporteIA() {
             document.getElementById('modalSuporte').classList.remove('hidden');
         }
@@ -613,31 +629,31 @@
 
         function enviarMensagemIA() {
             const input = document.getElementById('chatInput');
-            let txt = input.value.trim();
+            const txt = input.value.trim();
             if (!txt) return;
 
             const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="bg-purple-950/40 border border-purple-900/50 p-2.5 rounded-2xl text-white ml-6 text-right">${txt}</div>`;
-            input.value = "";
+            chat.innerHTML += `<div class="bg-purple-950/60 border border-purple-800/50 p-2.5 rounded-2xl text-white ml-6 text-right">${txt}</div>`;
+            input.value = '';
             chat.scrollTop = chat.scrollHeight;
 
             setTimeout(() => {
-                let resposta = "🤖 Analisei sua mensagem através da IA Neural-7. O sistema InfinitePay está operacional e as entregas ocorrem automaticamente após a aprovação no painel.";
-                if (txt.toLowerCase().includes("venda") || txt.toLowerCase().includes("aprovar")) {
-                    resposta = `🤖 Atualmente existem ${db.pedidosPendentes.length} pagamento(s) pendente(s) aguardando liberação na aba de aprovação.`;
+                let resposta = "Entendido! Nossos servidores InfinitePay monitoram os pagamentos em tempo real. Assim que aprovado, seu acesso é liberado.";
+                const lower = txt.toLowerCase();
+                if (lower.includes('pagamento') || lower.includes('pix')) {
+                    resposta = "O pagamento de R$ 5,99 via Pix Copia e Cola é processado instantaneamente pela InfinitePay.";
                 }
-                chat.innerHTML += `<div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-2xl text-zinc-300 mr-6">${resposta}</div>`;
+                chat.innerHTML += `<div class="bg-neutral-900 border border-neutral-800/80 p-2.5 rounded-2xl text-zinc-300 leading-relaxed mr-6">🤖 ${resposta}</div>`;
                 chat.scrollTop = chat.scrollHeight;
-            }, 700);
+            }, 800);
         }
 
-        // Área Administrativa & Validação por Senha Numérica
         function abrirAdminModal() {
             document.getElementById('modalAdmin').classList.remove('hidden');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('loginErrorMsg').classList.add('hidden');
             document.getElementById('adminLoginBox').classList.remove('hidden');
             document.getElementById('adminDashboard').classList.add('hidden');
-            document.getElementById('adminPasswordInput').value = "";
-            document.getElementById('loginErrorMsg').classList.add('hidden');
         }
 
         function fecharAdminModal() {
@@ -645,177 +661,154 @@
         }
 
         function tentarLoginAdmin() {
-            const senhaInput = document.getElementById('adminPasswordInput').value.trim();
-            const errDiv = document.getElementById('loginErrorMsg');
-
-            if (!senhaInput) {
-                errDiv.innerHTML = "⚠️ Digite a senha antes de entrar!";
-                errDiv.classList.remove('hidden');
-                showToast("Campo de senha vazio!", "⚠️");
-                return;
+            const senha = document.getElementById('adminPasswordInput').value;
+            const err = document.getElementById('loginErrorMsg');
+            if (senha === SENHA_MESTRE) {
+                document.getElementById('adminLoginBox').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                renderizarAdminData();
+                showToast("Painel Desbloqueado!", "🔓");
+            } else {
+                err.innerText = "Senha incorreta!";
+                err.classList.remove('hidden');
             }
+        }
 
-            if (!/^\d+$/.test(senhaInput)) {
-                errDiv.innerHTML = "❌ A senha deve conter apenas números!";
-                errDiv.classList.remove('hidden');
-                showToast("Apenas números são permitidos!", "❌");
-                return;
+        function mudarTabAdmin(index) {
+            const carousel = document.getElementById('adminCarousel');
+            carousel.scrollTo({ left: index * carousel.clientWidth, behavior: 'smooth' });
+            atualizarBotoesTab(index);
+        }
+
+        function sincronizarScrollTab() {
+            const carousel = document.getElementById('adminCarousel');
+            const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+            atualizarBotoesTab(index);
+        }
+
+        function atualizarBotoesTab(activeIdx) {
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`tabBtn${i}`);
+                if (i === activeIdx) {
+                    btn.className = "h-8 bg-white text-black font-bold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow";
+                } else {
+                    btn.className = "h-8 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800";
+                }
             }
-
-            if (senhaInput !== SENHA_MESTRE) {
-                errDiv.innerHTML = "🔒 Senha incorreta. Tente novamente!";
-                errDiv.classList.remove('hidden');
-                showToast("Senha incorreta!", "🔒");
-                return;
-            }
-
-            errDiv.classList.add('hidden');
-            document.getElementById('adminLoginBox').classList.add('hidden');
-            document.getElementById('adminDashboard').classList.remove('hidden');
-            renderizarAdminData();
-            showToast("Acesso administrativo autorizado!", "🔓");
         }
 
         function renderizarAdminData() {
-            const aprovadas = db.vendasAprovadas || [];
-            const pendentes = db.pedidosPendentes || [];
-            const ips = db.visitorIps || [];
+            const listaVendas = document.getElementById('listaVendasAprovadas');
+            listaVendas.innerHTML = '';
+            let faturamentoTotal = 0;
 
-            document.getElementById('statVendasCount').innerText = aprovadas.length;
-            
-            // Calcular faturamento total (R$ 5,99 por venda)
-            let faturamentoTotal = aprovadas.length * 5.99;
-            document.getElementById('statFaturamento').innerText = faturamentoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            
-            document.getElementById('statPendentesCount').innerText = `${pendentes.length} Pendentes`;
-            document.getElementById('statIpCount').innerText = `${ips.length} IPs`;
-
-            // Lista de Vendas
-            const listaV = document.getElementById('listaVendasAprovadas');
-            if (aprovadas.length === 0) {
-                listaV.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-4">Nenhuma venda registrada ainda.</p>`;
+            if (db.vendasAprovadas.length === 0) {
+                listaVendas.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-4">Nenhuma venda aprovada.</p>`;
             } else {
-                listaV.innerHTML = aprovadas.map(v => `
-                    <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
-                        <div>
-                            <span class="font-bold text-white block">${v.name}</span>
-                            <span class="text-[10px] text-zinc-400">CPF: ${v.cpf} • ${v.time}</span>
+                db.vendasAprovadas.forEach(v => {
+                    faturamentoTotal += 5.99;
+                    listaVendas.innerHTML += `
+                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl flex items-center justify-between text-[11px]">
+                            <div>
+                                <span class="font-bold text-white block">${v.name}</span>
+                                <span class="text-[9px] text-zinc-400">${v.email} • ${v.time}</span>
+                            </div>
+                            <span class="text-emerald-400 font-extrabold">+R$ 5,99</span>
                         </div>
-                        <span class="text-xs font-extrabold text-emerald-400">${v.value}</span>
-                    </div>
-                `).join('');
+                    `;
+                });
             }
 
-            // Lista de Pendentes (Canal de Aprovação)
-            const listaP = document.getElementById('listaPedidosPendentes');
-            if (pendentes.length === 0) {
-                listaP.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-6">Nenhum pagamento pendente no momento.</p>`;
+            document.getElementById('statVendasCount').innerText = db.vendasAprovadas.length;
+            document.getElementById('statFaturamento').innerText = `R$ ${faturamentoTotal.toFixed(2).replace('.', ',')}`;
+
+            const listaPendentes = document.getElementById('listaPedidosPendentes');
+            listaPendentes.innerHTML = '';
+            document.getElementById('statPendentesCount').innerText = `${db.pedidosPendentes.length} Pendentes`;
+
+            if (db.pedidosPendentes.length === 0) {
+                listaPendentes.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-4">Nenhum pedido pendente.</p>`;
             } else {
-                listaP.innerHTML = pendentes.map((p, idx) => `
-                    <div class="bg-neutral-900 border border-neutral-800 p-3 rounded-xl flex flex-col gap-2 text-xs">
-                        <div>
-                            <span class="font-bold text-white block">${p.name}</span>
-                            <span class="text-[10px] text-zinc-400">CPF: ${p.cpf} | Nasc: ${p.dob}</span>
-                            <span class="text-[10px] text-zinc-500 block">E-mail: ${p.email} • ${p.time}</span>
+                db.pedidosPendentes.forEach((p, idx) => {
+                    listaPendentes.innerHTML += `
+                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl space-y-1.5 text-[11px]">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-white">${p.name}</span>
+                                <span class="text-amber-400 font-semibold">${p.valor}</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-400">CPF: ${p.cpf} | ${p.email}</div>
+                            <div class="flex gap-2 pt-1">
+                                <button onclick="aprovarPedido(${idx})" class="flex-1 h-7 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-[10px] transition cursor-pointer">Aprovar</button>
+                                <button onclick="rejeitarPedido(${idx})" class="flex-1 h-7 bg-neutral-800 hover:bg-neutral-700 text-zinc-300 font-semibold rounded-lg text-[10px] transition cursor-pointer">Rejeitar</button>
+                            </div>
                         </div>
-                        <div class="flex gap-2 pt-1 border-t border-neutral-800">
-                            <button onclick="aprovarPedido(${idx})" class="flex-1 h-7 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 font-bold rounded-lg text-[10px] transition border border-emerald-800 cursor-pointer">Aprovar Venda</button>
-                            <button onclick="rejeitarPedido(${idx})" class="flex-1 h-7 bg-rose-950 hover:bg-rose-900 text-rose-300 font-bold rounded-lg text-[10px] transition border border-rose-800 cursor-pointer">Recusar</button>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                });
             }
 
-            // Lista de IPs
             const listaIps = document.getElementById('listaIpsContainer');
-            if (ips.length === 0) {
-                listaIps.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-4">Nenhum IP capturado.</p>`;
+            listaIps.innerHTML = '';
+            if (db.visitorIps.length === 0) {
+                listaIps.innerHTML = `<p class="text-[11px] text-zinc-500 text-center py-4">Nenhum IP registrado.</p>`;
             } else {
-                listaIps.innerHTML = ips.map(i => `
-                    <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
-                        <div>
-                            <span class="font-bold text-white block">${i.ip}</span>
-                            <span class="text-[10px] text-zinc-400">${i.device} • ${i.time}</span>
+                db.visitorIps.forEach(ip => {
+                    listaIps.innerHTML += `
+                        <div class="bg-neutral-900 border border-neutral-800 p-2 rounded-xl flex items-center justify-between text-[11px]">
+                            <div>
+                                <span class="font-bold text-white block">${ip.ip}</span>
+                                <span class="text-[9px] text-zinc-400">${ip.device} • ${ip.time}</span>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 bg-neutral-800 text-zinc-300 rounded-lg">Ativo</span>
                         </div>
-                        <span class="text-[10px] bg-neutral-950 text-zinc-300 px-2 py-0.5 rounded border border-neutral-800">${i.id}</span>
-                    </div>
-                `).join('');
+                    `;
+                });
             }
 
-            // Preencher aba de Ajustes
-            document.getElementById('configImg').value = db.profile.img;
-            document.getElementById('configName').value = db.profile.name;
-            document.getElementById('configBio').value = db.profile.bio;
+            document.getElementById('configIcon1').value = db.profile.icon1 || "";
+            document.getElementById('configIcon2').value = db.profile.icon2 || "";
+            document.getElementById('configBadge').value = db.profile.badgeIcon || "";
+            document.getElementById('configPanelColor').value = db.profile.panelColor || "";
         }
 
-        function aprovarPedido(idx) {
-            let pedido = db.pedidosPendentes.splice(idx, 1)[0];
-            if (!Array.isArray(db.vendasAprovadas)) db.vendasAprovadas = [];
+        function aprovarPedido(index) {
+            const pedido = db.pedidosPendentes.splice(index, 1)[0];
             db.vendasAprovadas.unshift(pedido);
             salvarDb();
             renderizarAdminData();
             showToast(`Venda de ${pedido.name} aprovada!`, "✅");
         }
 
-        function rejeitarPedido(idx) {
-            db.pedidosPendentes.splice(idx, 1);
+        function rejeitarPedido(index) {
+            db.pedidosPendentes.splice(index, 1);
             salvarDb();
             renderizarAdminData();
-            showToast("Pagamento recusado.", "❌");
+            showToast("Pedido rejeitado.", "🗑️");
         }
 
         function limparVendasAprovadas() {
-            if (confirm("Deseja limpar todo o histórico de vendas aprovadas?")) {
+            if (confirm("Limpar histórico de vendas?")) {
                 db.vendasAprovadas = [];
                 salvarDb();
                 renderizarAdminData();
-                showToast("Histórico limpo!", "🗑️");
+                showToast("Histórico limpo.", "🧹");
             }
         }
 
         function limparIps() {
-            if (confirm("Deseja limpar os registros de IP?")) {
-                db.visitorIps = [];
-                salvarDb();
-                renderizarAdminData();
-                showToast("Logs de IP limpos!", "🗑️");
-            }
-        }
-
-        function salvarConfigAdmin() {
-            db.profile.img = document.getElementById('configImg').value.trim() || "https://i.postimg.cc/9F5WcckY/IMG-1942.jpg";
-            db.profile.name = document.getElementById('configName').value.trim() || "amaralreal7";
-            db.profile.bio = document.getElementById('configBio').value.trim() || "O maior chefe do 7";
+            db.visitorIps = [];
             salvarDb();
             renderizarAdminData();
-            showToast("Configurações atualizadas com sucesso!", "💾");
+            showToast("Logs limpos.", "🧹");
         }
 
-        // Navegação por Abas do Admin
-        function mudarTabAdmin(indice) {
-            const carousel = document.getElementById('adminCarousel');
-            const w = carousel.clientWidth;
-            carousel.scrollTo({ left: w * indice, behavior: 'smooth' });
-            destacarBtnTab(indice);
-        }
-
-        function sincronizarScrollTab() {
-            const carousel = document.getElementById('adminCarousel');
-            const w = carousel.clientWidth;
-            if (w === 0) return;
-            const idx = Math.round(carousel.scrollLeft / w);
-            destacarBtnTab(idx);
-        }
-
-        function destacarBtnTab(indice) {
-            for (let i = 0; i <= 3; i++) {
-                let btn = document.getElementById(`tabBtn${i}`);
-                if (i === indice) {
-                    btn.className = "h-9 bg-white text-black font-bold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 shadow";
-                } else {
-                    btn.className = "h-9 bg-neutral-900 text-zinc-400 hover:text-white font-semibold rounded-xl text-[10px] transition cursor-pointer flex items-center justify-center gap-1 border border-neutral-800";
-                }
-            }
+        function salvarConfigAdminCustom() {
+            db.profile.icon1 = document.getElementById('configIcon1').value.trim() || "fa-solid fa-bolt";
+            db.profile.icon2 = document.getElementById('configIcon2').value.trim() || "fa-solid fa-robot";
+            db.profile.badgeIcon = document.getElementById('configBadge').value.trim() || "fa-solid fa-circle-check";
+            db.profile.panelColor = document.getElementById('configPanelColor').value.trim() || "#0a0a0a";
+            salvarDb();
+            renderizarAdminData();
+            showToast("Customizações salvas!", "💾");
         }
     </script>
 </body>
