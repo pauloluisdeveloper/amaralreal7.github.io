@@ -1,747 +1,298 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NotifyCash - VIP Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSIGHT - Painel</title>
+    <!-- Tailwind CSS CDN para estilização rápida e moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para os ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --nu-roxo: #8a05be;
-            --nu-roxo-claro: #a514e8;
-            --bg-black: #000000;
-            --bg-card: #0d0d12;
-            --borda-sutil: rgba(255, 255, 255, 0.1);
-            --neon-glow: rgba(138, 5, 190, 0.5);
+            --bg-cream: #F7F1E3;
+            --sidebar-cream: #F3EBD9;
+            --border-cream: #E5D9BD;
+            --text-brown: #5C4A34;
+            --accent-gold: #C5A059;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body {
-            background-color: var(--bg-black);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
+            background-color: var(--bg-cream);
+            color: var(--text-brown);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
-
-        /* Estrutura estilo App Centralizada */
-        .app-container {
-            width: 100%;
-            max-width: 420px;
-            height: 100%;
-            max-height: 850px;
-            background-color: var(--bg-black);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 30px 20px;
-            position: relative;
-            overflow-y: auto;
-            border-radius: 36px;
-            box-shadow: 0 0 50px rgba(138, 5, 190, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .content-top {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        /* Avatar com Animação e Brilho */
-        .logo-container {
-            width: 115px;
-            height: 115px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--nu-roxo), #00d2ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px var(--neon-glow);
-            animation: pulseGlow 3s infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(138, 5, 190, 0.4); transform: scale(1); }
-            100% { box-shadow: 0 0 35px rgba(0, 210, 255, 0.6); transform: scale(1.03); }
-        }
-
-        .logo-inner {
-            width: 100%;
-            height: 100%;
-            background-color: #0b0b0f;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .logo-inner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .title {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-
-        .subtitle {
-            font-size: 12px;
-            color: #71717a;
-            font-weight: 600;
-            letter-spacing: 2.5px;
-            margin-bottom: 28px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        /* Botão Nubank Roxo com Animação Fluida */
-        .vip-buy-btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--nu-roxo), var(--nu-roxo-claro));
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 15px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 25px rgba(138, 5, 190, 0.6);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .vip-buy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(138, 5, 190, 0.8);
-        }
-
-        .vip-buy-btn:active {
-            transform: scale(0.97);
-        }
-
-        .nu-icon {
-            background-color: #ffffff;
-            color: var(--nu-roxo);
-            font-weight: 900;
-            font-size: 13px;
-            height: 30px;
-            width: 30px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .button-text {
-            flex-grow: 1;
-            text-align: center;
-            padding-right: 30px;
-        }
-
-        /* Selos de Confiança Personalizados */
-        .security-badges {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: #a1a1aa;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        /* Botão da Administração com Escudo Personalizado */
-        .admin-btn {
-            width: 100%;
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 16px;
-            padding: 15px 18px;
-            display: flex;
-            align-items: center;
-            color: #d4d4d8;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
+        .bg-cream-custom { background-color: var(--sidebar-cream); }
+        .border-cream-custom { border-color: var(--border-cream); }
+        .text-brown-custom { color: var(--text-brown); }
+        
+        /* Efeito de hover suave nos itens de menu */
+        .menu-item {
             transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-
-        .admin-btn:hover {
-            background-color: #16161f;
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
+        .menu-item:hover {
+            background-color: rgba(197, 160, 89, 0.15);
+            padding-left: 1.25rem;
         }
-
-        .admin-icon-box {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            font-size: 16px;
-            height: 32px;
-            width: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 14px;
-        }
-
-        /* ==================== PAINEL ADMIN MODAL ==================== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(14px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 15px;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .admin-modal {
-            background-color: #08080c;
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
-            width: 100%;
-            max-width: 420px;
-            border-radius: 28px;
-            padding: 18px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.95);
-            transform: scale(0.92);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-overlay.active .admin-modal {
-            transform: scale(1);
-        }
-
-        .modal-header-box {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .modal-title-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .close-x-btn {
-            background: #181822;
-            border: 1px solid var(--borda-sutil);
-            color: #ffffff;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .close-x-btn:hover {
-            background: #2a2a38;
-        }
-
-        /* Abas Estilizadas Dashboard */
-        .admin-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 14px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            color: #71717a;
-            padding: 10px 6px;
-            font-size: 12px;
+        .menu-item.active {
+            background-color: rgba(197, 160, 89, 0.25);
+            border-left: 4px solid var(--accent-gold);
             font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .tab-btn.active {
-            background-color: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .tab-content-container {
-            overflow-y: auto;
-            flex-grow: 1;
-            max-height: 340px;
-        }
-
-        .inner-content-box {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .section-title-inner {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .metric-card {
-            background-color: #040406;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 12px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 12px;
-            color: #a1a1aa;
-        }
-
-        .metric-card span:last-child {
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        .subtext-history {
-            font-size: 11px;
-            color: #71717a;
-            text-align: center;
-            margin: 15px 0;
-            line-height: 1.4;
-        }
-
-        .action-sub-btn {
-            width: 100%;
-            background-color: #181822;
-            border: 1px solid var(--borda-sutil);
-            color: #ffffff;
-            border-radius: 12px;
-            padding: 11px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-align: center;
-        }
-
-        .action-sub-btn:hover {
-            background-color: #262636;
-        }
-
-        /* Campos de Formulário no Dashboard de Ajustes */
-        .admin-field {
-            margin-bottom: 10px;
-        }
-
-        .admin-field label {
-            display: block;
-            font-size: 10px;
-            color: #a1a1aa;
-            margin-bottom: 3px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .admin-field input {
-            width: 100%;
-            background-color: #040406;
-            border: 1px solid var(--borda-sutil);
-            border-radius: 10px;
-            padding: 9px 11px;
-            color: #ffffff;
-            font-size: 12px;
-            outline: none;
-        }
-
-        .admin-field input:focus {
-            border-color: var(--nu-roxo);
-        }
-
-        .exit-panel-btn {
-            width: 100%;
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            color: #ffffff;
-            border-radius: 16px;
-            padding: 13px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .exit-panel-btn:hover {
-            background-color: #181822;
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        /* Rodapé Fixo App */
-        .app-footer {
-            font-size: 11px;
-            color: #52525b;
-            text-align: center;
-            margin-top: 10px;
-            letter-spacing: 1px;
         }
     </style>
 </head>
-<body>
+<body class="flex h-screen overflow-hidden">
 
-    <div class="app-container">
-        <div class="content-top" style="width: 100%;">
-            <!-- Logotipo -->
-            <div class="logo-container">
-                <div class="logo-inner">
-                    <img id="perfilImg" src="https://i.imgur.com/34X35mB.png" alt="Logo">
+    <!-- Overlay para dispositivos móveis quando o menu estiver aberto -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR (Menu Lateral) -->
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-72 bg-cream-custom border-r border-cream-custom flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none">
+        
+        <!-- Topo: Logótipo -->
+        <div class="p-5 flex items-center justify-between border-b border-cream-custom">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B7355] to-[#C5A059] flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
                 </div>
+                <span class="text-2xl font-black tracking-wider text-[#5C4A34]" style="font-family: serif;">INSIGHT</span>
             </div>
-
-            <!-- Títulos -->
-            <h1 class="title">ACESSE ESSE LINK</h1>
-            <p class="subtitle">LINK ABAIXO</p>
-
-            <!-- Botão VIP de Compra (Nubank Roxo Animado) -->
-            <div class="vip-buy-btn" onclick="realizarCompra()">
-                <div class="nu-icon" id="iconeBotaoCustom">nu</div>
-                <div class="button-text" id="textoBotaoCustom">
-                    QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨
-                </div>
-            </div>
-
-            <!-- Selos de Confiança Personalizados -->
-            <div class="security-badges" id="secaoSelos">
-                <span>🛡️ Compra 100% segura</span>
-                <span>•</span>
-                <span>⚡ Entrega por e-mail</span>
-            </div>
-
-            <!-- Botão Painel de Administração com Escudo Personalizado -->
-            <div class="admin-btn" onclick="pedirSenhaAdmin()">
-                <div class="admin-icon-box">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <div style="flex-grow: 1; text-align: left;">
-                    Painel de Administração
-                </div>
-                <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #52525b;"></i>
-            </div>
+            <!-- Botão de fechar em mobile -->
+            <button id="close-sidebar" class="md:hidden text-[#5C4A34] hover:text-black">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
 
-        <div class="app-footer">
-            SECURE ACCESS • v2.6
+        <!-- Conteúdo do Menu com Scroll -->
+        <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6 text-sm">
+            
+            <!-- Secção: Painel Principal -->
+            <div>
+                <a href="#" onclick="switchTab('painel')" class="menu-item active flex items-center p-3 rounded-xl font-medium space-x-3">
+                    <i class="fa-solid fa-table-cells-large text-base"></i>
+                    <span>Painel</span>
+                </a>
+            </div>
+
+            <!-- Secção: Ferramentas -->
+            <div>
+                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Ferramentas</p>
+                <div class="space-y-1">
+                    <a href="#" onclick="switchTab('favoritos')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-regular fa-star text-base"></i>
+                        <span>Favoritos</span>
+                    </a>
+                    <a href="#" onclick="switchTab('novas')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
+                        <span>Ferramentas Novas</span>
+                    </a>
+                    <a href="#" onclick="switchTab('vip')" class="menu-item flex items-center justify-between p-3 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-crown text-base"></i>
+                            <span>Ferramentas VIP</span>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#8B7500] border border-[#D4AF37]/40">VIP</span>
+                    </a>
+                    <a href="#" onclick="switchTab('gratis')" class="menu-item flex items-center justify-between p-3 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-screwdriver-wrench text-base"></i>
+                            <span>Ferramentas Grátis</span>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-800 border border-emerald-500/30">FREE</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Secção: Comunidade -->
+            <div>
+                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Comunidade</p>
+                <div class="space-y-1">
+                    <a href="#" onclick="switchTab('comunidade')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-users text-base"></i>
+                        <span>Comunidade</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Secção: Conta -->
+            <div>
+                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Conta</p>
+                <div class="space-y-1">
+                    <a href="#" onclick="switchTab('configuracoes')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-gear text-base"></i>
+                        <span>Configurações</span>
+                    </a>
+                    <a href="#" onclick="switchTab('assinatura')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-credit-card text-base"></i>
+                        <span>Assinatura</span>
+                    </a>
+                    <a href="#" onclick="switchTab('sua-assinatura')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-shield-check text-base"></i>
+                        <span>Sua Assinatura</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Secção: Suporte -->
+            <div>
+                <p class="px-3 text-xs font-bold uppercase tracking-wider text-[#8C7A65] mb-2">Suporte</p>
+                <div class="space-y-1">
+                    <a href="#" onclick="switchTab('duvidas')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-regular fa-circle-question text-base"></i>
+                        <span>Dúvidas</span>
+                    </a>
+                    <a href="#" onclick="switchTab('ajuda')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-headset text-base"></i>
+                        <span>Ajuda</span>
+                    </a>
+                    <a href="#" onclick="switchTab('reportar')" class="menu-item flex items-center p-3 rounded-xl space-x-3">
+                        <i class="fa-solid fa-bug text-base"></i>
+                        <span>Reportar Bug</span>
+                    </a>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </aside>
 
-    <!-- Modal do Painel de Administração -->
-    <div class="modal-overlay" id="adminModalOverlay">
-        <div class="admin-modal">
-            <!-- Cabeçalho do Painel -->
-            <div class="modal-header-box">
-                <div class="modal-title-left">
-                    <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i>
-                    <span>Painel Real-Time Global</span>
-                </div>
-                <div class="close-x-btn" onclick="fecharPainel()">
-                    <i class="fa-solid fa-xmark"></i>
+    <!-- CONTEÚDO PRINCIPAL DO SITE -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-white/50">
+        
+        <!-- Barra Superior -->
+        <header class="h-16 border-b border-cream-custom bg-white/70 backdrop-blur-md px-6 flex items-center justify-between z-20">
+            <div class="flex items-center space-x-4">
+                <button id="open-sidebar" class="md:hidden text-[#5C4A34] hover:text-black focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h1 id="page-title" class="text-xl font-bold text-[#5C4A34]">Painel Principal</h1>
+            </div>
+            
+            <!-- Perfil do Utilizador -->
+            <div class="flex items-center space-x-3">
+                <span class="text-sm font-medium hidden sm:inline">Bem-vindo, Utilizador</span>
+                <div class="w-10 h-10 rounded-full bg-[#8B7355] text-white flex items-center justify-center font-bold shadow-inner">
+                    U
                 </div>
             </div>
+        </header>
 
-            <!-- Abas do Dashboard -->
-            <div class="admin-tabs">
-                <button class="tab-btn active" onclick="mudarAba('vendas')">
-                    <i class="fa-solid fa-bag-shopping"></i> Vendas
-                </button>
-                <button class="tab-btn" onclick="mudarAba('cliques')">
-                    <i class="fa-solid fa-chart-line"></i> Cliques
-                </button>
-                <button class="tab-btn" onclick="mudarAba('ajustes')">
-                    <i class="fa-solid fa-sliders"></i> Ajustes
-                </button>
-            </div>
-
-            <!-- Conteúdo das Abas -->
-            <div class="tab-content-container">
-                
-                <!-- Aba 1: Vendas -->
-                <div class="tab-pane active" id="tab-vendas">
-                    <div class="inner-content-box">
-                        <div class="section-title-inner">
-                            <i class="fa-solid fa-receipt text-purple"></i> Gestão de Vendas & Pedidos
+        <!-- Área Dinâmica de Conteúdo -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-6 md:p-8">
+            <!-- Conteúdo inicial do Painel -->
+            <div class="max-w-5xl mx-auto space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-semibold text-gray-500">Ferramentas Favoritas</span>
+                            <i class="fa-regular fa-star text-amber-600 text-lg"></i>
                         </div>
-                        <div class="metric-card">
-                            <span>Total de pedidos gerados:</span>
-                            <span id="contadorPedidos">0</span>
+                        <h2 class="text-3xl font-bold">12</h2>
+                        <p class="text-xs text-emerald-600 mt-2 font-medium"><i class="fa-solid fa-arrow-up"></i> +2 esta semana</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-semibold text-gray-500">Estado da Assinatura</span>
+                            <i class="fa-solid fa-crown text-amber-600 text-lg"></i>
                         </div>
-                        <div class="subtext-history" id="historicoVendasTexto">
-                            Histórico de Pedidos Pix (Global):<br><br>
-                            Nenhum pedido registado ainda.
+                        <h2 class="text-2xl font-bold text-amber-700">VIP Ativo</h2>
+                        <p class="text-xs text-gray-500 mt-2">Expira em: 24/10/2026</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-semibold text-gray-500">Suporte Técnico</span>
+                            <i class="fa-solid fa-headset text-amber-600 text-lg"></i>
                         </div>
-                        <div class="action-sub-btn" onclick="limparHistorico()">
-                            Limpar Histórico de Pedidos
-                        </div>
+                        <h2 class="text-2xl font-bold text-emerald-600">Online</h2>
+                        <p class="text-xs text-gray-500 mt-2">Tempo médio: 5 mins</p>
                     </div>
                 </div>
 
-                <!-- Aba 2: Cliques -->
-                <div class="tab-pane" id="tab-cliques">
-                    <div class="inner-content-box">
-                        <div class="section-title-inner">
-                            <i class="fa-solid fa-users"></i> Monitor de Tráfego & Dashboard
+                <!-- Secção de Acesso Rápido -->
+                <div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm">
+                    <h3 class="text-lg font-bold text-[#5C4A34] mb-4">Acesso Rápido às Ferramentas</h3>
+                    <p class="text-sm text-gray-600 mb-4">Selecione uma categoria no menu lateral ou clique numa das ferramentas em destaque abaixo para começar a utilizar o INSIGHT.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <h4 class="font-bold text-sm">Gerador de Ideias</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">Crie insights e estratégias automáticas para o seu negócio.</p>
                         </div>
-                        <div class="metric-card">
-                            <span>Total de cliques no site:</span>
-                            <span id="contadorCliques">1</span>
+                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </div>
+                                <h4 class="font-bold text-sm">Análise de Métricas</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">Monitore o desempenho e tráfego em tempo real.</p>
                         </div>
-                        <div class="subtext-history" id="logsContainer" style="text-align: left; max-height: 120px; overflow-y: auto;">
-                            [Sistema] Acesso inicial detetado com sucesso.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Aba 3: Ajustes -->
-                <div class="tab-pane" id="tab-ajustes">
-                    <div class="inner-content-box">
-                        <div class="section-title-inner">
-                            <i class="fa-solid fa-gear"></i> Configurações do Painel
-                        </div>
-                        <div class="admin-field">
-                            <label>Link URL da Foto de Perfil</label>
-                            <input type="text" id="inputLogoUrl" placeholder="https://exemplo.com/foto.png" oninput="atualizarFotoPreview()">
-                        </div>
-                        <div class="admin-field">
-                            <label>Ícone Personalizado do Botão</label>
-                            <input type="text" id="inputIconeBotao" value="nu" placeholder="Ex: nu, VIP, $" oninput="atualizarIconeBotao()">
-                        </div>
-                        <div class="admin-field">
-                            <label>Texto do Botão de Compra</label>
-                            <input type="text" id="inputTextoBotao" value="QUERO ADQUIRIR O BANCO 🚨 (clique aqui) 🚨" oninput="atualizarTextoBotao()">
-                        </div>
-                        <div class="admin-field">
-                            <label>Cor Principal e Neon</label>
-                            <input type="color" id="inputCorTema" value="#8a05be" onchange="atualizarCorTema()" style="height: 36px; padding: 2px; cursor: pointer;">
-                        </div>
-                        <div class="admin-field">
-                            <label>Selos de Confiança Editáveis</label>
-                            <input type="text" id="inputSelos" value="🛡️ Compra 100% segura • ⚡ Entrega por e-mail" oninput="atualizarSelos()">
-                        </div>
-                        <div class="admin-field">
-                            <label>Alterar Senha do Painel</label>
-                            <input type="password" id="inputNovaSenha" value="10" placeholder="Nova senha">
-                        </div>
-                        <div class="action-sub-btn" style="background-color: #16a34a; color: #fff; margin-top: 8px;" onclick="salvarConfiguracoes()">
-                            Guardar Alterações
+                        <div class="p-4 rounded-xl border border-cream-custom hover:border-amber-500 cursor-pointer transition bg-amber-50/30">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <h4 class="font-bold text-sm">Comunidade VIP</h4>
+                            </div>
+                            <p class="text-xs text-gray-500">Conecte-se com outros membros e partilhe experiências.</p>
                         </div>
                     </div>
                 </div>
-
-            </div>
-
-            <!-- Botão Fechar Painel -->
-            <div class="exit-panel-btn" onclick="fecharPainel()">
-                Fechar / Sair do Painel
             </div>
         </div>
-    </div>
 
-    <!-- Scripts de Funcionalidade 100% Integrada -->
+    </main>
+
+    <!-- JavaScript para interatividade (Menu Mobile e Troca de Abas) -->
     <script>
-        let senhaAdminAtual = "10";
-        let totalCliques = 1;
-        let totalPedidos = 0;
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
 
-        function pedirSenhaAdmin() {
-            let senha = prompt("🔒 Insira a senha de administrador:");
-            if (senha === null) return; // Clicou em cancelar
-            
-            if (senha.trim() === senhaAdminAtual) {
-                abrirPainel();
-                registarLog("Painel administrativo aberto com sucesso.");
-            } else {
-                alert("❌ Erro: Senha de administrador incorreta!");
-                registarLog("Tentativa de acesso negada (Senha incorreta).");
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        openSidebarBtn.addEventListener('click', toggleSidebar);
+        closeSidebarBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Dados simulados para as páginas ao clicar no menu
+        const pageData = {
+            'painel': { title: 'Painel Principal', content: `<div class="max-w-5xl mx-auto space-y-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Favoritos</span><h2 class="text-3xl font-bold mt-2">12</h2></div><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Estado</span><h2 class="text-2xl font-bold text-amber-700 mt-2">VIP Ativo</h2></div><div class="bg-white p-6 rounded-2xl border border-cream-custom shadow-sm"><span class="text-sm font-semibold text-gray-500">Suporte</span><h2 class="text-2xl font-bold text-emerald-600 mt-2">Online</h2></div></div></div>` },
+            'favoritos': { title: 'Favoritos', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">As suas ferramentas favoritas aparecerão aqui guardadas para acesso rápido.</p></div>' },
+            'novas': { title: 'Ferramentas Novas', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Explore as funcionalidades e atualizações mais recentes adicionadas esta semana.</p></div>' },
+            'vip': { title: 'Ferramentas VIP', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Conteúdo exclusivo reservado para assinantes do plano VIP do INSIGHT.</p></div>' },
+            'gratis': { title: 'Ferramentas Grátis', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Lista completa de ferramentas gratuitas disponíveis para todos os utilizadores.</p></div>' },
+            'comunidade': { title: 'Comunidade', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Bem-vindo à comunidade INSIGHT. Participe nas discussões e interaja com outros utilizadores.</p></div>' },
+            'configuracoes': { title: 'Configurações', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Gerencie as preferências da sua conta, palavra-passe e notificações.</p></div>' },
+            'assinatura': { title: 'Assinatura', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Veja planos disponíveis, faça upgrades ou gira os seus pagamentos.</p></div>' },
+            'sua-assinatura': { title: 'Detalhes da Sua Assinatura', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">O seu plano atual é <strong>VIP</strong> com renovação automática ativa.</p></div>' },
+            'duvidas': { title: 'Dúvidas Frequentes', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Consulte as perguntas frequentes sobre o funcionamento das ferramentas.</p></div>' },
+            'ajuda': { title: 'Ajuda e Suporte', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Entre em contacto direto com a nossa equipa de suporte técnico.</p></div>' },
+            'reportar': { title: 'Reportar Bug', content: '<div class="bg-white p-6 rounded-2xl border border-cream-custom"><p class="text-gray-600">Encontrou algum erro? Preencha o formulário para notificar a nossa equipa de desenvolvimento.</p></div>' }
+        };
+
+        function switchTab(tabKey) {
+            // Atualizar classes ativas no menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Atualizar título e conteúdo
+            if (pageData[tabKey]) {
+                document.getElementById('page-title').innerText = pageData[tabKey].title;
+                document.getElementById('content-area').innerHTML = pageData[tabKey].content;
             }
-        }
 
-        function abrirPainel() {
-            document.getElementById('adminModalOverlay').classList.add('active');
-        }
-
-        function fecharPainel() {
-            document.getElementById('adminModalOverlay').classList.remove('active');
-        }
-
-        function mudarAba(nomeAba) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-
-            if(nomeAba === 'vendas') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('tab-vendas').classList.add('active');
-            } else if(nomeAba === 'cliques') {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.getElementById('tab-cliques').classList.add('active');
-            } else if(nomeAba === 'ajustes') {
-                document.querySelectorAll('.tab-btn')[2].classList.add('active');
-                document.getElementById('tab-ajustes').classList.add('active');
+            // Fechar menu no telemóvel ao clicar
+            if (window.innerWidth < 768) {
+                toggleSidebar();
             }
-        }
-
-        function atualizarFotoPreview() {
-            let url = document.getElementById('inputLogoUrl').value;
-            if(url.trim() !== "") {
-                document.getElementById('perfilImg').src = url;
-            }
-        }
-
-        function atualizarIconeBotao() {
-            let icone = document.getElementById('inputIconeBotao').value;
-            document.getElementById('iconeBotaoCustom').innerText = icone;
-        }
-
-        function atualizarTextoBotao() {
-            let texto = document.getElementById('inputTextoBotao').value;
-            document.getElementById('textoBotaoCustom').innerText = texto;
-        }
-
-        function atualizarCorTema() {
-            let cor = document.getElementById('inputCorTema').value;
-            document.documentElement.style.setProperty('--nu-roxo', cor);
-            document.documentElement.style.setProperty('--nu-roxo-claro', cor);
-            document.documentElement.style.setProperty('--neon-glow', cor + '80');
-        }
-
-        function atualizarSelos() {
-            let textoSelos = document.getElementById('inputSelos').value;
-            document.getElementById('secaoSelos').innerText = textoSelos;
-        }
-
-        function limparHistorico() {
-            totalPedidos = 0;
-            document.getElementById('contadorPedidos').innerText = "0";
-            document.getElementById('historicoVendasTexto').innerHTML = "Histórico de Pedidos Pix (Global):<br><br>Nenhum pedido registado ainda.";
-            alert("🧹 Histórico de pedidos limpo com sucesso!");
-            registarLog("Histórico de vendas reiniciado.");
-        }
-
-        function realizarCompra() {
-            totalCliques++;
-            totalPedidos++;
-            document.getElementById('contadorCliques').innerText = totalCliques;
-            document.getElementById('contadorPedidos').innerText = totalPedidos;
-            
-            let hora = new Date().toLocaleTimeString();
-            document.getElementById('historicoVendasTexto').innerHTML = `Histórico de Pedidos Pix (Global):<br><br><b style="color: #22c55e;">[${hora}] Novo Pix Gerado! (Pedido #${totalPedidos})</b>`;
-            
-            registarLog(`Novo clique e pedido #${totalPedidos} gerados.`);
-            
-            // Simulação de erro/aviso de checkout ou redirecionamento seguro
-            let confirmar = confirm("⚡ Redirecionar para o checkout automatizado via Pix Nubank?");
-            if (confirmar) {
-                // Aqui podes colocar o link real do teu checkout
-                alert("Redirecionando para o ambiente seguro de pagamento...");
-            }
-        }
-
-        function registarLog(mensagem) {
-            let caixaLogs = document.getElementById('logsContainer');
-            let hora = new Date().toLocaleTimeString();
-            caixaLogs.innerHTML += `<br>[${hora}] ${mensagem}`;
-            caixaLogs.scrollTop = caixaLogs.scrollHeight;
-        }
-
-        function salvarConfiguracoes() {
-            let novaSenhaInput = document.getElementById('inputNovaSenha').value;
-            if(novaSenhaInput.trim() !== "") {
-                senhaAdminAtual = novaSenhaInput.trim();
-            }
-            alert("✅ Configurações e nova senha guardadas com sucesso!");
-            registarLog("Configurações atualizadas via painel.");
-            fecharPainel();
         }
     </script>
-
 </body>
 </html>
