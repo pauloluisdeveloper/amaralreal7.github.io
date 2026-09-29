@@ -2,181 +2,448 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Financeiro - Nubank Estilo</title>
-    <!-- Tailwind CSS para estilização rápida e moderna -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nubank - Conta e Cartão</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estilização personalizada em Preto e Branco puro */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f7;
+            color: #111111;
+            -webkit-tap-highlight-color: transparent;
         }
-        .card-custom {
-            background-color: #121212;
-            border: 1px solid #262626;
+        .nu-purple {
+            background-color: #8A05BE;
         }
-        .card-custom:hover {
-            border-color: #404040;
+        .nu-purple-text {
+            color: #8A05BE;
+        }
+        .nu-border {
+            border-color: #e5e5e7;
+        }
+        /* Esconde scrollbar mas mantém funcionalidade */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 md:p-8">
+<body class="flex justify-center items-center min-h-screen bg-neutral-900 sm:py-6">
 
-    <!-- Topo / Cabeçalho -->
-    <header class="max-w-md mx-auto w-full flex justify-between items-center mb-6">
-        <div class="flex items-center space-x-3">
-            <!-- Avatar / Foto de Perfil Editável -->
-            <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-lg overflow-hidden border border-white">
-                <span id="user-initials">EU</span>
-            </div>
-            <div>
-                <h1 class="text-lg font-semibold" id="greeting">Olá, Usuário</h1>
-            </div>
-        </div>
-        <div class="flex space-x-4">
-            <!-- Botão de Visibilidade do Saldo -->
-            <button onclick="toggleBalance()" class="p-2 rounded-full card-custom text-white hover:bg-neutral-800 transition">
-                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-            </button>
-        </div>
-    </header>
+    <!-- Container estilo Smartphone -->
+    <div class="w-full sm:max-w-md h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-neutral-800">
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-md mx-auto w-full space-y-6">
-
-        <!-- Card de Saldo da Conta -->
-        <section class="card-custom rounded-2xl p-5 shadow-lg">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-sm text-neutral-400 font-medium">Conta</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </div>
-            <div class="text-2xl font-bold tracking-tight" id="balance-container">
-                <span id="balance-text">R$ 5.430,21</span>
-            </div>
-        </section>
-
-        <!-- Atalhos Rápidos (Horizontal Scroll) -->
-        <section class="overflow-x-auto pb-2 scrollbar-none">
-            <div class="flex space-x-4 min-w-max">
-                <!-- Botão Atalho -->
-                <div class="flex flex-col items-center space-y-2 cursor-pointer group">
-                    <div class="w-16 h-16 rounded-full card-custom flex items-center justify-center group-hover:bg-neutral-800 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        <!-- CABEÇALHO FIXO -->
+        <header class="nu-purple text-white pt-6 pb-4 px-6 flex flex-col justify-between shrink-0">
+            <div class="flex justify-between items-center mb-6">
+                <!-- Avatar / Perfil -->
+                <button onclick="editarPerfil()" class="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center font-bold text-sm border border-purple-400 focus:outline-none active:scale-95 transition">
+                    <span id="user-initials">US</span>
+                </button>
+                <!-- Ícones de Ação -->
+                <div class="flex items-center space-x-5">
+                    <button onclick="toggleBalance()" class="focus:outline-none">
+                        <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                    </div>
-                    <span class="text-xs text-neutral-300 font-medium">Pix</span>
-                </div>
-                <div class="flex flex-col items-center space-y-2 cursor-pointer group">
-                    <div class="w-16 h-16 rounded-full card-custom flex items-center justify-center group-hover:bg-neutral-800 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.07 10.07 0 014.213-5.22m3.571-1.25A9.97 9.97 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.027 10.027 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
-                    </div>
-                    <span class="text-xs text-neutral-300 font-medium">Pagar</span>
-                </div>
-                <div class="flex flex-col items-center space-y-2 cursor-pointer group">
-                    <div class="w-16 h-16 rounded-full card-custom flex items-center justify-center group-hover:bg-neutral-800 transition">
+                    </button>
+                    <button class="focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                    </div>
-                    <span class="text-xs text-neutral-300 font-medium">Pegar Empréstimo</span>
-                </div>
-                <div class="flex flex-col items-center space-y-2 cursor-pointer group">
-                    <div class="w-16 h-16 rounded-full card-custom flex items-center justify-center group-hover:bg-neutral-800 transition">
+                    </button>
+                    <button onclick="adicionarTransacao()" class="focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                    </div>
-                    <span class="text-xs text-neutral-300 font-medium">Investir</span>
+                    </button>
                 </div>
             </div>
-        </section>
+            <!-- Saudação -->
+            <h2 class="text-xl font-bold" id="greeting">Olá, Usuário</h2>
+        </header>
 
-        <!-- Seção do Cartão de Crédito -->
-        <section class="card-custom rounded-2xl p-5 shadow-lg">
-            <div class="flex justify-between items-center mb-3">
-                <span class="text-sm font-semibold">Cartão de Crédito</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </div>
-            <div class="text-xs text-neutral-400 mb-1">Fatura atual</div>
-            <div class="text-xl font-bold mb-3">R$ 1.250,80</div>
-            <div class="text-xs text-neutral-400">Limite disponível: <span class="text-white font-medium">R$ 3.749,20</span></div>
-        </section>
+        <!-- CONTEÚDO SCROLLÁVEL DA PÁGINA -->
+        <main class="flex-1 overflow-y-auto no-scrollbar pb-24">
 
-        <!-- Histórico / Histórico de Transações Editável -->
-        <section class="card-custom rounded-2xl p-5 shadow-lg space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-sm font-semibold">Histórico</h3>
-                <span class="text-xs text-neutral-400 cursor-pointer hover:underline">Ver tudo</span>
+            <!-- ABA 1: INÍCIO (Default) -->
+            <div id="tab-inicio" class="space-y-6 pt-5">
+                <!-- Seção Conta -->
+                <div class="px-6">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-bold text-neutral-900">Conta</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <div class="text-2xl font-bold tracking-tight text-neutral-900" id="balance-container">
+                        <span id="balance-text">R$ 7.420,50</span>
+                    </div>
+                </div>
+
+                <!-- Atalhos Rápidos (Scroll Horizontal) -->
+                <div class="overflow-x-auto no-scrollbar pl-6">
+                    <div class="flex space-x-4 pr-6">
+                        <!-- Pix -->
+                        <div onclick="mudarAba('pix')" class="flex flex-col items-center space-y-2 cursor-pointer shrink-0">
+                            <div class="w-18 w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-neutral-800">Área Pix</span>
+                        </div>
+                        <!-- Pagar -->
+                        <div class="flex flex-col items-center space-y-2 cursor-pointer shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-neutral-800">Pagar</span>
+                        </div>
+                        <!-- Transferir -->
+                        <div class="flex flex-col items-center space-y-2 cursor-pointer shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-neutral-800">Transferir</span>
+                        </div>
+                        <!-- Recarga -->
+                        <div class="flex flex-col items-center space-y-2 cursor-pointer shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-neutral-800">Recarga</span>
+                        </div>
+                        <!-- Empréstimo -->
+                        <div class="flex flex-col items-center space-y-2 cursor-pointer shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-neutral-800">Pegar Emprestado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meus Cartões -->
+                <div class="px-6">
+                    <div class="bg-neutral-100 p-4 rounded-2xl flex items-center space-x-3 cursor-pointer hover:bg-neutral-200 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                        <span class="text-sm font-semibold text-neutral-900">Meus cartões</span>
+                    </div>
+                </div>
+
+                <!-- Card de Convite / Promo -->
+                <div class="px-6">
+                    <div class="bg-neutral-100 p-4 rounded-2xl space-y-2">
+                        <p class="text-sm font-bold text-neutral-900">Indique seus amigos</p>
+                        <p class="text-xs text-neutral-600">Mostre aos seus amigos como é fácil ter uma vida sem burocracia.</p>
+                    </div>
+                </div>
+
+                <!-- Divisor -->
+                <div class="border-t border-neutral-200 mx-6"></div>
+
+                <!-- Cartão de Crédito -->
+                <div class="px-6 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-neutral-900">Cartão de Crédito</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <div class="text-xs text-neutral-500">Fatura atual</div>
+                    <div class="text-xl font-bold text-neutral-900">R$ 1.450,20</div>
+                    <div class="text-xs text-neutral-500">Limite disponível <span class="text-neutral-900 font-semibold">R$ 3.549,80</span></div>
+                </div>
+
+                <!-- Divisor -->
+                <div class="border-t border-neutral-200 mx-6"></div>
+
+                <!-- Histórico de Transações (Clicável para Comprovante) -->
+                <div class="px-6 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-neutral-900">Histórico</h3>
+                        <span class="text-xs font-semibold nu-purple-text cursor-pointer">Ver tudo</span>
+                    </div>
+
+                    <div class="space-y-3" id="transaction-list">
+                        <!-- Transação 1 -->
+                        <div onclick="abrirComprovante('Supermercado Extra', '- R$ 180,00', 'Hoje, 15:42', 'Débito em conta', 'COMPROVANTE-948271', 'Extra Supermercados Ltda')" class="flex justify-between items-center p-3 rounded-xl hover:bg-neutral-100 cursor-pointer transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-800">
+                                    🛒
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-neutral-900">Supermercado Extra</p>
+                                    <p class="text-xs text-neutral-500">Hoje, 15:42</p>
+                                </div>
+                            </div>
+                            <span class="text-sm font-semibold text-neutral-900">- R$ 180,00</span>
+                        </div>
+
+                        <!-- Transação 2 -->
+                        <div onclick="abrirComprovante('Pix Recebido - Ana Paula', '+ R$ 1.200,00', 'Ontem, 11:15', 'Transferência Pix', 'COMPROVANTE-837261', 'Ana Paula Silva')" class="flex justify-between items-center p-3 rounded-xl hover:bg-neutral-100 cursor-pointer transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center nu-purple-text">
+                                    ⚡
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-neutral-900">Pix recebido de Ana Paula</p>
+                                    <p class="text-xs text-neutral-500">Ontem, 11:15</p>
+                                </div>
+                            </div>
+                            <span class="text-sm font-semibold text-green-600">+ R$ 1.200,00</span>
+                        </div>
+
+                        <!-- Transação 3 -->
+                        <div onclick="abrirComprovante('Netflix', '- R$ 55,90', '25 Set, 08:00', 'Cartão de Crédito', 'COMPROVANTE-129384', 'Netflix Streaming Services')" class="flex justify-between items-center p-3 rounded-xl hover:bg-neutral-100 cursor-pointer transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-800">
+                                    📺
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-neutral-900">Netflix</p>
+                                    <p class="text-xs text-neutral-500">25 Set, 08:00</p>
+                                </div>
+                            </div>
+                            <span class="text-sm font-semibold text-neutral-900">- R$ 55,90</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="space-y-3" id="transaction-list">
-                <!-- Item dinâmico 1 -->
-                <div class="flex justify-between items-center text-sm">
+
+            <!-- ABA 2: PIX -->
+            <div id="tab-pix" class="space-y-6 pt-5 px-6 hidden">
+                <h2 class="text-2xl font-bold text-neutral-900">Área Pix</h2>
+                <p class="text-xs text-neutral-500">Envie e receba dinheiro a qualquer hora e dia da semana sem pagar nada.</p>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div onclick="alert('Simulação de transferência Pix!')" class="bg-neutral-100 p-4 rounded-2xl cursor-pointer hover:bg-neutral-200 transition space-y-2">
+                        <div class="w-10 h-10 rounded-full nu-purple text-white flex items-center justify-center font-bold">➔</div>
+                        <p class="text-sm font-bold text-neutral-900">Transferir</p>
+                    </div>
+                    <div onclick="alert('Chave Pix copiada!')" class="bg-neutral-100 p-4 rounded-2xl cursor-pointer hover:bg-neutral-200 transition space-y-2">
+                        <div class="w-10 h-10 rounded-full nu-purple text-white flex items-center justify-center font-bold">📋</div>
+                        <p class="text-sm font-bold text-neutral-900">Cobrar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 3: CARTÕES -->
+            <div id="tab-cartoes" class="space-y-6 pt-5 px-6 hidden">
+                <h2 class="text-2xl font-bold text-neutral-900">Meus Cartões</h2>
+                <div class="nu-purple p-6 rounded-2xl text-white space-y-8 shadow-md">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold tracking-widest text-lg">nu</span>
+                        <span class="text-xs uppercase bg-white/20 px-2 py-1 rounded">Virtual</span>
+                    </div>
                     <div>
-                        <p class="font-medium">Supermercado Extra</p>
-                        <p class="text-xs text-neutral-500">Hoje, 14:20</p>
+                        <p class="text-sm text-purple-200">Nome no cartão</p>
+                        <p class="font-semibold text-base" id="card-holder-name">USUÁRIO NUBANK</p>
                     </div>
-                    <span class="font-semibold">- R$ 150,00</span>
-                </div>
-                <!-- Item dinâmico 2 -->
-                <div class="flex justify-between items-center text-sm">
-                    <div>
-                        <p class="font-medium">Salário Recebido</p>
-                        <p class="text-xs text-neutral-500">Ontem</p>
-                    </div>
-                    <span class="font-semibold text-white">+ R$ 4.500,00</span>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <!-- ABA 4: SHOPPING -->
+            <div id="tab-shopping" class="space-y-6 pt-5 px-6 hidden">
+                <h2 class="text-2xl font-bold text-neutral-900">Nu Shopping</h2>
+                <p class="text-xs text-neutral-500">Vantagens e cashback em lojas parceiras direto no seu app.</p>
+                <div class="bg-neutral-100 p-5 rounded-2xl text-center space-y-2">
+                    <p class="font-bold text-neutral-900">Até 10% de Cashback</p>
+                    <p class="text-xs text-neutral-600">Compre com seu cartão virtual nas lojas parceiras.</p>
+                </div>
+            </div>
 
-    <!-- Rodapé / Painel de Configuração Rápida (Edição Direta) -->
-    <footer class="max-w-md mx-auto w-full mt-8 pt-4 border-t border-neutral-800 text-center">
-        <p class="text-xs text-neutral-500 mb-2">Painel Editável em Tempo Real</p>
-        <div class="flex justify-center space-x-2">
-            <button onclick="editData()" class="px-4 py-2 bg-white text-black text-xs font-bold rounded-lg hover:bg-neutral-200 transition">
-                Editar Dados
-            </button>
+        </main>
+
+        <!-- MODAL DE COMPROVANTE VISUAL -->
+        <div id="modal-comprovante" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                <!-- Topo Comprovante -->
+                <div class="nu-purple text-white p-6 text-center relative">
+                    <button onclick="fecharComprovante()" class="absolute top-4 right-4 text-white hover:bg-purple-800 p-2 rounded-full">
+                        ✕
+                    </button>
+                    <div class="w-12 h-12 bg-white rounded-full mx-auto flex items-center justify-center nu-purple-text font-bold text-xl mb-2 shadow">
+                        nu
+                    </div>
+                    <h3 class="text-lg font-bold">Comprovante de Transação</h3>
+                    <p class="text-xs text-purple-200 mt-1" id="comp-data">Hoje, 15:42</p>
+                </div>
+
+                <!-- Detalhes do Recibo -->
+                <div class="p-6 space-y-4 overflow-y-auto flex-1 text-sm text-neutral-700">
+                    <div class="text-center pb-4 border-b border-neutral-100">
+                        <p class="text-xs text-neutral-400">Valor da Transação</p>
+                        <p class="text-2xl font-bold text-neutral-900 mt-1" id="comp-valor">- R$ 180,00</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-xs text-neutral-400 block">Descrição</span>
+                            <span class="font-semibold text-neutral-900" id="comp-titulo">Supermercado Extra</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-neutral-400 block">Tipo de Operação</span>
+                            <span class="font-semibold text-neutral-900" id="comp-tipo">Débito em conta</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-neutral-400 block">Favorecido / Estabelecimento</span>
+                            <span class="font-semibold text-neutral-900" id="comp-favorecido">Extra Supermercados Ltda</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-neutral-400 block">ID da Transação (Autênticação)</span>
+                            <span class="font-mono text-xs font-bold text-neutral-600 bg-neutral-100 p-2 rounded block mt-1" id="comp-id">COMPROVANTE-948271</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rodapé Comprovante -->
+                <div class="p-4 bg-neutral-50 border-t border-neutral-100 flex space-x-3">
+                    <button onclick="copiarComprovante()" class="flex-1 bg-neutral-200 text-neutral-800 py-3 rounded-xl font-bold text-xs hover:bg-neutral-300 transition">
+                        Copiar ID
+                    </button>
+                    <button onclick="alert('Comprovante salvo com sucesso no seu dispositivo!')" class="flex-1 nu-purple text-white py-3 rounded-xl font-bold text-xs hover:opacity-90 transition">
+                        Salvar Imagem
+                    </button>
+                </div>
+            </div>
         </div>
-    </footer>
 
-    <!-- Script de Interatividade -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR (ESTILO APP MOBILE) -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-neutral-200 px-6 py-3 flex justify-between items-center z-10">
+            <button onclick="mudarAba('inicio')" id="btn-tab-inicio" class="flex flex-col items-center space-y-1 nu-purple-text focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span class="text-[10px] font-semibold">Início</span>
+            </button>
+            <button onclick="mudarAba('pix')" id="btn-tab-pix" class="flex flex-col items-center space-y-1 text-neutral-400 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span class="text-[10px] font-semibold">Pix</span>
+            </button>
+            <button onclick="mudarAba('cartoes')" id="btn-tab-cartoes" class="flex flex-col items-center space-y-1 text-neutral-400 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+                <span class="text-[10px] font-semibold">Cartões</span>
+            </button>
+            <button onclick="mudarAba('shopping')" id="btn-tab-shopping" class="flex flex-col items-center space-y-1 text-neutral-400 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span class="text-[10px] font-semibold">Shopping</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- SCRIPT DE CONTROLE -->
     <script>
-        let isBalanceVisible = true;
+        let saldoVisivel = true;
 
         function toggleBalance() {
-            isBalanceVisible = !isBalanceVisible;
-            const balanceText = document.getElementById('balance-text');
-            if (isBalanceVisible) {
-                balanceText.innerText = "R$ 5.430,21";
-            } else {
-                balanceText.innerText = "••••••••";
+            saldoVisivel = !saldoVisivel;
+            document.getElementById('balance-text').innerText = saldoVisivel ? "R$ 7.420,50" : "••••••••";
+            document.getElementById('eye-open').classList.toggle('hidden', !saldoVisivel);
+            document.getElementById('eye-closed').classList.toggle('hidden', saldoVisivel);
+        }
+
+        function mudarAba(abaId) {
+            const abas = ['inicio', 'pix', 'cartoes', 'shopping'];
+            abas.forEach(aba => {
+                document.getElementById(`tab-${aba}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-tab-${aba}`);
+                if (btn) {
+                    btn.classList.remove('nu-purple-text');
+                    btn.classList.add('text-neutral-400');
+                }
+            });
+
+            document.getElementById(`tab-${abaId}`).classList.remove('hidden');
+            const ativoBtn = document.getElementById(`btn-tab-${abaId}`);
+            if (ativoBtn) {
+                ativoBtn.classList.remove('text-neutral-400');
+                ativoBtn.classList.add('nu-purple-text');
             }
         }
 
-        function editData() {
-            const novoNome = prompt("Digite o novo nome do usuário:", "Usuário");
-            if (novoNome) {
-                document.getElementById('greeting').innerText = `Olá, ${novoNome}`;
-                document.getElementById('user-initials').innerText = novoNome.substring(0, 2).toUpperCase();
-            }
+        function abrirComprovante(titulo, valor, data, tipo, id, favorecido) {
+            document.getElementById('comp-titulo').innerText = titulo;
+            document.getElementById('comp-valor').innerText = valor;
+            document.getElementById('comp-data').innerText = data;
+            document.getElementById('comp-tipo').innerText = tipo;
+            document.getElementById('comp-id').innerText = id;
+            document.getElementById('comp-favorecido').innerText = favorecido;
 
-            const novoSaldo = prompt("Digite o novo saldo da conta:", "5430.21");
+            document.getElementById('modal-comprovante').classList.remove('hidden');
+        }
+
+        function fecharComprovante() {
+            document.getElementById('modal-comprovante').classList.add('hidden');
+        }
+
+        function copiarComprovante() {
+            const idText = document.getElementById('comp-id').innerText;
+            navigator.clipboard.writeText(idText);
+            alert("ID do comprovante copiado para a área de transferência!");
+        }
+
+        function editarPerfil() {
+            const nome = prompt("Digite o seu nome completo:", "Usuário Nubank");
+            if (nome) {
+                document.getElementById('greeting').innerText = `Olá, ${nome}`;
+                document.getElementById('user-initials').innerText = nome.substring(0, 2).toUpperCase();
+                document.getElementById('card-holder-name').innerText = nome.toUpperCase();
+            }
+            const novoSaldo = prompt("Digite o novo saldo da conta:", "7420.50");
             if (novoSaldo) {
                 document.getElementById('balance-text').innerText = `R$ ${Number(novoSaldo).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
             }
+        }
+
+        function adicionarTransacao() {
+            const nome = prompt("Nome da transação (ex: Uber, Padaria):");
+            if (!nome) return;
+            const valor = prompt("Valor (ex: -35.00 ou +150.00):");
+            if (!valor) return;
+
+            const lista = document.getElementById('transaction-list');
+            const item = document.createElement('div');
+            item.className = "flex justify-between items-center p-3 rounded-xl hover:bg-neutral-100 cursor-pointer transition";
+            item.onclick = () => abrirComprovante(nome, `R$ ${valor}`, "Agora mesmo", "Transação Personalizada", "COMPROVANTE-" + Math.floor(Math.random()*900000+100000), nome);
+            item.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-800">💸</div>
+                    <div>
+                        <p class="text-sm font-semibold text-neutral-900">${nome}</p>
+                        <p class="text-xs text-neutral-500">Agora mesmo</p>
+                    </div>
+                </div>
+                <span class="text-sm font-semibold text-neutral-900">R$ ${valor}</span>
+            `;
+            lista.prepend(item);
         }
     </script>
 </body>
