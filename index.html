@@ -32,6 +32,15 @@
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Animação Notificação Push */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .push-notification {
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 <body>
@@ -39,8 +48,11 @@
     <!-- Container Fixo Centralizado (App Frame / Responsivo Absoluto) -->
     <div id="app-container" class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
 
+        <!-- ================= SISTEMA DE NOTIFICAÇÃO PUSH FLUTUANTE ================= -->
+        <div id="push-container" class="absolute top-3 left-3 right-3 z-[100] pointer-events-none flex flex-col gap-2"></div>
+
         <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
-        <div id="screen-login" class="absolute inset-0 bg-white z-[100] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
+        <div id="screen-login" class="absolute inset-0 bg-white z-[90] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
             <div class="pt-8 text-center">
                 <div class="flex justify-center mb-4">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter Logo" class="h-10">
@@ -106,7 +118,10 @@
             </div>
             <div class="flex items-center space-x-3 text-zinc-600 text-base">
                 <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
-                <i class="fa-regular fa-bell cursor-pointer" onclick="alert('Sem novas notificações.')"></i>
+                <div class="relative cursor-pointer" onclick="abrirModalNotificacoes()">
+                    <i class="fa-regular fa-bell"></i>
+                    <span id="badge-notif" class="absolute -top-1 -right-1 w-2 h-2 bg-orange-600 rounded-full hidden"></span>
+                </div>
             </div>
         </header>
 
@@ -125,7 +140,7 @@
                     <h2 class="text-xl font-extrabold text-zinc-900" id="saldo-display">R$ 4.850,20</h2>
                     <i class="fa-solid fa-chevron-right text-xs text-zinc-400"></i>
                 </div>
-                <p class="text-[11px] text-zinc-500">Rendimento total: <span class="text-emerald-600 font-medium">+R$ 38,40</span> este mês</p>
+                <p class="text-[11px] text-zinc-500">Rendimento total: <span class="text-emerald-600 font-medium" id="rendimento-display">+R$ 38,40</span> este mês</p>
             </div>
 
             <!-- Atalhos / Ações Rápidas -->
@@ -142,7 +157,7 @@
                     </div>
                     <span class="text-[11px] font-medium text-zinc-700">Cartões</span>
                 </div>
-                <div onclick="alert('Secção de Investimentos')" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
+                <div onclick="abrirModalInvestimento()" class="bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
                         <i class="fa-solid fa-chart-pie"></i>
                     </div>
@@ -196,11 +211,11 @@
                 <i class="fa-solid fa-credit-card text-base"></i>
                 <span class="text-[9px] font-medium mt-0.5">Cartões</span>
             </div>
-            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
+            <div onclick="abrirModalInvestimento()" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-chart-pie text-base"></i>
                 <span class="text-[9px] font-medium mt-0.5">Investir</span>
             </div>
-            <div class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
+            <div onclick="alert('Inter Shop')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600 transition">
                 <i class="fa-solid fa-bag-shopping text-base"></i>
                 <span class="text-[9px] font-medium mt-0.5">Shop</span>
             </div>
@@ -214,7 +229,6 @@
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalCartao()"></i>
                 </div>
 
-                <!-- Simulação Visual do Cartão Inter Laranja -->
                 <div class="w-full h-44 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-5 text-white flex flex-col justify-between shadow-lg relative overflow-hidden">
                     <div class="flex justify-between items-center">
                         <span class="font-bold tracking-widest text-sm">INTER</span>
@@ -247,6 +261,50 @@
                     <button onclick="fecharModalCartao()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
                         Fechar
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODAL INVESTIMENTOS ================= -->
+        <div id="modal-investimento" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
+            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200">
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+                    <h3 class="font-bold text-zinc-800 text-sm">Investir no Inter (100% CDI)</h3>
+                    <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalInvestimento()"></i>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="bg-orange-50 p-3.5 rounded-2xl border border-orange-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-orange-600 font-bold block text-sm">Rendimento Automático</span>
+                            <span class="text-zinc-600 text-[11px]">Seu dinheiro rende todos os dias úteis.</span>
+                        </div>
+                        <i class="fa-solid fa-chart-line text-orange-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <label class="font-semibold text-zinc-600 block mb-1">Valor para Aplicar (R$)</label>
+                        <input type="text" id="inv-valor" value="500,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
+                    </div>
+                </div>
+
+                <button onclick="executarInvestimento()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1">
+                    Aplicar na Conta Mais / CDI
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= MODAL NOTIFICAÇÕES ================= -->
+        <div id="modal-notificacoes" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
+            <div class="bg-white w-full rounded-t-3xl p-6 space-y-3 max-h-[80vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+                    <h3 class="font-bold text-zinc-800 text-sm">Notificações Recentes</h3>
+                    <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalNotificacoes()"></i>
+                </div>
+
+                <div class="space-y-2.5" id="lista-notificacoes-app">
+                    <div class="p-3 bg-zinc-50 rounded-xl border border-zinc-100 text-xs text-zinc-600">
+                        Nenhuma notificação anterior pendente.
+                    </div>
                 </div>
             </div>
         </div>
@@ -303,7 +361,7 @@
             </div>
         </div>
 
-        <!-- ================= MODAL COMPROVATIVO ================= -->
+        <!-- ================= MODAL COMPROVATIVO (Com Bonequinho de Perfil Padrão) ================= -->
         <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[80] hidden flex-col justify-between p-6 overflow-y-auto">
             <div>
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
@@ -315,8 +373,9 @@
                 </div>
 
                 <div class="text-center py-5 border-b border-dashed border-zinc-200">
-                    <div class="w-11 h-11 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-lg" id="comp-icone-status">
-                        <i class="fa-solid fa-check"></i>
+                    <!-- Ícone substituído por Bonequinho de Perfil Genérico -->
+                    <div class="w-12 h-12 rounded-full bg-zinc-100 text-zinc-600 flex items-center justify-center mx-auto mb-2 text-xl" id="comp-icone-status">
+                        <i class="fa-solid fa-user"></i>
                     </div>
                     <h3 class="text-xs font-semibold text-zinc-500" id="comp-titulo-status">Pix efetuado com sucesso</h3>
                     <h2 class="text-xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 0,00</h2>
@@ -360,6 +419,7 @@
     <script>
         let saldoAtual = 4850.20;
         let saldoVisivel = true;
+        let listaNotificacoes = [];
 
         window.onload = function() {
             const savedName = localStorage.getItem('inter_nome');
@@ -389,6 +449,8 @@
             setTimeout(() => {
                 loginScreen.style.display = 'none';
             }, 300);
+
+            adicionarNotificacaoSistema("Bem-vindo ao Banco Inter!", "Sua conta digital está ativa e rendendo 100% CDI.");
         }
 
         function atualizarNomeNaTela(nome) {
@@ -424,11 +486,9 @@
             document.getElementById('input-novo-nome').value = document.getElementById('user-display-name').innerText;
             document.getElementById('modal-nome').classList.remove('hidden');
         }
-
         function fecharModalAlterarNome() {
             document.getElementById('modal-nome').classList.add('hidden');
         }
-
         function confirmarAlterarNome() {
             const novoNome = document.getElementById('input-novo-nome').value;
             if(novoNome.trim() !== "") {
@@ -456,18 +516,81 @@
             }
         }
 
-        function abrirModalCartao() {
-            document.getElementById('modal-cartao').classList.remove('hidden');
-        }
-        function fecharModalCartao() {
-            document.getElementById('modal-cartao').classList.add('hidden');
+        function abrirModalCartao() { document.getElementById('modal-cartao').classList.remove('hidden'); }
+        function fecharModalCartao() { document.getElementById('modal-cartao').classList.add('hidden'); }
+
+        function abrirModalInvestimento() { document.getElementById('modal-investimento').classList.remove('hidden'); }
+        function fecharModalInvestimento() { document.getElementById('modal-investimento').classList.add('hidden'); }
+
+        function executarInvestimento() {
+            const valStr = document.getElementById('inv-valor').value.replace(/\./g, '').replace(',', '.');
+            const val = parseFloat(valStr);
+            if(isNaN(val) || val <= 0) { alert('Valor inválido.'); return; }
+            
+            saldoAtual += val;
+            atualizarDisplaySaldo();
+            fecharModalInvestimento();
+            adicionarNotificacaoSistema("Investimento Aplicado", `Aplicação de ${val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} efetuada com sucesso no CDI.`);
+            alert('Investimento efetuado com sucesso!');
         }
 
-        function abrirModalSimularPix() {
-            document.getElementById('modal-pix').classList.remove('hidden');
+        function abrirModalSimularPix() { document.getElementById('modal-pix').classList.remove('hidden'); }
+        function fecharModalSimularPix() { document.getElementById('modal-pix').classList.add('hidden'); }
+
+        function abrirModalNotificacoes() {
+            document.getElementById('modal-notificacoes').classList.remove('hidden');
+            document.getElementById('badge-notif').classList.add('hidden');
         }
-        function fecharModalSimularPix() {
-            document.getElementById('modal-pix').classList.add('hidden');
+        function fecharModalNotificacoes() { document.getElementById('modal-notificacoes').classList.add('hidden'); }
+
+        function adicionarNotificacaoSistema(titulo, mensagem) {
+            const agora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            listaNotificacoes.unshift({ titulo, mensagem, hora: agora });
+
+            // Atualiza HTML da lista de notificações
+            const containerNotif = document.getElementById('lista-notificacoes-app');
+            containerNotif.innerHTML = listaNotificacoes.map(n => `
+                <div class="p-3 bg-zinc-50 rounded-xl border border-zinc-100 flex flex-col gap-0.5">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-xs text-zinc-800">${n.titulo}</span>
+                        <span class="text-[10px] text-zinc-400">${n.hora}</span>
+                    </div>
+                    <p class="text-[11px] text-zinc-600">${n.mensagem}</p>
+                </div>
+            `).join('');
+
+            // Mostra badge vermelha no sininho
+            document.getElementById('badge-notif').classList.remove('hidden');
+
+            // Dispara Push Nativo Visual na Tela do Telemóvel
+            dispararPushVisual(titulo, mensagem);
+        }
+
+        function dispararPushVisual(titulo, mensagem) {
+            const pushBox = document.createElement('div');
+            pushBox.className = "push-notification bg-zinc-900/95 text-white p-3.5 rounded-2xl shadow-xl flex items-center space-x-3 backdrop-blur-md border border-white/10 pointer-events-auto";
+            pushBox.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <h5 class="text-xs font-bold text-orange-400">Banco Inter</h5>
+                        <span class="text-[9px] text-zinc-400">Agora</span>
+                    </div>
+                    <p class="text-[11px] font-semibold text-white truncate">${titulo}</p>
+                    <p class="text-[10px] text-zinc-300 truncate">${mensagem}</p>
+                </div>
+            `;
+            const containerPush = document.getElementById('push-container');
+            containerPush.appendChild(pushBox);
+
+            setTimeout(() => {
+                pushBox.style.opacity = '0';
+                pushBox.style.transform = 'translateY(-20px)';
+                pushBox.style.transition = 'all 0.3s ease';
+                setTimeout(() => pushBox.remove(), 300);
+            }, 4000);
         }
 
         function executarSimulacaoPix() {
@@ -503,6 +626,13 @@
             `;
             lista.insertAdjacentHTML('afterbegin', itemHTML);
             fecharModalSimularPix();
+
+            // Dispara Notificação em Tempo Real no Dispositivo
+            const msgNotif = tipo === 'enviado' 
+                ? `Pix de ${valorF} enviado com sucesso para ${nome}.` 
+                : `Pix de ${valorF} recebido de ${nome} (${banco}).`;
+            adicionarNotificacaoSistema(tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido', msgNotif);
+
             abrirComprovativo(tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido', (tipo === 'enviado' ? '- ' : '+ ') + valorF, 'Hoje, ' + hora, nome, cpf, banco);
         }
 
@@ -513,15 +643,6 @@
             document.getElementById('comp-nome').innerText = nome;
             document.getElementById('comp-cpf').innerText = cpf;
             document.getElementById('comp-banco').innerText = banco;
-
-            const iconeBox = document.getElementById('comp-icone-status');
-            if(titulo.includes('Enviado')) {
-                iconeBox.className = "w-11 h-11 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-2 text-lg";
-                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-            } else {
-                iconeBox.className = "w-11 h-11 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-lg";
-                iconeBox.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
-            }
 
             document.getElementById('modal-comprovativo').style.display = 'flex';
         }
