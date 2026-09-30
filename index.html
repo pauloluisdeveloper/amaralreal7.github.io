@@ -19,6 +19,8 @@
     
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        /* Garante centralização perfeita na tela sem quebrar o design original */
         html, body { 
             background-color: #121214; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -27,6 +29,7 @@
             overflow: hidden; 
             display: flex; justify-content: center; align-items: center; 
         }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -47,15 +50,15 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-zinc-950 flex justify-center items-center h-dvh w-screen overflow-hidden">
 
-    <!-- Container Fixo Centralizado (App Frame) -->
-    <div id="app-container" class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
+    <!-- Container Fixo Centralizado com o seu design exato -->
+    <div class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
 
         <!-- ================= NOTIFICAÇÃO PUSH ESTILO IPHONE (NO TOPO) ================= -->
         <div id="push-container" class="absolute top-3 left-3 right-3 z-[250] pointer-events-none flex flex-col gap-2 items-center"></div>
 
-        <!-- ================= TOAST / ALERTA CUSTOMIZADO (NA PARTE INFERIOR) ================= -->
+        <!-- ================= TOAST / ALERTA CUSTOMIZADO ================= -->
         <div id="toast-container" class="absolute inset-x-0 bottom-20 z-[200] flex justify-center items-center pointer-events-none hidden px-6">
             <div class="toast-inter bg-zinc-900/95 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3.5 backdrop-blur-md border border-white/10 max-w-xs text-center">
                 <div class="w-7 h-7 rounded-full bg-orange-600 text-white flex items-center justify-center shrink-0 text-xs shadow-sm">
@@ -109,7 +112,6 @@
                 <button type="button" onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30 cursor-pointer text-sm">
                     Entrar na Conta
                 </button>
-                <!-- Botão Cadastre-se puramente visual (sem função e sem mensagens) -->
                 <button type="button" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition cursor-pointer text-xs">
                     Cadastre-se / Abrir Conta
                 </button>
@@ -370,7 +372,7 @@
 
         <!-- MODAL CARTÃO -->
         <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
                     <h3 class="font-bold text-zinc-800 text-sm">Meu Cartão Múltiplo</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalCartao()"></i>
@@ -414,7 +416,7 @@
 
         <!-- MODAL INVESTIMENTOS -->
         <div id="modal-investimento" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
                     <h3 class="font-bold text-zinc-800 text-sm">Investimentos (100% CDI)</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalInvestimento()"></i>
@@ -442,7 +444,7 @@
 
         <!-- MODAL ALTERAR NOME -->
         <div id="modal-nome" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-xs rounded-2xl p-5 space-y-3.5 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="bg-white w-full max-w-xs rounded-2xl p-5 space-y-3.5 shadow-2xl">
                 <h3 class="font-bold text-zinc-800 text-sm">Alterar Nome de Titular</h3>
                 <input type="text" id="input-novo-nome" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                 <div class="flex gap-2.5 pt-1">
@@ -454,12 +456,113 @@
 
         <!-- MODAL TRANSAÇÃO / PIX -->
         <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200 hide-scrollbar">
-                <!-- Conteúdo fechado do Pix/Modal caso haja funções adicionais -->
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl hide-scrollbar">
+                <!-- Conteúdo do Pix -->
             </div>
         </div>
 
     </div>
 
+    <!-- Scripts de Controle (Correção do Login e Foto de Perfil) -->
+    <script>
+        function realizarLogin() {
+            const telaLogin = document.getElementById('screen-login');
+            if (telaLogin) {
+                telaLogin.style.opacity = '0';
+                setTimeout(() => {
+                    telaLogin.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function carregarFotoGaleria(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Atualiza a foto tanto no login quanto na home
+                    const imgs = [document.getElementById('login-avatar-img'), document.getElementById('user-avatar-img')];
+                    const texts = [document.getElementById('login-avatar-text'), document.getElementById('user-avatar-text')];
+                    
+                    imgs.forEach(img => {
+                        if (img) {
+                            img.src = e.target.result;
+                            img.classList.remove('hidden');
+                        }
+                    });
+                    texts.forEach(txt => {
+                        if (txt) {
+                            txt.classList.add('hidden');
+                        }
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function atualizarNomeNaTela(val) {
+            const cartaoTitular = document.getElementById('cartao-titular');
+            if (cartaoTitular) cartaoTitular.innerText = val ? val.toUpperCase() : 'USUÁRIO';
+        }
+
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast-container');
+            const msgEl = document.getElementById('toast-message');
+            if (toast && msgEl) {
+                msgEl.innerText = msg;
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 2500);
+            }
+        }
+
+        function abrirInterShop() {
+            const shop = document.getElementById('modal-intershop');
+            if (shop) shop.style.display = 'flex';
+        }
+        function fecharInterShop() {
+            const shop = document.getElementById('modal-intershop');
+            if (shop) shop.style.display = 'none';
+        }
+
+        function abrirModalCartao() {
+            const modal = document.getElementById('modal-cartao');
+            if (modal) modal.classList.remove('hidden');
+        }
+        function fecharModalCartao() {
+            const modal = document.getElementById('modal-cartao');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function abrirModalInvestimento() {
+            const modal = document.getElementById('modal-investimento');
+            if (modal) modal.classList.remove('hidden');
+        }
+        function fecharModalInvestimento() {
+            const modal = document.getElementById('modal-investimento');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function abrirModalSimularPix() {
+            const modal = document.getElementById('modal-pix');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function alternarVisibilidadeSaldo() {
+            const saldo = document.getElementById('saldo-display');
+            const eye = document.getElementById('toggle-eye');
+            if (saldo && eye) {
+                if (saldo.innerText.includes('R$')) {
+                    saldo.innerText = 'R$ ••••••';
+                    eye.classList.remove('fa-regular', 'fa-eye');
+                    eye.classList.add('fa-regular', 'fa-eye-slash');
+                } else {
+                    saldo.innerText = 'R$ 9,60';
+                    eye.classList.remove('fa-regular', 'fa-eye-slash');
+                    eye.classList.add('fa-regular', 'fa-eye');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
