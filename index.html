@@ -19,7 +19,7 @@
     
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
+        html, body { 
             background-color: #121214; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             margin: 0; padding: 0; 
@@ -116,10 +116,8 @@
             </div>
         </div>
 
-        <!-- ================= 2. HOME PRINCIPAL (NOVO DESIGN INTER) ================= -->
-        <!-- Cabeçalho Novo Design -->
+        <!-- ================= 2. HOME PRINCIPAL ================= -->
         <header class="px-5 pt-4 pb-2 bg-white flex justify-between items-center z-10 shrink-0">
-            <!-- Logo Banco Inter Estilizada -->
             <div class="flex items-center space-x-1">
                 <div class="text-orange-600 text-lg flex items-center">
                     <i class="fa-solid fa-sun text-orange-500 text-sm mr-0.5"></i>
@@ -131,7 +129,6 @@
                 <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
                 <i class="fa-solid fa-magnifying-glass cursor-pointer" onclick="abrirInterShop()"></i>
                 
-                <!-- Perfil / Ícone de Utilizador -->
                 <div class="relative cursor-pointer group" onclick="document.getElementById('file-input-avatar').click()" title="Alterar foto">
                     <div class="w-8 h-8 rounded-full bg-zinc-200 text-zinc-700 flex items-center font-bold justify-center text-xs shadow-xs overflow-hidden border border-zinc-300">
                         <span id="user-avatar-text">UI</span>
@@ -157,7 +154,7 @@
                 </div>
             </div>
 
-            <!-- Card de Conta Digital (Novo Layout) -->
+            <!-- Card de Conta Digital -->
             <div class="bg-white p-5 rounded-3xl shadow-xs border border-zinc-100">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-medium text-zinc-500">Conta Digital</span>
@@ -169,7 +166,6 @@
                     <h2 class="text-2xl font-extrabold text-zinc-900 tracking-tight" id="saldo-display">R$ 9,60</h2>
                 </div>
 
-                <!-- Botões Pix e Pagar dentro do Card -->
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="abrirModalSimularPix()" class="bg-zinc-50 hover:bg-zinc-100 py-2.5 px-4 rounded-2xl border border-zinc-100 flex items-center space-x-2.5 transition cursor-pointer">
                         <div class="w-7 h-7 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
@@ -186,7 +182,7 @@
                 </div>
             </div>
 
-            <!-- Atalhos / Ações Rápidas (4 Botões do Novo Design) -->
+            <!-- Atalhos / Ações Rápidas -->
             <div class="grid grid-cols-4 gap-2">
                 <div onclick="abrirModalCartao()" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
                     <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
@@ -214,7 +210,7 @@
                 </div>
             </div>
 
-            <!-- Banner Black / Benefícios Exclusivos -->
+            <!-- Banner Black -->
             <div onclick="abrirModalCartao()" class="w-full bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 rounded-3xl p-4 text-white shadow-md relative overflow-hidden cursor-pointer flex justify-between items-center border border-zinc-700">
                 <div class="space-y-1.5 z-10 max-w-[180px]">
                     <h3 class="text-sm font-black tracking-wide">Benefícios</h3>
@@ -232,7 +228,7 @@
                 </div>
             </div>
 
-            <!-- Seção Ser Inter é ter (Shopping) -->
+            <!-- Shopping -->
             <div class="space-y-2">
                 <h3 class="text-xs font-bold text-zinc-800 px-1">Ser Inter é ter</h3>
                 <div onclick="abrirInterShop()" class="bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl p-4 text-white shadow-md relative overflow-hidden cursor-pointer flex justify-between items-center">
@@ -271,7 +267,7 @@
 
         </main>
 
-        <!-- Barra de Navegação Inferior Tradicional do Novo Design -->
+        <!-- Barra de Navegação Inferior -->
         <nav class="bg-white border-t border-zinc-200 py-2 px-6 flex justify-between items-center text-center shrink-0 z-10">
             <div class="flex flex-col items-center text-orange-600 cursor-pointer">
                 <i class="fa-solid fa-house text-base"></i>
@@ -298,7 +294,6 @@
         <!-- ================= MODAL SHOP ================= -->
         <div id="modal-intershop" class="absolute inset-0 bg-white z-[100] hidden flex-col justify-between overflow-y-auto">
             <div>
-                <!-- Topo Shop com Botão X Proporcional -->
                 <div class="bg-orange-600 px-5 pt-4 pb-4 text-white flex justify-between items-center sticky top-0 z-20 shadow-md">
                     <div>
                         <h2 class="text-xs font-black tracking-wider">SHOPPING</h2>
@@ -309,7 +304,6 @@
                     </button>
                 </div>
 
-                <!-- Barra de Pesquisa Shop -->
                 <div class="p-4 bg-zinc-50 border-b border-zinc-100">
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-xs text-zinc-400"></i>
@@ -317,7 +311,6 @@
                     </div>
                 </div>
 
-                <!-- Vitrine de Produtos -->
                 <div class="p-4 space-y-3 pb-8">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xs font-bold text-zinc-800">Smartphones em Destaque</h3>
@@ -325,7 +318,6 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-3" id="vitrine-produtos">
-                        <!-- Produto 1 -->
                         <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
                             <div>
                                 <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
@@ -345,7 +337,6 @@
                             </div>
                         </div>
 
-                        <!-- Produto 2 -->
                         <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
                             <div>
                                 <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
@@ -464,356 +455,11 @@
         <!-- MODAL TRANSAÇÃO / PIX -->
         <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200 hide-scrollbar">
-                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-sm">Nova Transação / Pix</h3>
-                    <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalSimularPix()"></i>
-                </div>
-                
-                <div class="space-y-2.5 text-xs">
-                    <div>
-                        <label class="font-semibold text-zinc-600 block mb-1">Tipo de Operação</label>
-                        <select id="sim-tipo" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
-                            <option value="enviado">Pix Enviado (-)</option>
-                            <option value="recebido">Pix Recebido (+)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="font-semibold text-zinc-600 block mb-1">Valor (R$)</label>
-                        <input type="text" id="sim-valor" value="50,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-zinc-600 block mb-1">Favorecido / Pagador</label>
-                        <input type="text" id="sim-nome" value="Maria Souza" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-zinc-600 block mb-1">CPF / CNPJ</label>
-                        <input type="text" id="sim-cpf" value="123.456.789-00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-zinc-600 block mb-1">Instituição Bancária</label>
-                        <input type="text" id="sim-banco" value="Nubank" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
-                    </div>
-                </div>
-
-                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1 cursor-pointer">
-                    Gerar Comprovativo e Atualizar Saldo
-                </button>
-            </div>
-        </div>
-
-        <!-- MODAL COMPROVATIVO -->
-        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[130] hidden flex-col justify-between p-6 overflow-y-auto">
-            <div>
-                <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
-                    <span class="text-xs font-bold text-zinc-500">Comprovativo de Transação</span>
-                    <i class="fa-solid fa-xmark text-zinc-600 text-lg cursor-pointer" onclick="fecharComprovativo()"></i>
-                </div>
-
-                <div class="text-center py-5 border-b border-dashed border-zinc-200">
-                    <div class="w-12 h-12 rounded-full bg-zinc-100 text-zinc-600 flex items-center justify-center mx-auto mb-2 text-xl">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <h3 class="text-xs font-semibold text-zinc-500" id="comp-titulo-status">Transação efetuada com sucesso</h3>
-                    <h2 class="text-xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 0,00</h2>
-                    <p class="text-[11px] text-zinc-400 mt-0.5" id="comp-data">---</p>
-                </div>
-
-                <div class="py-3.5 space-y-2.5 text-xs">
-                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[9px] mb-1">Detalhes</div>
-                    <div class="flex justify-between">
-                        <span class="text-zinc-500">Nome</span>
-                        <span class="font-bold text-zinc-800 text-right truncate max-w-[180px]" id="comp-nome">---</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-zinc-500">CPF/CNPJ</span>
-                        <span class="font-medium text-zinc-800" id="comp-cpf">---</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-zinc-500">Instituição</span>
-                        <span class="font-medium text-zinc-800" id="comp-banco">---</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-zinc-500">Autenticação</span>
-                        <span class="font-mono text-[10px] text-zinc-600">E004169682026...</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-2 pt-3 border-t border-zinc-100">
-                <button onclick="mostrarToast('Comprovativo guardado com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md cursor-pointer">
-                    Guardar Comprovativo
-                </button>
-                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">
-                    Voltar ao Início
-                </button>
+                <!-- Conteúdo fechado do Pix/Modal caso haja funções adicionais -->
             </div>
         </div>
 
     </div>
 
-    <!-- Scripts -->
-    <script>
-        let saldoAtual = 9.60;
-        let saldoVisivel = true;
-        let listaNotificacoes = [];
-
-        window.onload = function() {
-            const savedName = localStorage.getItem('app_nome');
-            if(savedName) {
-                document.getElementById('input-nome-login').value = savedName;
-                atualizarNomeNaTela(savedName);
-            }
-            
-            const savedAvatar = localStorage.getItem('app_avatar');
-            if(savedAvatar) {
-                definirAvatarImagem(savedAvatar);
-            }
-        }
-
-        function mostrarToast(mensagem) {
-            const toastContainer = document.getElementById('toast-container');
-            const toastMsg = document.getElementById('toast-message');
-            toastMsg.innerText = mensagem;
-            toastContainer.classList.remove('hidden');
-
-            setTimeout(() => {
-                toastContainer.classList.add('hidden');
-            }, 2500);
-        }
-
-        function realizarLogin() {
-            const nomeInput = document.getElementById('input-nome-login').value;
-            const saldoStr = document.getElementById('input-saldo').value.replace(/\./g, '').replace(',', '.');
-            
-            if(nomeInput.trim() !== "") {
-                localStorage.setItem('app_nome', nomeInput);
-                atualizarNomeNaTela(nomeInput);
-            }
-            
-            if(!isNaN(parseFloat(saldoStr))) {
-                saldoAtual = parseFloat(saldoStr);
-                atualizarDisplaySaldo();
-            }
-
-            const loginScreen = document.getElementById('screen-login');
-            loginScreen.style.opacity = '0';
-            loginScreen.style.pointerEvents = 'none';
-            setTimeout(() => {
-                loginScreen.style.display = 'none';
-            }, 300);
-
-            adicionarNotificacaoSistema("Conta Ativa", "Sua conta digital está pronta para uso.");
-        }
-
-        function atualizarNomeNaTela(nome) {
-            document.getElementById('cartao-titular').innerText = (nome || 'Usuário').toUpperCase();
-            
-            const savedAvatar = localStorage.getItem('app_avatar');
-            if(!savedAvatar) {
-                const iniciais = nome.split(' ').filter(n=>n).map(n => n[0]).join('').substring(0, 2).toUpperCase();
-                document.getElementById('user-avatar-text').innerText = iniciais || 'US';
-                document.getElementById('login-avatar-text').innerText = iniciais || 'US';
-            }
-        }
-
-        function carregarFotoGaleria(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const dataURL = e.target.result;
-                    localStorage.setItem('app_avatar', dataURL);
-                    definirAvatarImagem(dataURL);
-                    mostrarToast("Foto de perfil atualizada!");
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function definirAvatarImagem(dataURL) {
-            const imgMain = document.getElementById('user-avatar-img');
-            const textMain = document.getElementById('user-avatar-text');
-            if(imgMain && textMain && dataURL) {
-                imgMain.src = dataURL;
-                imgMain.classList.remove('hidden');
-                textMain.classList.add('hidden');
-            }
-
-            const imgLogin = document.getElementById('login-avatar-img');
-            const textLogin = document.getElementById('login-avatar-text');
-            if(imgLogin && textLogin && dataURL) {
-                imgLogin.src = dataURL;
-                imgLogin.classList.remove('hidden');
-                textLogin.classList.add('hidden');
-            }
-        }
-
-        function alternarVisibilidadeSaldo() {
-            saldoVisivel = !saldoVisivel;
-            const eyeIcon = document.getElementById('toggle-eye');
-            if(saldoVisivel) {
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-                atualizarDisplaySaldo();
-            } else {
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-                document.getElementById('saldo-display').innerText = 'R$ •••••••';
-            }
-        }
-
-        function atualizarDisplaySaldo() {
-            if(saldoVisivel) {
-                document.getElementById('saldo-display').innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            }
-        }
-
-        function abrirModalCartao() { document.getElementById('modal-cartao').classList.remove('hidden'); }
-        function fecharModalCartao() { document.getElementById('modal-cartao').classList.add('hidden'); }
-
-        function abrirModalInvestimento() { document.getElementById('modal-investimento').classList.remove('hidden'); }
-        function fecharModalInvestimento() { document.getElementById('modal-investimento').classList.add('hidden'); }
-
-        function abrirInterShop() { document.getElementById('modal-intershop').style.display = 'flex'; }
-        function fecharInterShop() { document.getElementById('modal-intershop').style.display = 'none'; }
-
-        function comprarProdutoShop(nomeProduto, valorProduto, cashbackProduto) {
-            if(saldoAtual < valorProduto) {
-                mostrarToast('Saldo insuficiente para esta compra.');
-                return;
-            }
-            saldoAtual -= valorProduto;
-            saldoAtual += cashbackProduto;
-            atualizarDisplaySaldo();
-            fecharInterShop();
-
-            const valorF = valorProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            const cashF = cashbackProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-            adicionarNotificacaoSistema("Compra Aprovada", `Adquiriu ${nomeProduto} por ${valorF}. Ganhou ${cashF} de cashback!`);
-            mostrarToast(`Compra efetuada! +${cashF} de cashback`);
-
-            const lista = document.getElementById('lista-transacoes');
-            const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const itemHTML = `
-                <div onclick="abrirComprovativo('Shopping', '- ${valorF}', 'Hoje, ${hora}', '${nomeProduto}', '00.000.000/0001-00', 'Loja Oficial')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-bag-shopping text-xs"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-zinc-800">Shopping</h4>
-                            <p class="text-[10px] text-zinc-400">Hoje, ${hora}</p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold text-rose-600">- ${valorF}</span>
-                </div>
-            `;
-            lista.insertAdjacentHTML('afterbegin', itemHTML);
-        }
-
-        function executarInvestimento() {
-            const valStr = document.getElementById('inv-valor').value.replace(/\./g, '').replace(',', '.');
-            const val = parseFloat(valStr);
-            if(isNaN(val) || val <= 0) { mostrarToast('Valor inválido.'); return; }
-            
-            saldoAtual += val;
-            atualizarDisplaySaldo();
-            fecharModalInvestimento();
-            adicionarNotificacaoSistema("Investimento Aplicado", `Aplicação de ${val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} efetuada com sucesso.`);
-            mostrarToast('Investimento efetuado!');
-        }
-
-        function abrirModalSimularPix() { document.getElementById('modal-pix').classList.remove('hidden'); }
-        function fecharModalSimularPix() { document.getElementById('modal-pix').classList.add('hidden'); }
-
-        function adicionarNotificacaoSistema(titulo, mensagem) {
-            const agora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            listaNotificacoes.unshift({ titulo, mensagem, hora: agora });
-            dispararPushVisual(titulo, mensagem);
-        }
-
-        function dispararPushVisual(titulo, mensagem) {
-            const pushBox = document.createElement('div');
-            pushBox.className = "push-notification bg-zinc-900/95 text-white p-3.5 rounded-2xl shadow-2xl flex items-center space-x-3.5 backdrop-blur-md border border-white/10 pointer-events-auto w-11/12 max-w-xs";
-            pushBox.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-white shrink-0 font-bold text-xs shadow">
-                    <i class="fa-solid fa-bell"></i>
-                </div>
-                <div class="flex-1 overflow-hidden">
-                    <div class="flex justify-between items-center">
-                        <h5 class="text-xs font-bold text-orange-400">Banco</h5>
-                        <span class="text-[9px] text-zinc-400">Agora</span>
-                    </div>
-                    <p class="text-[11px] font-semibold text-white truncate">${titulo}</p>
-                    <p class="text-[10px] text-zinc-300 truncate">${mensagem}</p>
-                </div>
-            `;
-            const containerPush = document.getElementById('push-container');
-            containerPush.appendChild(pushBox);
-
-            setTimeout(() => {
-                pushBox.style.opacity = '0';
-                pushBox.style.transform = 'translateY(-20px)';
-                pushBox.style.transition = 'all 0.3s ease';
-                setTimeout(() => pushBox.remove(), 300);
-            }, 4000);
-        }
-
-        function executarSimulacaoPix() {
-            const tipo = document.getElementById('sim-tipo').value;
-            const valorStr = document.getElementById('sim-valor').value.replace(/\./g, '').replace(',', '.');
-            const valor = parseFloat(valorStr);
-            const nome = document.getElementById('sim-nome').value;
-            const cpf = document.getElementById('sim-cpf').value;
-            const banco = document.getElementById('sim-banco').value;
-
-            if(isNaN(valor) || valor <= 0) { mostrarToast('Insira um valor válido.'); return; }
-
-            if(tipo === 'enviado') saldoAtual -= valor; else saldoAtual += valor;
-            atualizarDisplaySaldo();
-
-            const lista = document.getElementById('lista-transacoes');
-            const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const valorF = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-            const itemHTML = `
-                <div onclick="abrirComprovativo('${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}', '${tipo === 'enviado' ? '- ' : '+ '}${valorF}', 'Hoje, ${hora}', '${nome}', '${cpf}', '${banco}')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full ${tipo === 'enviado' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-arrow-${tipo === 'enviado' ? 'up' : 'down'} text-xs"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-zinc-800">${tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido'}</h4>
-                            <p class="text-[10px] text-zinc-400">Hoje, ${hora}</p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold ${tipo === 'enviado' ? 'text-rose-600' : 'text-emerald-600'}">${tipo === 'enviado' ? '- ' : '+ '}${valorF}</span>
-                </div>
-            `;
-            lista.insertAdjacentHTML('afterbegin', itemHTML);
-            fecharModalSimularPix();
-
-            const msgNotif = tipo === 'enviado' 
-                ? `Pix de ${valorF} enviado para ${nome}.` 
-                : `Pix de ${valorF} recebido de ${nome}.`;
-            adicionarNotificacaoSistema(tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido', msgNotif);
-
-            abrirComprovativo(tipo === 'enviado' ? 'Pix Enviado' : 'Pix Recebido', (tipo === 'enviado' ? '- ' : '+ ') + valorF, 'Hoje, ' + hora, nome, cpf, banco);
-        }
-
-        function abrirComprovativo(titulo, valor, data, nome, cpf, banco) {
-            document.getElementById('comp-titulo-status').innerText = titulo === 'Pix Enviado' ? 'Pix efetuado com sucesso' : 'Transação efetuada com sucesso';
-            document.getElementById('comp-valor').innerText = valor;
-            document.getElementById('comp-data').innerText = data;
-            document.getElementById('comp-nome').innerText = nome;
-            document.getElementById('comp-cpf').innerText = cpf;
-            document.getElementById('comp-banco').innerText = banco;
-            document.getElementById('modal-comprovativo').style.display = 'flex';
-        }
-
-        function fecharComprovativo() {
-            document.getElementById('modal-comprovativo').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
-
-```
