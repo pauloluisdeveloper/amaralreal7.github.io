@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Banco Inter</title>
+    <title>Conta Digital</title>
     
-    <!-- Configurações PWA / iOS Safari -->
+    <!-- Configurações PWA / iOS Safari / Google Chrome -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Inter">
+    <meta name="apple-mobile-web-app-title" content="Meu App">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#FF7A00">
-    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -70,13 +68,8 @@
         <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
         <div id="screen-login" class="absolute inset-0 bg-white z-[150] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
             <div class="pt-6 text-center">
-                <!-- Logotipo Oficial Inter no Login -->
-                <div class="flex justify-center mb-4">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Banco Inter" class="h-8 object-contain">
-                </div>
-
                 <!-- Foto de Perfil Sincronizada com Lápis Discreto -->
-                <div class="relative inline-block cursor-pointer mb-2 group" onclick="document.getElementById('file-input-avatar-login').click()" title="Alterar foto">
+                <div class="relative inline-block cursor-pointer mb-3 group" onclick="document.getElementById('file-input-avatar-login').click()" title="Alterar foto">
                     <div class="w-16 h-16 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-lg shadow-md overflow-hidden border-2 border-orange-500 ring-4 ring-orange-50">
                         <span id="login-avatar-text">UI</span>
                         <img id="login-avatar-img" src="" alt="Perfil" class="w-full h-full object-cover hidden">
@@ -94,7 +87,7 @@
             <div class="space-y-3 my-auto py-2">
                 <div>
                     <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Titular</label>
-                    <input type="text" id="input-nome-login" value="Usuário Inter" oninput="atualizarNomeNaTela(this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
+                    <input type="text" id="input-nome-login" value="Usuário" oninput="atualizarNomeNaTela(this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -116,7 +109,7 @@
                 <button type="button" onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30 cursor-pointer text-sm">
                     Entrar na Conta
                 </button>
-                <p class="text-[10px] text-center text-zinc-400 mt-2.5">Banco Inter S.A. • Simulador Oficial</p>
+                <p class="text-[10px] text-center text-zinc-400 mt-2.5">Ambiente Seguro • Simulador</p>
             </div>
         </div>
 
@@ -139,16 +132,14 @@
                 <div>
                     <span class="text-[11px] text-zinc-400 block leading-tight">Olá,</span>
                     <div class="flex items-center gap-1.5 group cursor-pointer" onclick="abrirModalAlterarNome()">
-                        <h1 class="text-xs font-bold text-zinc-800 truncate max-w-[130px]" id="user-display-name">Usuário Inter</h1>
+                        <h1 class="text-xs font-bold text-zinc-800 truncate max-w-[130px]" id="user-display-name">Usuário</h1>
                         <i class="fa-solid fa-pencil text-zinc-400 text-[9px]"></i>
                     </div>
                 </div>
             </div>
             
-            <!-- Logo Oficial Inter no Header -->
             <div class="flex items-center space-x-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5 object-contain">
-                <div class="flex items-center space-x-2 text-zinc-600 text-base border-l border-zinc-200 pl-3">
+                <div class="flex items-center space-x-2 text-zinc-600 text-base pl-1">
                     <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
                     <div class="relative cursor-pointer" onclick="abrirModalNotificacoes()">
                         <i class="fa-regular fa-bell"></i>
@@ -212,7 +203,7 @@
                 </div>
 
                 <div class="space-y-3" id="lista-transacoes">
-                    <div onclick="abrirComprovativo('Pix Enviado', '- R$ 150,00', 'Hoje, 14:20', 'Maria Souza da Silva', '***.456.789-**', 'Banco Nubank')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
+                    <div onclick="abrirComprovativo('Pix Enviado', '- R$ 150,00', 'Hoje, 14:20', 'Maria Souza da Silva', '***.456.789-**', 'Nubank')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
                         <div class="flex items-center space-x-2.5">
                             <div class="w-9 h-9 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
                                 <i class="fa-solid fa-arrow-up text-xs"></i>
@@ -253,17 +244,14 @@
             </div>
         </nav>
 
-        <!-- ================= MODAL INTER SHOP ================= -->
+        <!-- ================= MODAL SHOP ================= -->
         <div id="modal-intershop" class="absolute inset-0 bg-white z-[100] hidden flex-col justify-between overflow-y-auto">
             <div>
-                <!-- Topo Shop com Logo Inter e Botão X Proporcional -->
+                <!-- Topo Shop com Botão X Proporcional -->
                 <div class="bg-orange-600 px-5 pt-4 pb-4 text-white flex justify-between items-center sticky top-0 z-20 shadow-md">
-                    <div class="flex items-center space-x-2.5">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-6 brightness-0 invert">
-                        <div>
-                            <h2 class="text-xs font-black tracking-wider">INTER SHOP</h2>
-                            <p class="text-[10px] opacity-90">Até 10% de Cashback na conta</p>
-                        </div>
+                    <div>
+                        <h2 class="text-xs font-black tracking-wider">SHOPPING</h2>
+                        <p class="text-[10px] opacity-90">Até 10% de Cashback na conta</p>
                     </div>
                     <button onclick="fecharInterShop()" class="w-8 h-8 rounded-full bg-black/20 hover:bg-black/30 text-white flex items-center justify-center transition cursor-pointer text-sm">
                         <i class="fa-solid fa-xmark"></i>
@@ -274,11 +262,11 @@
                 <div class="p-4 bg-zinc-50 border-b border-zinc-100">
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-xs text-zinc-400"></i>
-                        <input type="text" placeholder="Buscar iPhone, Samsung, Xiaomi..." class="w-full bg-white border border-zinc-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800 shadow-xs">
+                        <input type="text" placeholder="Buscar smartphones, eletrônicos..." class="w-full bg-white border border-zinc-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800 shadow-xs">
                     </div>
                 </div>
 
-                <!-- Vitrine de Produtos (Smartphones) -->
+                <!-- Vitrine de Produtos -->
                 <div class="p-4 space-y-3 pb-8">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xs font-bold text-zinc-800">Smartphones em Destaque</h3>
@@ -286,81 +274,41 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-3" id="vitrine-produtos">
-                        <!-- Produto 1: iPhone 15 Pro -->
+                        <!-- Produto 1 -->
                         <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
                             <div>
                                 <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
                                     <span class="absolute top-2 left-2 bg-orange-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">6% Cashback</span>
                                     <i class="fa-solid fa-mobile-screen-button text-3xl text-zinc-400"></i>
                                 </div>
-                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Apple iPhone 15 Pro Max 256GB Titânio Natural</h4>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Smartphone Pro Max 256GB Titânio</h4>
                             </div>
                             <div class="pt-2 mt-2 border-t border-zinc-50">
                                 <span class="text-[10px] text-zinc-400 line-through block">R$ 8.999,00</span>
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 7.499,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Apple iPhone 15 Pro Max 256GB', 7499.00, 449.94)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
+                                <button onclick="comprarProdutoShop('Smartphone Pro Max 256GB', 7499.00, 449.94)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Produto 2: Samsung Galaxy S24 Ultra -->
+                        <!-- Produto 2 -->
                         <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
                             <div>
                                 <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
                                     <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">8% Cashback</span>
                                     <i class="fa-solid fa-mobile-screen text-3xl text-zinc-400"></i>
                                 </div>
-                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Samsung Galaxy S24 Ultra 5G 512GB Titânio Cinza</h4>
+                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Smartphone Ultra 5G 512GB</h4>
                             </div>
                             <div class="pt-2 mt-2 border-t border-zinc-50">
                                 <span class="text-[10px] text-zinc-400 line-through block">R$ 7.999,00</span>
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 6.299,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Samsung Galaxy S24 Ultra 512GB', 6299.00, 503.92)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
-                                    Comprar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Produto 3: iPhone 14 -->
-                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
-                            <div>
-                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
-                                    <span class="absolute top-2 left-2 bg-orange-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">5% Cashback</span>
-                                    <i class="fa-solid fa-mobile-screen-button text-3xl text-zinc-400"></i>
-                                </div>
-                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Apple iPhone 14 128GB Meia-Noite</h4>
-                            </div>
-                            <div class="pt-2 mt-2 border-t border-zinc-50">
-                                <span class="text-[10px] text-zinc-400 line-through block">R$ 4.999,00</span>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-extrabold text-orange-600">R$ 3.899,00</span>
-                                </div>
-                                <button onclick="comprarProdutoShop('Apple iPhone 14 128GB', 3899.00, 194.95)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
-                                    Comprar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Produto 4: Xiaomi Redmi Note 13 Pro -->
-                        <div class="bg-white p-3 rounded-2xl border border-zinc-100 shadow-xs flex flex-col justify-between">
-                            <div>
-                                <div class="w-full h-32 bg-zinc-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden relative">
-                                    <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">10% Cashback</span>
-                                    <i class="fa-solid fa-mobile-screen text-3xl text-zinc-400"></i>
-                                </div>
-                                <h4 class="text-xs font-bold text-zinc-800 leading-snug line-clamp-2">Xiaomi Redmi Note 13 Pro+ 5G 256GB</h4>
-                            </div>
-                            <div class="pt-2 mt-2 border-t border-zinc-50">
-                                <span class="text-[10px] text-zinc-400 line-through block">R$ 2.799,00</span>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-extrabold text-orange-600">R$ 2.199,00</span>
-                                </div>
-                                <button onclick="comprarProdutoShop('Xiaomi Redmi Note 13 Pro+', 2199.00, 219.90)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
+                                <button onclick="comprarProdutoShop('Smartphone Ultra 512GB', 6299.00, 503.92)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
@@ -382,23 +330,23 @@
         <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-sm">Meu Cartão Inter</h3>
+                    <h3 class="font-bold text-zinc-800 text-sm">Meu Cartão Múltiplo</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalCartao()"></i>
                 </div>
 
                 <div class="w-full h-44 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-5 text-white flex flex-col justify-between shadow-lg relative overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <span class="font-bold tracking-widest text-sm">INTER</span>
+                        <span class="font-bold tracking-widest text-sm">BLACK</span>
                         <i class="fa-solid fa-wifi rotate-90 text-sm"></i>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] uppercase opacity-80">Cartão Múltiplo (Débito/Crédito)</div>
+                        <div class="text-[10px] uppercase opacity-80">Débito e Crédito</div>
                         <div class="font-mono text-base tracking-widest" id="cartao-num">5271 •••• •••• 8902</div>
                     </div>
                     <div class="flex justify-between items-end text-xs">
                         <div>
                             <span class="text-[9px] block opacity-70">TITULAR</span>
-                            <span class="font-bold uppercase truncate max-w-[150px] block" id="cartao-titular">USUÁRIO INTER</span>
+                            <span class="font-bold uppercase truncate max-w-[150px] block" id="cartao-titular">USUÁRIO</span>
                         </div>
                         <div>
                             <span class="text-[9px] block opacity-70">VALIDADE</span>
@@ -426,7 +374,7 @@
         <div id="modal-investimento" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-sm">Investir no Inter (100% CDI)</h3>
+                    <h3 class="font-bold text-zinc-800 text-sm">Investimentos (100% CDI)</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalInvestimento()"></i>
                 </div>
 
@@ -445,7 +393,7 @@
                 </div>
 
                 <button onclick="executarInvestimento()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1 cursor-pointer">
-                    Aplicar na Conta Mais / CDI
+                    Aplicar na Conta CDI
                 </button>
             </div>
         </div>
@@ -508,7 +456,7 @@
                     </div>
                     <div>
                         <label class="font-semibold text-zinc-600 block mb-1">Instituição Bancária</label>
-                        <input type="text" id="sim-banco" value="Mercado Pago IP" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
+                        <input type="text" id="sim-banco" value="Mercado Pago" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                     </div>
                 </div>
 
@@ -522,24 +470,21 @@
         <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[130] hidden flex-col justify-between p-6 overflow-y-auto">
             <div>
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
-                    <div class="flex items-center space-x-2">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5 object-contain">
-                        <span class="text-xs font-bold text-zinc-400">Comprovativo Pix</span>
-                    </div>
+                    <span class="text-xs font-bold text-zinc-500">Comprovativo de Transação</span>
                     <i class="fa-solid fa-xmark text-zinc-600 text-lg cursor-pointer" onclick="fecharComprovativo()"></i>
                 </div>
 
                 <div class="text-center py-5 border-b border-dashed border-zinc-200">
-                    <div class="w-12 h-12 rounded-full bg-zinc-100 text-zinc-600 flex items-center justify-center mx-auto mb-2 text-xl" id="comp-icone-status">
-                        <i class="fa-solid fa-user"></i>
+                    <div class="w-12 h-12 rounded-full bg-zinc-100 text-zinc-600 flex items-center justify-center mx-auto mb-2 text-xl">
+                        <i class="fa-solid fa-check"></i>
                     </div>
-                    <h3 class="text-xs font-semibold text-zinc-500" id="comp-titulo-status">Pix efetuado com sucesso</h3>
+                    <h3 class="text-xs font-semibold text-zinc-500" id="comp-titulo-status">Transação efetuada com sucesso</h3>
                     <h2 class="text-xl font-black text-zinc-900 mt-1" id="comp-valor">R$ 0,00</h2>
                     <p class="text-[11px] text-zinc-400 mt-0.5" id="comp-data">---</p>
                 </div>
 
                 <div class="py-3.5 space-y-2.5 text-xs">
-                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[9px] mb-1">Detalhes da Transação</div>
+                    <div class="font-bold text-zinc-400 uppercase tracking-wider text-[9px] mb-1">Detalhes</div>
                     <div class="flex justify-between">
                         <span class="text-zinc-500">Nome</span>
                         <span class="font-bold text-zinc-800 text-right truncate max-w-[180px]" id="comp-nome">---</span>
@@ -553,7 +498,7 @@
                         <span class="font-medium text-zinc-800" id="comp-banco">---</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-zinc-500">Autenticação (EndToEnd)</span>
+                        <span class="text-zinc-500">Autenticação</span>
                         <span class="font-mono text-[10px] text-zinc-600">E004169682026...</span>
                     </div>
                 </div>
@@ -571,20 +516,20 @@
 
     </div>
 
-    <!-- Scripts de Lógica Integrada -->
+    <!-- Scripts -->
     <script>
         let saldoAtual = 4850.20;
         let saldoVisivel = true;
         let listaNotificacoes = [];
 
         window.onload = function() {
-            const savedName = localStorage.getItem('inter_nome');
+            const savedName = localStorage.getItem('app_nome');
             if(savedName) {
                 document.getElementById('input-nome-login').value = savedName;
                 atualizarNomeNaTela(savedName);
             }
             
-            const savedAvatar = localStorage.getItem('inter_avatar');
+            const savedAvatar = localStorage.getItem('app_avatar');
             if(savedAvatar) definirAvatarImagem(savedAvatar);
         }
 
@@ -604,7 +549,7 @@
             const saldoStr = document.getElementById('input-saldo').value.replace(/\./g, '').replace(',', '.');
             
             if(nomeInput.trim() !== "") {
-                localStorage.setItem('inter_nome', nomeInput);
+                localStorage.setItem('app_nome', nomeInput);
                 atualizarNomeNaTela(nomeInput);
             }
             
@@ -620,17 +565,17 @@
                 loginScreen.style.display = 'none';
             }, 300);
 
-            adicionarNotificacaoSistema("Bem-vindo ao Banco Inter!", "Sua conta digital está ativa e rendendo 100% CDI.");
+            adicionarNotificacaoSistema("Conta Ativa", "Sua conta digital está pronta para uso.");
         }
 
         function atualizarNomeNaTela(nome) {
-            document.getElementById('user-display-name').innerText = nome || 'Usuário Inter';
-            document.getElementById('cartao-titular').innerText = (nome || 'Usuário Inter').toUpperCase();
+            document.getElementById('user-display-name').innerText = nome || 'Usuário';
+            document.getElementById('cartao-titular').innerText = (nome || 'Usuário').toUpperCase();
             
             const avatarImg = document.getElementById('user-avatar-img');
             if(avatarImg.src === "" || avatarImg.classList.contains('hidden')) {
                 const iniciais = nome.split(' ').filter(n=>n).map(n => n[0]).join('').substring(0, 2).toUpperCase();
-                document.getElementById('user-avatar-text').innerText = iniciais || 'UI';
+                document.getElementById('user-avatar-text').innerText = iniciais || 'US';
             }
         }
 
@@ -639,7 +584,7 @@
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     const dataURL = e.target.result;
-                    localStorage.setItem('inter_avatar', dataURL);
+                    localStorage.setItem('app_avatar', dataURL);
                     definirAvatarImagem(dataURL);
                     mostrarToast("Foto de perfil atualizada!");
                 }
@@ -673,7 +618,7 @@
         function confirmarAlterarNome() {
             const novoNome = document.getElementById('input-novo-nome').value;
             if(novoNome.trim() !== "") {
-                localStorage.setItem('inter_nome', novoNome);
+                localStorage.setItem('app_nome', novoNome);
                 document.getElementById('input-nome-login').value = novoNome;
                 atualizarNomeNaTela(novoNome);
                 mostrarToast("Nome alterado com sucesso!");
@@ -721,19 +666,19 @@
             const valorF = valorProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             const cashF = cashbackProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-            adicionarNotificacaoSistema("Compra Aprovada - Inter Shop", `Adquiriu ${nomeProduto} por ${valorF}. Ganhou ${cashF} de cashback!`);
+            adicionarNotificacaoSistema("Compra Aprovada", `Adquiriu ${nomeProduto} por ${valorF}. Ganhou ${cashF} de cashback!`);
             mostrarToast(`Compra efetuada! +${cashF} de cashback`);
 
             const lista = document.getElementById('lista-transacoes');
             const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const itemHTML = `
-                <div onclick="abrirComprovativo('Inter Shop', '- ${valorF}', 'Hoje, ${hora}', '${nomeProduto}', '00.000.000/0001-00', 'Inter Shop S.A.')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
+                <div onclick="abrirComprovativo('Shopping', '- ${valorF}', 'Hoje, ${hora}', '${nomeProduto}', '00.000.000/0001-00', 'Loja Oficial')" class="flex items-center justify-between cursor-pointer hover:bg-zinc-50 p-1 rounded-xl transition">
                     <div class="flex items-center space-x-2.5">
                         <div class="w-9 h-9 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-bag-shopping text-xs"></i>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-zinc-800">Inter Shop</h4>
+                            <h4 class="text-xs font-bold text-zinc-800">Shopping</h4>
                             <p class="text-[10px] text-zinc-400">Hoje, ${hora}</p>
                         </div>
                     </div>
@@ -792,7 +737,7 @@
                 </div>
                 <div class="flex-1 overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <h5 class="text-xs font-bold text-orange-400">Banco Inter</h5>
+                        <h5 class="text-xs font-bold text-orange-400">Notificação</h5>
                         <span class="text-[9px] text-zinc-400">Agora</span>
                     </div>
                     <p class="text-[11px] font-semibold text-white truncate">${titulo}</p>
