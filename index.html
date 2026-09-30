@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Inter</title>
+    <title>Banco Inter</title>
     
-    <!-- Configuração PWA / Tela Cheia Real -->
+    <!-- Configurações PWA / iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Inter">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#FF7A00">
-    
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkludGVyIiwKICAic2hvcnRfbmFtZSI6CiJJbnRlciIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiaWNvbnMiOiB7fX0=">
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg">
     
     <!-- Tailwind CSS -->
@@ -52,39 +51,44 @@
 </head>
 <body>
 
-    <!-- Container Fixo Centralizado (App Frame / Responsivo Absoluto) -->
+    <!-- Container Fixo Centralizado (App Frame) -->
     <div id="app-container" class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
 
-        <!-- ================= TOAST / ALERTA CUSTOMIZADO INTER ================= -->
-        <div id="toast-container" class="absolute inset-x-0 top-1/2 -translate-y-1/2 z-[150] flex justify-center items-center pointer-events-none hidden px-6">
+        <!-- ================= TOAST / ALERTA CUSTOMIZADO ================= -->
+        <div id="toast-container" class="absolute inset-x-0 top-1/2 -translate-y-1/2 z-[200] flex justify-center items-center pointer-events-none hidden px-6">
             <div class="toast-inter bg-zinc-900/95 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3.5 backdrop-blur-md border border-white/10 max-w-xs text-center">
                 <div class="w-7 h-7 rounded-full bg-orange-600 text-white flex items-center justify-center shrink-0 text-xs shadow-sm">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <span id="toast-message" class="text-xs font-semibold text-zinc-100 leading-tight">Dados do cartão copiados com sucesso!</span>
+                <span id="toast-message" class="text-xs font-semibold text-zinc-100 leading-tight">Ação realizada com sucesso!</span>
             </div>
         </div>
 
-        <!-- ================= SISTEMA DE NOTIFICAÇÃO PUSH FLUTUANTE ================= -->
-        <div id="push-container" class="absolute top-3 left-3 right-3 z-[100] pointer-events-none flex flex-col gap-2"></div>
+        <!-- ================= NOTIFICAÇÃO PUSH FLUTUANTE ================= -->
+        <div id="push-container" class="absolute top-3 left-3 right-3 z-[180] pointer-events-none flex flex-col gap-2"></div>
 
         <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
-        <div id="screen-login" class="absolute inset-0 bg-white z-[90] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
+        <div id="screen-login" class="absolute inset-0 bg-white z-[150] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
             <div class="pt-6 text-center">
-                <!-- Foto de Perfil Sincronizada no Login -->
-                <div class="relative inline-block cursor-pointer mb-3 group" onclick="document.getElementById('file-input-avatar-login').click()" title="Alterar foto da galeria">
+                <!-- Logotipo Oficial Inter no Login -->
+                <div class="flex justify-center mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Banco Inter" class="h-8 object-contain">
+                </div>
+
+                <!-- Foto de Perfil Sincronizada com Lápis Discreto -->
+                <div class="relative inline-block cursor-pointer mb-2 group" onclick="document.getElementById('file-input-avatar-login').click()" title="Alterar foto">
                     <div class="w-16 h-16 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-lg shadow-md overflow-hidden border-2 border-orange-500 ring-4 ring-orange-50">
                         <span id="login-avatar-text">UI</span>
                         <img id="login-avatar-img" src="" alt="Perfil" class="w-full h-full object-cover hidden">
                     </div>
-                    <div class="absolute bottom-0 right-0 w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center text-[10px] shadow border border-white">
+                    <div class="absolute bottom-0 right-0 w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center text-[10px] shadow border border-white opacity-90 group-hover:scale-110 transition">
                         <i class="fa-solid fa-pencil"></i>
                     </div>
                     <input type="file" id="file-input-avatar-login" accept="image/*" class="hidden" onchange="carregarFotoGaleria(this)">
                 </div>
 
-                <h2 class="text-base font-bold text-zinc-800">Acesse sua conta</h2>
-                <p class="text-[11px] text-zinc-500 mt-0.5">Insira os seus dados para simulação</p>
+                <h2 class="text-base font-bold text-zinc-800 mt-1">Acesse sua conta</h2>
+                <p class="text-[11px] text-zinc-500">Insira os seus dados para simulação</p>
             </div>
 
             <div class="space-y-3 my-auto py-2">
@@ -120,13 +124,13 @@
         <!-- Cabeçalho -->
         <header class="px-5 pt-4 pb-3 bg-white flex justify-between items-center z-10 shrink-0 border-b border-zinc-100">
             <div class="flex items-center space-x-3">
-                <!-- Foto de Perfil Principal com Lápis -->
-                <div class="relative cursor-pointer group" onclick="document.getElementById('file-input-avatar').click()" title="Alterar foto da galeria">
+                <!-- Foto de Perfil Principal com Lápis Discreto -->
+                <div class="relative cursor-pointer group" onclick="document.getElementById('file-input-avatar').click()" title="Alterar foto">
                     <div class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center font-bold justify-center text-sm shadow-sm overflow-hidden border-2 border-white ring-1 ring-zinc-200">
                         <span id="user-avatar-text">UI</span>
                         <img id="user-avatar-img" src="" alt="Perfil" class="w-full h-full object-cover hidden">
                     </div>
-                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-orange-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-sm border border-white">
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-orange-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-sm border border-white group-hover:scale-110 transition">
                         <i class="fa-solid fa-pencil"></i>
                     </div>
                     <input type="file" id="file-input-avatar" accept="image/*" class="hidden" onchange="carregarFotoGaleria(this)">
@@ -140,11 +144,16 @@
                     </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-3 text-zinc-600 text-base">
-                <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
-                <div class="relative cursor-pointer" onclick="abrirModalNotificacoes()">
-                    <i class="fa-regular fa-bell"></i>
-                    <span id="badge-notif" class="absolute -top-1 -right-1 w-2 h-2 bg-orange-600 rounded-full hidden"></span>
+            
+            <!-- Logo Oficial Inter no Header -->
+            <div class="flex items-center space-x-3">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5 object-contain">
+                <div class="flex items-center space-x-2 text-zinc-600 text-base border-l border-zinc-200 pl-3">
+                    <i class="fa-regular fa-eye cursor-pointer" id="toggle-eye" onclick="alternarVisibilidadeSaldo()"></i>
+                    <div class="relative cursor-pointer" onclick="abrirModalNotificacoes()">
+                        <i class="fa-regular fa-bell"></i>
+                        <span id="badge-notif" class="absolute -top-1 -right-1 w-2 h-2 bg-orange-600 rounded-full hidden"></span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -244,19 +253,21 @@
             </div>
         </nav>
 
-        <!-- ================= MODAL INTER SHOP (SMARTPHONES / IPHONES / ANDROIDS) ================= -->
-        <div id="modal-intershop" class="absolute inset-0 bg-white z-[85] hidden flex-col justify-between overflow-y-auto">
+        <!-- ================= MODAL INTER SHOP ================= -->
+        <div id="modal-intershop" class="absolute inset-0 bg-white z-[100] hidden flex-col justify-between overflow-y-auto">
             <div>
-                <!-- Topo Shop -->
-                <div class="bg-orange-600 px-5 pt-5 pb-4 text-white flex justify-between items-center sticky top-0 z-20 shadow-md">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <!-- Topo Shop com Logo Inter e Botão X Proporcional -->
+                <div class="bg-orange-600 px-5 pt-4 pb-4 text-white flex justify-between items-center sticky top-0 z-20 shadow-md">
+                    <div class="flex items-center space-x-2.5">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-6 brightness-0 invert">
                         <div>
-                            <h2 class="text-sm font-black tracking-wider">INTER SHOP</h2>
+                            <h2 class="text-xs font-black tracking-wider">INTER SHOP</h2>
                             <p class="text-[10px] opacity-90">Até 10% de Cashback na conta</p>
                         </div>
                     </div>
-                    <i class="fa-solid fa-xmark text-white text-lg cursor-pointer bg-black/20 w-8 h-8 rounded-full flex items-center justify-center" onclick="fecharInterShop()"></i>
+                    <button onclick="fecharInterShop()" class="w-8 h-8 rounded-full bg-black/20 hover:bg-black/30 text-white flex items-center justify-center transition cursor-pointer text-sm">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
 
                 <!-- Barra de Pesquisa Shop -->
@@ -289,7 +300,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 7.499,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Apple iPhone 15 Pro Max 256GB', 7499.00, 449.94)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                <button onclick="comprarProdutoShop('Apple iPhone 15 Pro Max 256GB', 7499.00, 449.94)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
@@ -309,7 +320,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 6.299,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Samsung Galaxy S24 Ultra 512GB', 6299.00, 503.92)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                <button onclick="comprarProdutoShop('Samsung Galaxy S24 Ultra 512GB', 6299.00, 503.92)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
@@ -329,7 +340,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 3.899,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Apple iPhone 14 128GB', 3899.00, 194.95)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                <button onclick="comprarProdutoShop('Apple iPhone 14 128GB', 3899.00, 194.95)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
@@ -349,7 +360,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-extrabold text-orange-600">R$ 2.199,00</span>
                                 </div>
-                                <button onclick="comprarProdutoShop('Xiaomi Redmi Note 13 Pro+', 2199.00, 219.90)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs">
+                                <button onclick="comprarProdutoShop('Xiaomi Redmi Note 13 Pro+', 2199.00, 219.90)" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 rounded-xl text-[11px] transition shadow-xs cursor-pointer">
                                     Comprar
                                 </button>
                             </div>
@@ -359,15 +370,17 @@
             </div>
 
             <div class="p-4 bg-white border-t border-zinc-100">
-                <button onclick="fecharInterShop()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                <button onclick="fecharInterShop()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">
                     Voltar à Conta
                 </button>
             </div>
         </div>
 
-        <!-- ================= MODAL CARTÃO FAKE ================= -->
-        <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200">
+        <!-- ================= MODAIS CENTRALIZADOS E FIXOS ================= -->
+
+        <!-- MODAL CARTÃO -->
+        <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
                     <h3 class="font-bold text-zinc-800 text-sm">Meu Cartão Inter</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalCartao()"></i>
@@ -399,19 +412,19 @@
                 </div>
 
                 <div class="space-y-2 pt-2">
-                    <button onclick="mostrarToast('Dados do cartão copiados com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md">
+                    <button onclick="mostrarToast('Dados do cartão copiados com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md cursor-pointer">
                         Copiar Número do Cartão
                     </button>
-                    <button onclick="fecharModalCartao()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                    <button onclick="fecharModalCartao()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">
                         Fechar
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= MODAL INVESTIMENTOS ================= -->
-        <div id="modal-investimento" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200">
+        <!-- MODAL INVESTIMENTOS -->
+        <div id="modal-investimento" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
                     <h3 class="font-bold text-zinc-800 text-sm">Investir no Inter (100% CDI)</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalInvestimento()"></i>
@@ -431,21 +444,21 @@
                     </div>
                 </div>
 
-                <button onclick="executarInvestimento()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1">
+                <button onclick="executarInvestimento()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1 cursor-pointer">
                     Aplicar na Conta Mais / CDI
                 </button>
             </div>
         </div>
 
-        <!-- ================= MODAL NOTIFICAÇÕES ================= -->
-        <div id="modal-notificacoes" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-3 max-h-[80vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
-                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
+        <!-- MODAL NOTIFICAÇÕES -->
+        <div id="modal-notificacoes" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3 max-h-[75vh] flex flex-col shadow-2xl animate-in fade-in zoom-in duration-200">
+                <div class="flex justify-between items-center border-b border-zinc-100 pb-3 shrink-0">
                     <h3 class="font-bold text-zinc-800 text-sm">Notificações Recentes</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalNotificacoes()"></i>
                 </div>
 
-                <div class="space-y-2.5" id="lista-notificacoes-app">
+                <div class="space-y-2.5 overflow-y-auto flex-1 pr-1" id="lista-notificacoes-app">
                     <div class="p-3 bg-zinc-50 rounded-xl border border-zinc-100 text-xs text-zinc-600">
                         Nenhuma notificação anterior pendente.
                     </div>
@@ -453,21 +466,21 @@
             </div>
         </div>
 
-        <!-- ================= MODAL ALTERAR NOME ================= -->
-        <div id="modal-nome" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-center justify-center p-4">
-            <div class="bg-white w-full rounded-2xl p-5 space-y-3.5 animate-in fade-in zoom-in duration-200">
+        <!-- MODAL ALTERAR NOME -->
+        <div id="modal-nome" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-xs rounded-2xl p-5 space-y-3.5 shadow-2xl animate-in fade-in zoom-in duration-200">
                 <h3 class="font-bold text-zinc-800 text-sm">Alterar Nome de Titular</h3>
                 <input type="text" id="input-novo-nome" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-orange-500 font-medium text-zinc-800">
                 <div class="flex gap-2.5 pt-1">
-                    <button onclick="fecharModalAlterarNome()" class="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">Cancelar</button>
-                    <button onclick="confirmarAlterarNome()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs">Salvar</button>
+                    <button onclick="fecharModalAlterarNome()" class="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">Cancelar</button>
+                    <button onclick="confirmarAlterarNome()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">Salvar</button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= MODAL SIMULAR PIX ================= -->
-        <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[70] hidden flex items-end justify-center">
-            <div class="bg-white w-full rounded-t-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-bottom duration-200">
+        <!-- MODAL SIMULAR PIX (CENTRALIZADO E FIXO) -->
+        <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200 hide-scrollbar">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
                     <h3 class="font-bold text-zinc-800 text-sm">Simular Nova Transação / Pix</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalSimularPix()"></i>
@@ -499,18 +512,18 @@
                     </div>
                 </div>
 
-                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1">
+                <button onclick="executarSimulacaoPix()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition text-xs shadow-md mt-1 cursor-pointer">
                     Gerar Comprovativo e Atualizar Saldo
                 </button>
             </div>
         </div>
 
-        <!-- ================= MODAL COMPROVATIVO ================= -->
-        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[80] hidden flex-col justify-between p-6 overflow-y-auto">
+        <!-- MODAL COMPROVATIVO -->
+        <div id="modal-comprovativo" class="absolute inset-0 bg-white z-[130] hidden flex-col justify-between p-6 overflow-y-auto">
             <div>
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-4">
                     <div class="flex items-center space-x-2">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_do_banco_Inter_%282023%29.svg" alt="Inter" class="h-5 object-contain">
                         <span class="text-xs font-bold text-zinc-400">Comprovativo Pix</span>
                     </div>
                     <i class="fa-solid fa-xmark text-zinc-600 text-lg cursor-pointer" onclick="fecharComprovativo()"></i>
@@ -547,10 +560,10 @@
             </div>
 
             <div class="space-y-2 pt-3 border-t border-zinc-100">
-                <button onclick="mostrarToast('Comprovativo guardado com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md">
+                <button onclick="mostrarToast('Comprovativo guardado com sucesso!')" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-md cursor-pointer">
                     Guardar Comprovativo
                 </button>
-                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs">
+                <button onclick="fecharComprovativo()" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-2.5 rounded-xl transition text-xs cursor-pointer">
                     Voltar ao Início
                 </button>
             </div>
@@ -701,7 +714,6 @@
                 return;
             }
             saldoAtual -= valorProduto;
-            // Adiciona cashback de volta ao saldo
             saldoAtual += cashbackProduto;
             atualizarDisplaySaldo();
             fecharInterShop();
@@ -712,7 +724,6 @@
             adicionarNotificacaoSistema("Compra Aprovada - Inter Shop", `Adquiriu ${nomeProduto} por ${valorF}. Ganhou ${cashF} de cashback!`);
             mostrarToast(`Compra efetuada! +${cashF} de cashback`);
 
-            // Regista transação no extrato
             const lista = document.getElementById('lista-transacoes');
             const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const itemHTML = `
