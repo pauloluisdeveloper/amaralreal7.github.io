@@ -30,12 +30,12 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .push-notification {
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes fadeInScale {
@@ -52,6 +52,9 @@
     <!-- Container Fixo Centralizado (App Frame) -->
     <div id="app-container" class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-[40px] sm:shadow-2xl flex flex-col justify-between relative overflow-hidden border-0 sm:border-8 sm:border-zinc-800">
 
+        <!-- ================= NOTIFICAÇÃO PUSH ESTILO IPHONE (NO TOPO) ================= -->
+        <div id="push-container" class="absolute top-3 left-3 right-3 z-[250] pointer-events-none flex flex-col gap-2 items-center"></div>
+
         <!-- ================= TOAST / ALERTA CUSTOMIZADO (NA PARTE INFERIOR) ================= -->
         <div id="toast-container" class="absolute inset-x-0 bottom-20 z-[200] flex justify-center items-center pointer-events-none hidden px-6">
             <div class="toast-inter bg-zinc-900/95 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3.5 backdrop-blur-md border border-white/10 max-w-xs text-center">
@@ -61,9 +64,6 @@
                 <span id="toast-message" class="text-xs font-semibold text-zinc-100 leading-tight">Ação realizada com sucesso!</span>
             </div>
         </div>
-
-        <!-- ================= NOTIFICAÇÃO PUSH FLUTUANTE (NA PARTE INFERIOR) ================= -->
-        <div id="push-container" class="absolute bottom-20 left-3 right-3 z-[180] pointer-events-none flex flex-col gap-2"></div>
 
         <!-- ================= 1. ECRÃ DE LOGIN / AGÊNCIA ================= -->
         <div id="screen-login" class="absolute inset-0 bg-white z-[150] flex flex-col justify-between p-6 transition-all duration-300 overflow-y-auto">
@@ -81,7 +81,7 @@
                 </div>
 
                 <h2 class="text-base font-bold text-zinc-800 mt-1">Acesse sua conta</h2>
-                <p class="text-[11px] text-zinc-500">Insira os seus dados para simulação</p>
+                <p class="text-[11px] text-zinc-500">Insira os seus dados de acesso</p>
             </div>
 
             <div class="space-y-3 my-auto py-2">
@@ -109,10 +109,10 @@
                 <button type="button" onclick="realizarLogin()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30 cursor-pointer text-sm">
                     Entrar na Conta
                 </button>
-                <button type="button" onclick="mostrarToast('Redirecionando para abertura de conta...')" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition cursor-pointer text-xs">
+                <!-- Botão Cadastre-se puramente visual (sem função e sem mensagens) -->
+                <button type="button" class="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold py-3 rounded-xl transition cursor-pointer text-xs">
                     Cadastre-se / Abrir Conta
                 </button>
-                <p class="text-[10px] text-center text-zinc-400 mt-1">Ambiente Seguro • Simulador</p>
             </div>
         </div>
 
@@ -205,7 +205,7 @@
             <div class="bg-white p-4 rounded-2xl shadow-xs border border-zinc-100">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="text-xs font-bold text-zinc-800">Últimas Transações</h3>
-                    <span class="text-[11px] font-bold text-orange-600 cursor-pointer" onclick="abrirModalSimularPix()">Simular Transação</span>
+                    <span class="text-[11px] font-bold text-orange-600 cursor-pointer" onclick="abrirModalSimularPix()">Nova Transação</span>
                 </div>
 
                 <div class="space-y-3" id="lista-transacoes">
@@ -432,11 +432,11 @@
             </div>
         </div>
 
-        <!-- MODAL SIMULAR PIX (CENTRALIZADO E FIXO) -->
+        <!-- MODAL TRANSAÇÃO / PIX -->
         <div id="modal-pix" class="absolute inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-3.5 max-h-[85vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200 hide-scrollbar">
                 <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-sm">Simular Nova Transação / Pix</h3>
+                    <h3 class="font-bold text-zinc-800 text-sm">Nova Transação / Pix</h3>
                     <i class="fa-solid fa-xmark text-zinc-400 text-base cursor-pointer" onclick="fecharModalSimularPix()"></i>
                 </div>
                 
@@ -751,14 +751,14 @@
 
         function dispararPushVisual(titulo, mensagem) {
             const pushBox = document.createElement('div');
-            pushBox.className = "push-notification bg-zinc-900/95 text-white p-3.5 rounded-2xl shadow-xl flex items-center space-x-3 backdrop-blur-md border border-white/10 pointer-events-auto";
+            pushBox.className = "push-notification bg-zinc-900/95 text-white p-3.5 rounded-2xl shadow-2xl flex items-center space-x-3.5 backdrop-blur-md border border-white/10 pointer-events-auto w-11/12 max-w-xs";
             pushBox.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">
+                <div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-white shrink-0 font-bold text-xs shadow">
                     <i class="fa-solid fa-bell"></i>
                 </div>
                 <div class="flex-1 overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <h5 class="text-xs font-bold text-orange-400">Notificação</h5>
+                        <h5 class="text-xs font-bold text-orange-400">Banco</h5>
                         <span class="text-[9px] text-zinc-400">Agora</span>
                     </div>
                     <p class="text-[11px] font-semibold text-white truncate">${titulo}</p>
@@ -770,7 +770,7 @@
 
             setTimeout(() => {
                 pushBox.style.opacity = '0';
-                pushBox.style.transform = 'translateY(20px)';
+                pushBox.style.transform = 'translateY(-20px)';
                 pushBox.style.transition = 'all 0.3s ease';
                 setTimeout(() => pushBox.remove(), 300);
             }, 4000);
