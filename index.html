@@ -36,7 +36,7 @@
             padding: env(safe-area-inset-top, 20px) 15px env(safe-area-inset-bottom, 20px) 15px;
         }
 
-        /* Painel centralizado exatamente como está na imagem */
+        /* Painel centralizado exatamente no meio da tela */
         .mobile-container {
             width: 100%;
             max-width: 360px;
@@ -279,92 +279,6 @@
             font-weight: 600;
             color: #fff;
         }
-
-        /* Modal VIP */
-        #vip-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #vip-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .vip-modal-card {
-            width: 85%;
-            max-width: 310px;
-            background-color: #0c0c0c;
-            border: 1px solid #222;
-            border-radius: 22px;
-            padding: 22px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #vip-modal-overlay.active .vip-modal-card {
-            transform: scale(1);
-        }
-
-        .vip-modal-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background-color: #820AD1;
-            margin: 0 auto 14px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(130, 10, 209, 0.4);
-        }
-
-        .vip-modal-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .vip-modal-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-
-        .vip-modal-desc {
-            font-size: 0.8rem;
-            color: #999;
-            line-height: 1.4;
-            margin-bottom: 18px;
-        }
-
-        .vip-modal-btn {
-            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
-        }
     </style>
 </head>
 <body>
@@ -399,14 +313,15 @@
                 <span>Gerar Notificação Pix</span>
             </button>
             
-            <button class="btn-white-vip" onclick="ativarNotificacoesVip()">
+            <!-- Botão redirecionando para o link de pagamento do InfinitePay -->
+            <button class="btn-white-vip" onclick="redirecionarInfinitePay()">
                 <span>Ativar Notificações Reais</span>
                 <span class="vip-badge">VIP</span>
             </button>
         </div>
     </div>
 
-    <!-- Notificação Visual Direta com espaçamento correto -->
+    <!-- Notificação Visual Direta -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -420,18 +335,6 @@
         </div>
     </div>
 
-    <!-- Modal VIP -->
-    <div id="vip-modal-overlay">
-        <div class="vip-modal-card">
-            <div class="vip-modal-icon">
-                <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank">
-            </div>
-            <div class="vip-modal-title" id="vipModalTitle">Notificações VIP</div>
-            <div class="vip-modal-desc" id="vipModalDesc">Sistema pronto para integração de pagamentos via InfinitePay.</div>
-            <button class="vip-modal-btn" onclick="fecharModalVip()">Entendido</button>
-        </div>
-    </div>
-
     <script>
         function atualizarSistemaInstantaneo() {
             const btn = document.getElementById('reloadBtn');
@@ -442,18 +345,11 @@
             }, 300);
         }
 
-        function mostrarModalVip(titulo, descricao) {
-            document.getElementById('vipModalTitle').innerText = titulo;
-            document.getElementById('vipModalDesc').innerText = descricao;
-            document.getElementById('vip-modal-overlay').classList.add('active');
-        }
-
-        function fecharModalVip() {
-            document.getElementById('vip-modal-overlay').classList.remove('active');
-        }
-
-        function ativarNotificacoesVip() {
-            mostrarModalVip("Área VIP - InfinitePay", "Em breve: liberação automática de acesso integrada ao seu recebimento via InfinitePay.");
+        // Redireciona para o link de pagamento do InfinitePay
+        function redirecionarInfinitePay() {
+            // Cole aqui o seu link de pagamento do InfinitePay entre as aspas:
+            const linkInfinitePay = "https://pay.infinitepay.io/seu-link-aqui"; 
+            window.location.href = linkInfinitePay;
         }
 
         function dispararNotificacao() {
