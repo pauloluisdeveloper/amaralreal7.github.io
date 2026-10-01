@@ -10,23 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
     
-    <!-- Ícone Apple Touch Icon com a Logo Oficial e Exata do Nubank -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><path d='M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z' fill='%23FFFFFF'/></svg>">
-    
-    <!-- Manifesto Web PWA -->
-    <link rel="manifest" href='data:application/manifest+json,{
-        "name": "Nubank",
-        "short_name": "Nubank",
-        "start_url": ".",
-        "display": "standalone",
-        "background_color": "#000000",
-        "theme_color": "#820AD1",
-        "icons": [{
-            "src": "data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><rect width=\'512\' height=\'512\' rx=\'112\' fill=\'%23820AD1\'/><path d=\'M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z\' fill=\'%23FFFFFF\'/></svg>",
-            "sizes": "512x512",
-            "type": "image/svg+xml"
-        }]
-    }'>
+    <!-- Ícone Apple Touch Icon com a Logo Correta do Nubank -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><path d='M130 350V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v188c0 42-24 64-67 64s-54-18-67-42c-13 24-24 42-67 42s-67-22-67-64z' fill='%23FFFFFF'/></svg>">
 
     <style>
         * {
@@ -62,7 +47,7 @@
             padding: 24px;
         }
 
-        /* Top Bar com Logo Oficial Nubank Perfeita */
+        /* Top Bar com Logo Correta do Nubank */
         .top-bar {
             display: flex;
             align-items: center;
@@ -71,8 +56,8 @@
         }
 
         .nu-logo-box {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             background-color: #820AD1;
             border-radius: 12px;
             display: flex;
@@ -82,8 +67,8 @@
         }
 
         .nu-logo-box svg {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
         }
 
         .title-app {
@@ -209,8 +194,8 @@
         }
 
         .notif-icon svg {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
         }
 
         .notif-content {
@@ -259,9 +244,9 @@
     <div class="mobile-container">
         <div class="top-bar">
             <div class="nu-logo-box">
-                <!-- Vetor exato da Logo Nubank -->
+                <!-- Vetor exato e otimizado da Logo Nubank -->
                 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z" fill="#FFFFFF"/>
+                    <path d="M130 350V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v188c0 42-24 64-67 64s-54-18-67-42c-13 24-24 42-67 42s-67-22-67-64z" fill="#FFFFFF"/>
                 </svg>
             </div>
             <div class="title-app">Nubank</div>
@@ -291,7 +276,7 @@
     <div id="bank-notification">
         <div class="notif-icon">
             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                <path d="M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z" fill="#FFFFFF"/>
+                <path d="M130 350V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v116c0 18 8 28 24 28s24-10 24-28V162h55v188c0 42-24 64-67 64s-54-18-67-42c-13 24-24 42-67 42s-67-22-67-64z" fill="#FFFFFF"/>
             </svg>
         </div>
         <div class="notif-content">
