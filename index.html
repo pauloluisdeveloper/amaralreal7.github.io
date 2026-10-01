@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nubank</title>
     
-    <!-- Configuração PWA Completa -->
+    <!-- Configuração PWA Otimizada -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
@@ -91,7 +91,7 @@
             color: #fff;
         }
 
-        /* Botão de Atualizar em Tempo Real (Bula o Cache do GitHub instantaneamente) */
+        /* Botão de Atualizar em Tempo Real (Bula o Cache do GitHub) */
         .btn-reload {
             background-color: #121212;
             border: 1px solid #262626;
@@ -215,7 +215,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo (Perfeita, Limpa e sem duplicar nomes) */
+        /* Notificação Visual no Topo (Perfeita, limpa e estável) */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -427,7 +427,7 @@
         </div>
     </div>
 
-    <!-- Notificação Visual no Topo (Perfeita, limpa, sem duplicidade de nomes) -->
+    <!-- Notificação Visual no Topo -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -482,24 +482,38 @@
             mostrarModalVip("Notificações VIP Ativadas", "O sistema de alertas em tempo real do Nubank está configurado e pronto para uso.");
         }
 
-        // Disparar Notificação Visual Limpa (Sem duplicar nomes na tela)
+        // Função de disparo garantida e blindada contra falhas
         function dispararNotificacao() {
-            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
-            const valor = document.getElementById('valorPix').value || "250,00";
+            const nomeInput = document.getElementById('nomePagador');
+            const valorInput = document.getElementById('valorPix');
+            
+            const nome = nomeInput ? nomeInput.value : "Carlos Eduardo";
+            const valor = valorInput ? valorInput.value : "250,00";
 
-            // Atualiza o texto da notificação visual superior com precisão absoluta
-            document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
-
-            const notif = document.getElementById('bank-notification');
-            notif.classList.add('show');
-
-            // Vibração sutil ao receber o Pix se suportada pelo aparelho
-            if ("vibrate" in navigator) {
-                navigator.vibrate(60);
+            // Atualiza o texto com segurança total
+            const textElement = document.getElementById('notifBodyText');
+            if (textElement) {
+                textElement.innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
             }
 
+            // Aciona a barra visual superior
+            const notif = document.getElementById('bank-notification');
+            if (notif) {
+                notif.classList.add('show');
+            }
+
+            // Vibração de feedback físico
+            if ("vibrate" in navigator) {
+                try {
+                    navigator.vibrate(60);
+                } catch(err) {}
+            }
+
+            // Recolhe a notificação após alguns segundos
             setTimeout(() => {
-                notif.classList.remove('show');
+                if (notif) {
+                    notif.classList.remove('show');
+                }
             }, 4500);
         }
     </script>
