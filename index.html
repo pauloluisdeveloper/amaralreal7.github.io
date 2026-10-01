@@ -225,7 +225,7 @@
             margin-top: -4px;
         }
 
-        /* Notificação Flutuante */
+        /* Notificação Flutuante Real */
         #bank-notification {
             position: fixed;
             top: 45px;
@@ -439,31 +439,6 @@
             overflow-y: auto;
         }
 
-        .detection-status {
-            font-size: 0.68rem;
-            color: #a855f7;
-            margin: 6px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-weight: 600;
-        }
-
-        .spinner-pulse {
-            width: 9px;
-            height: 9px;
-            background-color: #a855f7;
-            border-radius: 50%;
-            animation: pulse 1.2s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.3); opacity: 1; }
-            100% { transform: scale(0.8); opacity: 0.5; }
-        }
-
         .key-input-area {
             margin-top: 6px;
             display: flex;
@@ -507,21 +482,48 @@
             margin-top: 2px;
         }
 
-        /* Painel Admin */
-        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 14px; }
-        .admin-header h2 { font-size: 1rem; color: #a855f7; font-weight: 700; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-        .stat-card { background: #111; border: 1px solid #222; padding: 12px; border-radius: 14px; text-align: center; }
-        .stat-card span { font-size: 0.65rem; color: #888; text-transform: uppercase; font-weight: 600; }
-        .stat-card h3 { font-size: 1.1rem; color: #fff; margin-top: 2px; }
-        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .logs-title { font-size: 0.8rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
-        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.7rem; }
+        /* Modal Customizado Estiloso (Substitui o Alert Feio) */
+        .modal-custom-alert {
+            width: 90%;
+            max-width: 280px;
+            background-color: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+        }
+
+        .modal-custom-alert h3 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .modal-custom-alert p {
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        /* Painel Admin Otimizado (Sem bugs visuais) */
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 12px; }
+        .admin-header h2 { font-size: 0.95rem; color: #a855f7; font-weight: 700; }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+        .stat-card { background: #111; border: 1px solid #222; padding: 8px 4px; border-radius: 12px; text-align: center; }
+        .stat-card span { font-size: 0.55rem; color: #888; text-transform: uppercase; font-weight: 600; display: block; }
+        .stat-card h3 { font-size: 0.9rem; color: #fff; margin-top: 2px; }
+        
+        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+        .logs-title { font-size: 0.75rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
+        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 6px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.65rem; }
         .log-row { display: flex; justify-content: space-between; color: #aaa; }
         .log-row b { color: #fff; }
         .badge-ativo { color: #00C853; font-weight: 800; }
-        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.8rem; margin-bottom: 10px; }
-        .btn-back-app { background: transparent; color: #666; border: none; font-size: 0.75rem; text-align: center; cursor: pointer; margin-top: 10px; text-decoration: underline; width: 100%; }
+        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 9px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.75rem; margin-bottom: 8px; }
+        .btn-back-app { background: transparent; color: #666; border: none; font-size: 0.7rem; text-align: center; cursor: pointer; margin-top: 8px; text-decoration: underline; width: 100%; }
     </style>
 </head>
 <body onload="inicializarDispositivo()">
@@ -577,10 +579,15 @@
     <div class="screen-container" id="admin-panel-screen">
         <div class="admin-header">
             <h2>Painel Admin VIP</h2>
-            <span style="font-size: 0.65rem; color: #00C853; font-weight: 700;">● LIVE</span>
+            <span style="font-size: 0.6rem; color: #00C853; font-weight: 700;">● LIVE</span>
         </div>
 
+        <!-- Estatísticas incluindo Contador de Cliques no Link -->
         <div class="stats-grid">
+            <div class="stat-card">
+                <span>Cliques Link</span>
+                <h3 id="statCliquesNum">0</h3>
+            </div>
             <div class="stat-card">
                 <span>Ativações</span>
                 <h3 id="totalVendasNum">0</h3>
@@ -596,17 +603,17 @@
         <div class="logs-section">
             <div class="logs-title">
                 <span>Logs de Vendas e Chaves</span>
-                <span id="statusSync" style="font-size: 0.6rem; color: #666;">Sincronizado</span>
+                <span id="statusSync" style="font-size: 0.55rem; color: #666;">Sincronizado</span>
             </div>
-            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto;">
-                <div style="text-align: center; color: #688; padding: 15px; font-size: 0.75rem;">Carregando logs...</div>
+            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto;">
+                <div style="text-align: center; color: #688; padding: 10px; font-size: 0.7rem;">Carregando logs...</div>
             </div>
         </div>
 
         <button class="btn-back-app" onclick="fecharPainelAdmin()">Voltar para o App</button>
     </div>
 
-    <!-- NOTIFICAÇÃO NUBANK -->
+    <!-- NOTIFICAÇÃO NUBANK REAL (Push na Barra de Notificações do Celular) -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -636,7 +643,7 @@
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT CLIENTE & PLANOS -->
+    <!-- MODAL CHECKOUT CLIENTE & PLANOS INFINITEPAY -->
     <div class="custom-overlay" id="vip-checkout-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Escolha seu Plano VIP</div>
@@ -654,19 +661,18 @@
                 </div>
             </div>
 
-            <div class="qr-placeholder">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix..." alt="QR Code Pix">
+            <div class="qr-placeholder" id="qrContainer">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=INFINITEPAY_CHECKOUT_URL" alt="QR Code InfinitePay">
             </div>
 
             <div class="pix-copy-box" id="pixCopiaColaText">
-                00020126580014br.gov.bcb.pix0136...
+                https://pay.infinitepay.io/seu-link-aqui (Insira seu link)
             </div>
-            <button class="btn-action-checkout" id="btnCopiarPix" style="padding: 7px; font-size: 0.7rem; margin-bottom: 6px;" onclick="copiarChavePix()">Copiar Código Pix</button>
-
-            <div class="detection-status">
-                <div class="spinner-pulse"></div>
-                <span id="detectionText">Aguardando pagamento Pix...</span>
-            </div>
+            
+            <!-- Botão de Pagamento InfinitePay -->
+            <button class="btn-action-checkout" id="btnPagarInfinitePay" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%); margin-bottom: 6px;" onclick="abrirCheckoutInfinitePay()">
+                Pagar com InfinitePay (Checkout)
+            </button>
 
             <div class="key-input-area">
                 <label>Ou digite sua Key de ativação oficial:</label>
@@ -678,13 +684,21 @@
         </div>
     </div>
 
+    <!-- MODAL DE ALERTA CUSTOMIZADO BONITO (Substitui os alerts feios) -->
+    <div class="custom-overlay" id="custom-alert-overlay">
+        <div class="modal-custom-alert">
+            <h3 id="customAlertTitle">Aviso</h3>
+            <p id="customAlertMessage">Mensagem do sistema...</p>
+            <button class="btn-action-checkout" onclick="fecharAlertaCustom()">Entendido</button>
+        </div>
+    </div>
+
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuvhvS8auXVaaGJ_P0P4LirQfxDEfpeOGteLAOXA0Y3dDrmUwXmVlWeQ4-O2A_Yqp8/exec";
         const SENHA_ADMIN_CORRETA = "@171020";
         let meuDeviceId = "";
         let planoSelecionadoValor = "11,90";
         let tempoSelecaoPlano = "30 Dias";
-        let intervaloDeteccao = null;
         let isProcessing = false;
 
         async function inicializarDispositivo() {
@@ -692,6 +706,9 @@
             if (!deviceIdSalvo) {
                 deviceIdSalvo = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
                 localStorage.setItem('nubank_device_id', deviceIdSalvo);
+                
+                // Registra +1 clique/acesso no link do app em tempo real
+                registrarCliqueLink();
             }
             meuDeviceId = deviceIdSalvo;
             document.getElementById('deviceStatusText').innerText = `ID: ${meuDeviceId.substring(0, 10)}...`;
@@ -706,8 +723,22 @@
                     aplicarModoLiberado();
                 }
             } catch (e) {
-                console.log("Erro ao verificar dispositivo");
+                console.log("Erro de sincronização inicial");
             }
+        }
+
+        // Contador de Cliques no Link de Acesso com lógica em tempo real
+        function registrarCliqueLink() {
+            let cliques = parseInt(localStorage.getItem('nu_total_cliques') || '0') + 1;
+            localStorage.setItem('nu_total_cliques', cliques);
+            
+            // Envia opcionalmente para o servidor se desejar salvar na planilha
+            try {
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "registrar_clique" })
+                });
+            } catch(e) {}
         }
 
         function aplicarModoLiberado() {
@@ -741,7 +772,7 @@
                 fecharModalSenhaAdmin();
                 abrirPainelAdmin();
             } else {
-                alert("Senha incorreta!");
+                mostrarAlertaCustom("Acesso Negado", "Senha administrativa incorreta.");
             }
         }
 
@@ -762,62 +793,49 @@
             document.getElementById('plano' + id).classList.add('selected');
             planoSelecionadoValor = valor;
             tempoSelecaoPlano = tempo;
+
+            // Atualiza os links e QR Code do InfinitePay com base no plano escolhido
+            if(valor === '5,99') {
+                document.getElementById('pixCopiaColaText').innerText = "https://pay.infinitepay.io/seu-link-15dias";
+            } else {
+                document.getElementById('pixCopiaColaText').innerText = "https://pay.infinitepay.io/seu-link-30dias";
+            }
         }
 
         function abrirCheckoutVip() {
             document.getElementById('vip-checkout-overlay').classList.add('active');
-            iniciarDeteccaoTempoReal();
         }
 
         function fecharCheckoutVip() {
             document.getElementById('vip-checkout-overlay').classList.remove('active');
-            if (intervaloDeteccao) clearInterval(intervaloDeteccao);
         }
 
-        function copiarChavePix() {
-            const codigoPix = `00020126580014br.gov.bcb.pix0136...&val=${planoSelecionadoValor}`;
-            navigator.clipboard.writeText(codigoPix).then(() => {
-                alert(`Código Pix de R$ ${planoSelecionadoValor} (${tempoSelecaoPlano}) copiado com sucesso!`);
-            });
-        }
-
-        function iniciarDeteccaoTempoReal() {
-            if (intervaloDeteccao) clearInterval(intervaloDeteccao);
+        // INTEGRAÇÃO INFINITEPAY: Abre o link de pagamento real no navegador
+        function abrirCheckoutInfinitePay() {
+            const linkInfinitePay = planoSelecionadoValor === '5,99' 
+                ? "https://pay.infinitepay.io/seu-link-15dias" 
+                : "https://pay.infinitepay.io/seu-link-30dias";
             
-            let segundos = 0;
-            const statusTexto = document.getElementById('detectionText');
-            
-            intervaloDeteccao = setInterval(async () => {
-                segundos++;
-                statusTexto.innerText = `Detectando Pix (${segundos}s)...`;
-
-                if (segundos % 5 === 0) {
-                    try {
-                        const response = await fetch(APPS_SCRIPT_URL, {
-                            method: "POST",
-                            body: JSON.stringify({ acao: "verificar", deviceId: meuDeviceId })
-                        });
-                        const res = await response.json();
-                        if (res.status === "liberado") {
-                            clearInterval(intervaloDeteccao);
-                            aplicarModoLiberado();
-                            fecharCheckoutVip();
-                            alert("Pagamento detectado e ativado com sucesso em tempo real!");
-                        }
-                    } catch (e) {
-                        console.log("Erro na checagem de tempo real");
-                    }
-                }
-            }, 1000);
+            window.open(linkInfinitePay, '_blank');
         }
 
-        // CORREÇÃO CRUCIAL: Validação rigorosa de chave e trava anti-spam para evitar ativações fantasmas
+        // Alerta customizado bonito combinando com o design
+        function mostrarAlertaCustom(titulo, mensagem) {
+            document.getElementById('customAlertTitle').innerText = titulo;
+            document.getElementById('customAlertMessage').innerText = mensagem;
+            document.getElementById('custom-alert-overlay').classList.add('active');
+        }
+
+        function fecharAlertaCustom() {
+            document.getElementById('custom-alert-overlay').classList.remove('active');
+        }
+
         async function validarKeyDeAcesso() {
             if (isProcessing) return;
 
             const inputKey = document.getElementById('inputUserKey').value.trim();
             if (!inputKey || inputKey.length < 5) {
-                alert("Por favor, digite uma Key de ativação válida!");
+                mostrarAlertaCustom("Atenção", "Por favor, digite uma Key de ativação válida!");
                 return;
             }
 
@@ -841,12 +859,12 @@
                 if(res.status === "sucesso") {
                     aplicarModoLiberado();
                     fecharCheckoutVip();
-                    alert("Acesso VIP ativado com sucesso!");
+                    mostrarAlertaCustom("Sucesso!", "Acesso VIP ativado com sucesso!");
                 } else {
-                    alert(res.mensagem || "Key inválida ou já utilizada.");
+                    mostrarAlertaCustom("Erro", res.mensagem || "Key inválida ou já utilizada.");
                 }
             } catch (e) {
-                alert("Erro de conexão com o banco de dados.");
+                mostrarAlertaCustom("Erro de Conexão", "Não foi possível validar com o servidor.");
             } finally {
                 isProcessing = false;
                 btn.disabled = false;
@@ -856,6 +874,11 @@
 
         async function carregarDadosAdmin() {
             document.getElementById('statusSync').innerText = "Atualizando...";
+            
+            // Exibe contagem de cliques do localStorage
+            const totalCliques = localStorage.getItem('nu_total_cliques') || '1';
+            document.getElementById('statCliquesNum').innerText = totalCliques;
+
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: "POST",
@@ -871,12 +894,12 @@
                     lista.innerHTML = "";
                     
                     if(res.registros.length === 0) {
-                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 15px; font-size: 0.75rem;">Nenhuma venda registrada.</div>`;
+                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 10px; font-size: 0.7rem;">Nenhuma venda registrada.</div>`;
                     } else {
                         res.registros.forEach(reg => {
                             lista.innerHTML += `
                                 <div class="log-item">
-                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 14)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
+                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 10)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
                                     <div class="log-row"><span>Key: <b>${reg.key}</b></span> <span>${reg.data}</span></div>
                                 </div>
                             `;
@@ -889,6 +912,7 @@
             }
         }
 
+        // Notificação flutuante que simula a notificação real no celular
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
