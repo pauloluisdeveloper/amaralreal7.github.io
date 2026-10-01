@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Gerador de Notificações</title>
+    <title>Nubank</title>
+    
+    <!-- Configuração PWA / Ícone Automático Nubank na Tela Inicial -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nubank">
+    
+    <!-- Ícone Apple Touch Icon com Logo Oficial Nubank (Roxo #820AD1) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><text x='50%25' y='54%25' font-family='Arial, sans-serif' font-weight='bold' font-size='280' fill='%23FFFFFF' text-anchor='middle' dominant-baseline='middle'>nu</text></svg>">
+    
+    <!-- Manifesto Web PWA -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "Nubank",
+        "short_name": "Nubank",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#000000",
+        "theme_color": "#820AD1",
+        "icons": [{
+            "src": "data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><rect width=\'512\' height=\'512\' rx=\'112\' fill=\'%23820AD1\'/><text x=\'50%25\' y=\'54%25\' font-family=\'Arial, sans-serif\' font-weight=\'bold\' font-size=\'280\' fill=\'%23FFFFFF\' text-anchor=\'middle\' dominant-baseline=\'middle\'>nu</text></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }]
+    }'>
+
     <style>
         * {
             box-sizing: border-box;
@@ -33,56 +57,52 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.04), 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: 0 15px 40px rgba(130, 10, 209, 0.12), 0 0 20px rgba(0,0,0,0.8);
             overflow: hidden;
-            padding: 22px;
+            padding: 24px;
         }
 
-        /* Top Bar */
+        /* Top Bar com Logo Oficial Nubank */
         .top-bar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            gap: 12px;
+            margin-bottom: 22px;
         }
 
-        .title-app {
-            font-size: 1.05rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            color: #fff;
-        }
-
-        .admin-shield {
-            background: #000;
-            border: 1.5px solid #ffffff;
-            color: #ffffff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+        .nu-logo-box {
+            width: 38px;
+            height: 38px;
+            background-color: #820AD1;
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            font-size: 0.8rem;
-            box-shadow: 0 0 10px rgba(255,255,255,0.1);
-            transition: 0.2s;
+            font-weight: bold;
+            font-size: 1.15rem;
+            color: #fff;
+            letter-spacing: -1px;
+            box-shadow: 0 4px 14px rgba(130, 10, 209, 0.45);
         }
-        .admin-shield:hover {
-            background: #1a1a1a;
+
+        .title-app {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
         }
 
         /* Content Area */
         .content {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
         }
 
         label {
@@ -91,47 +111,53 @@
             font-weight: 500;
         }
 
-        input, select {
+        input {
             width: 100%;
             background-color: #141414;
             border: 1px solid #282828;
             color: #ffffff;
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s;
         }
 
-        input:focus, select:focus {
-            border-color: #666;
+        input:focus {
+            border-color: #820AD1;
         }
 
-        /* Botão Branco VIP */
-        .btn-white {
-            background-color: #ffffff;
-            color: #000000;
+        /* Botão Profissional Nubank (Alto Padrão) */
+        .btn-nu {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #ffffff;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 14px;
+            border-radius: 12px;
             font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             margin-top: 4px;
-            transition: opacity 0.2s;
+            box-shadow: 0 6px 20px rgba(130, 10, 209, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-white:hover {
-            opacity: 0.9;
+        .btn-nu:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(130, 10, 209, 0.3);
         }
 
         /* Botão Secundário para Notificações Reais */
         .btn-outline {
             background-color: transparent;
             color: #aaa;
-            border: 1px dashed #444;
-            padding: 10px;
-            border-radius: 10px;
+            border: 1px dashed #333;
+            padding: 11px;
+            border-radius: 12px;
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
@@ -140,11 +166,11 @@
         }
 
         .btn-outline:hover {
-            border-color: #fff;
+            border-color: #820AD1;
             color: #fff;
         }
 
-        /* Notificação Visual Interna (Fallback elegante) */
+        /* Notificação Visual no Topo */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -154,7 +180,7 @@
             max-width: 380px;
             background: rgba(20, 20, 20, 0.96);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(130, 10, 209, 0.3);
             color: #fff;
             padding: 12px 14px;
             border-radius: 16px;
@@ -173,12 +199,14 @@
         .notif-icon {
             width: 36px;
             height: 36px;
+            background-color: #820AD1;
             border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 0.85rem;
+            color: #fff;
             flex-shrink: 0;
         }
 
@@ -198,7 +226,7 @@
 
         .notif-app-name {
             font-size: 0.65rem;
-            color: #aaa;
+            color: #b8b8b8;
             font-weight: 600;
             text-transform: uppercase;
         }
@@ -218,67 +246,7 @@
 
         .notif-text b {
             font-weight: 600;
-        }
-
-        /* Modal de Administração */
-        #admin-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-        }
-
-        .admin-box {
-            background: #111;
-            border: 1px solid #333;
-            width: 100%;
-            max-width: 330px;
-            padding: 20px;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .admin-box h3 {
-            font-size: 1rem;
-        }
-
-        .admin-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .btn-close {
-            background: #222;
             color: #fff;
-            border: none;
-            padding: 9px;
-            border-radius: 8px;
-            flex: 1;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .btn-save {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 9px;
-            border-radius: 8px;
-            flex: 1;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -286,23 +254,13 @@
 
     <!-- Container VIP Compacto Arredondado no Centro -->
     <div class="mobile-container">
-        <!-- Top Bar com Selo de Escudo Branco -->
         <div class="top-bar">
-            <div class="title-app" id="uiTitle">Gerador Pix VIP</div>
-            <div class="admin-shield" onclick="abrirAdmin()" title="Administração">🛡️</div>
+            <div class="nu-logo-box">nu</div>
+            <div class="title-app">Nubank</div>
         </div>
 
-        <!-- Formulário Principal -->
+        <!-- Formulário Principal Exclusivo Nubank -->
         <div class="content">
-            <div class="form-group">
-                <label>Banco / Carteira</label>
-                <select id="bancoSelect">
-                    <option value="nubank">Nubank</option>
-                    <option value="inter">Inter</option>
-                    <option value="picpay">PicPay</option>
-                </select>
-            </div>
-
             <div class="form-group">
                 <label>Nome do Pagador</label>
                 <input type="text" id="nomePagador" value="Carlos Eduardo">
@@ -313,72 +271,27 @@
                 <input type="text" id="valorPix" value="250,00">
             </div>
 
-            <div class="form-group">
-                <label>Toque de Notificação</label>
-                <select id="somSelect">
-                    <option value="iphone">Sino do iPhone (Tri-tone)</option>
-                    <option value="android">Toque do Android (Beep)</option>
-                </select>
-            </div>
-
-            <button class="btn-white" onclick="dispararNotificacao()" id="uiBtnText">Gerar Notificação Pix</button>
+            <button class="btn-nu" onclick="dispararNotificacao()">
+                <span>Gerar Notificação Pix</span>
+            </button>
+            
             <button class="btn-outline" onclick="pedirPermissaoNotificacao()">🔔 Ativar Notificações Reais do Celular</button>
         </div>
     </div>
 
-    <!-- Notificação Visual no Topo -->
+    <!-- Notificação Visual Interna no Topo -->
     <div id="bank-notification">
-        <div class="notif-icon" id="notifIconBox">⚡</div>
+        <div class="notif-icon">nu</div>
         <div class="notif-content">
             <div class="notif-header-row">
-                <span class="notif-app-name" id="notifAppName">Nubank</span>
+                <span class="notif-app-name">Nubank</span>
                 <span class="notif-time">agora</span>
             </div>
             <div class="notif-text" id="notifBodyText">Você recebeu um Pix de <b>R$ 250,00</b> de Carlos Eduardo</div>
         </div>
     </div>
 
-    <!-- Modal de Administração -->
-    <div id="admin-modal">
-        <div class="admin-box">
-            <h3>Área de Administração</h3>
-            <p style="font-size: 0.75rem; color: #888;">Controle restrito ao proprietário.</p>
-            
-            <div class="form-group">
-                <label>Senha de Acesso</label>
-                <input type="password" id="adminPass" placeholder="Senha (padrão: admin)">
-            </div>
-
-            <div id="adminEditArea" style="display:none; flex-direction: column; gap: 10px;">
-                <div class="form-group">
-                    <label>Título do Card</label>
-                    <input type="text" id="editTitle" value="Gerador Pix VIP">
-                </div>
-                <div class="form-group">
-                    <label>Texto do Botão</label>
-                    <input type="text" id="editBtn" value="Gerar Notificação Pix">
-                </div>
-            </div>
-
-            <div class="admin-actions">
-                <button class="btn-close" onclick="fecharAdmin()">Fechar</button>
-                <button class="btn-save" onclick="salvarAdmin()">Salvar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const bancosConfig = {
-            nubank: { nome: 'Nubank', cor: '#820AD1', icone: 'Nu' },
-            inter: { nome: 'Banco Inter', cor: '#FF7A00', icone: 'Inter' },
-            picpay: { nome: 'PicPay', cor: '#11C76F', icone: 'Pay' }
-        };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            if(localStorage.getItem('appTitle')) document.getElementById('uiTitle').innerText = localStorage.getItem('appTitle');
-            if(localStorage.getItem('appBtn')) document.getElementById('uiBtnText').innerText = localStorage.getItem('appBtn');
-        });
-
         // Solicitar Permissão Real do Sistema Operacional
         function pedirPermissaoNotificacao() {
             if (!("Notification" in window)) {
@@ -388,28 +301,24 @@
 
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    alert("Notificações reais ativadas com sucesso! Agora as notificações aparecerão na tela de bloqueio.");
+                    alert("Notificações reais do Nubank ativadas com sucesso!");
                 } else {
-                    alert("Permissão negada. Você precisa permitir nas configurações do navegador/celular.");
+                    alert("Permissão negada. Ative nas configurações do seu celular.");
                 }
             });
         }
 
-        // Disparar Notificação (Real do Sistema + Visual Interna + Som)
+        // Disparar Notificação (Real do Sistema + Visual Interna)
         function dispararNotificacao() {
-            const bancoKey = document.getElementById('bancoSelect').value;
-            const banco = bancosConfig[bancoKey];
-            const nome = document.getElementById('nomePagador').value || "Alguém";
-            const valor = document.getElementById('valorPix').value || "0,00";
-            const somTipo = document.getElementById('somSelect').value;
+            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
+            const valor = document.getElementById('valorPix').value || "250,00";
 
             // 1. Disparar Notificação Real na Tela de Bloqueio do Dispositivo
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
-                    new Notification(banco.nome, {
+                    new Notification("Nubank", {
                         body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
-                        icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-                        tag: 'pix-notif'
+                        tag: 'pix-nubank'
                     });
                 } catch (e) {
                     console.log("Erro ao disparar notificação do sistema:", e);
@@ -417,96 +326,14 @@
             }
 
             // 2. Disparar Notificação Visual Interna (Banner elegante no topo)
-            const iconBox = document.getElementById('notifIconBox');
-            iconBox.innerText = banco.icone;
-            iconBox.style.backgroundColor = banco.cor;
-            iconBox.style.color = '#fff';
-
-            document.getElementById('notifAppName').innerText = banco.nome;
             document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
 
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
-            // 3. Tocar Som Personalizado
-            tocarSom(somTipo);
-
             setTimeout(() => {
                 notif.classList.remove('show');
             }, 4000);
-        }
-
-        // Sistema de som via Web Audio API
-        function tocarSom(tipo) {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                if (tipo === 'iphone') {
-                    tocarNota(ctx, 659.25, 0, 0.12);    // E5
-                    tocarNota(ctx, 830.61, 0.12, 0.12); // G#5
-                    tocarNota(ctx, 987.77, 0.24, 0.35); // B5 (Sino)
-                } else {
-                    tocarNota(ctx, 1046.50, 0, 0.15);  // C6 (Android)
-                }
-            } catch (e) {
-                // Áudio bloqueado pelo navegador
-            }
-        }
-
-        function tocarNota(ctx, freq, inicio, duracao) {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, ctx.currentTime + inicio);
-            
-            gain.gain.setValueAtTime(0.2, ctx.currentTime + inicio);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + inicio + duracao);
-            
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            
-            osc.start(ctx.currentTime + inicio);
-            osc.stop(ctx.currentTime + inicio + duracao);
-        }
-
-        // Painel Admin
-        function abrirAdmin() {
-            document.getElementById('admin-modal').style.display = 'flex';
-        }
-
-        function fecharAdmin() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.getElementById('adminPass').value = '';
-            document.getElementById('adminEditArea').style.display = 'none';
-        }
-
-        function salvarAdmin() {
-            const pass = document.getElementById('adminPass').value;
-            const editArea = document.getElementById('adminEditArea');
-
-            if (pass === 'admin' || editArea.style.display === 'flex') {
-                if (editArea.style.display !== 'flex') {
-                    editArea.style.display = 'flex';
-                    document.getElementById('editTitle').value = document.getElementById('uiTitle').innerText;
-                    document.getElementById('editBtn').value = document.getElementById('uiBtnText').innerText;
-                    alert('Senha correta! Modifique os campos e clique em Salvar.');
-                    return;
-                }
-
-                const novoTitulo = document.getElementById('editTitle').value;
-                const novoBtn = document.getElementById('editBtn').value;
-
-                document.getElementById('uiTitle').innerText = novoTitulo;
-                document.getElementById('uiBtnText').innerText = novoBtn;
-
-                localStorage.setItem('appTitle', novoTitulo);
-                localStorage.setItem('appBtn', novoBtn);
-
-                fecharAdmin();
-                alert('Alterações salvas permanentemente!');
-            } else {
-                alert('Senha incorreta!');
-            }
         }
     </script>
 </body>
