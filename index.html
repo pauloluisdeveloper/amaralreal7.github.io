@@ -29,14 +29,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding: 15px;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .screen-container {
             width: 100%;
             max-width: 380px;
+            height: 100%;
+            max-height: 720px;
             background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 28px;
@@ -62,7 +67,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
+            flex-shrink: 0;
         }
 
         .top-left {
@@ -143,13 +149,15 @@
         .content {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
         label {
@@ -163,7 +171,7 @@
             background-color: #0b0b0b;
             border: 1px solid #1f1f1f;
             color: #ffffff;
-            padding: 12px 14px;
+            padding: 11px 14px;
             border-radius: 12px;
             font-size: 0.95rem;
             outline: none;
@@ -178,12 +186,11 @@
             background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
             color: #ffffff;
             border: none;
-            padding: 14px;
+            padding: 13px;
             border-radius: 12px;
             font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 4px;
             box-shadow: 0 4px 15px rgba(130, 10, 209, 0.3);
             display: flex;
             align-items: center;
@@ -194,7 +201,7 @@
             background-color: #ffffff;
             color: #000000;
             border: none;
-            padding: 13px;
+            padding: 12px;
             border-radius: 12px;
             font-size: 0.82rem;
             font-weight: 700;
@@ -205,6 +212,30 @@
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: #ffffff;
+            border: none;
+            padding: 11px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(220, 39, 67, 0.3);
+        }
+
+        .btn-instagram svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         .vip-badge {
@@ -222,7 +253,6 @@
             font-size: 0.65rem;
             color: #555;
             text-align: center;
-            margin-top: -4px;
         }
 
         #bank-notification {
@@ -335,11 +365,13 @@
             background-color: #0c0c0c;
             border: 1px solid #262626;
             border-radius: 24px;
-            padding: 20px;
+            padding: 18px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.9);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .custom-overlay.active .checkout-card {
@@ -347,23 +379,23 @@
         }
 
         .checkout-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 4px;
         }
 
         .checkout-subtitle {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: #888;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .plan-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .plan-card {
@@ -452,16 +484,16 @@
         #pix-native-container {
             display: none;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             margin-top: 6px;
         }
 
         .qr-box {
             background: #fff;
-            padding: 10px;
+            padding: 8px;
             border-radius: 12px;
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -479,16 +511,16 @@
             border: 1px solid #222;
             padding: 8px;
             border-radius: 8px;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: #aaa;
             word-break: break-all;
-            max-height: 55px;
+            max-height: 45px;
             overflow-y: auto;
             text-align: left;
         }
 
         .waiting-pulse {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: #a855f7;
             font-weight: 600;
             animation: pulse 1.5s infinite;
@@ -524,22 +556,28 @@
             line-height: 1.3;
         }
 
-        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 12px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 10px; flex-shrink: 0; }
         .admin-header h2 { font-size: 0.95rem; color: #a855f7; font-weight: 700; }
         
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
-        .stat-card { background: #111; border: 1px solid #222; padding: 8px 4px; border-radius: 12px; text-align: center; }
-        .stat-card span { font-size: 0.55rem; color: #888; text-transform: uppercase; font-weight: 600; display: block; }
-        .stat-card h3 { font-size: 0.9rem; color: #fff; margin-top: 2px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
+        .stat-card { background: #111; border: 1px solid #222; padding: 6px 4px; border-radius: 12px; text-align: center; }
+        .stat-card span { font-size: 0.5rem; color: #888; text-transform: uppercase; font-weight: 600; display: block; }
+        .stat-card h3 { font-size: 0.85rem; color: #fff; margin-top: 2px; }
         
-        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-        .logs-title { font-size: 0.75rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
-        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 6px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.65rem; }
+        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; flex: 1; overflow: hidden; }
+        .logs-title { font-size: 0.7rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
+        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 6px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.62rem; }
         .log-row { display: flex; justify-content: space-between; color: #aaa; }
         .log-row b { color: #fff; }
         .badge-ativo { color: #00C853; font-weight: 800; }
-        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 9px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.75rem; margin-bottom: 8px; }
-        .btn-back-app { background: transparent; color: #666; border: none; font-size: 0.7rem; text-align: center; cursor: pointer; margin-top: 8px; text-decoration: underline; width: 100%; }
+        
+        .admin-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; flex-shrink: 0; }
+        .btn-admin-act { background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; cursor: pointer; text-align: center; }
+        .btn-admin-act.danger { background: rgba(255, 23, 68, 0.15); border-color: rgba(255, 23, 68, 0.4); color: #ff5252; }
+        .btn-admin-act.success { background: rgba(0, 200, 83, 0.15); border-color: rgba(0, 200, 83, 0.4); color: #00C853; }
+        
+        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 8px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.72rem; flex-shrink: 0; width: 100%; margin-top: 4px; }
+        .btn-back-app { background: transparent; color: #666; border: none; font-size: 0.7rem; text-align: center; cursor: pointer; margin-top: 6px; text-decoration: underline; width: 100%; flex-shrink: 0; }
     </style>
 </head>
 <body onload="inicializarDispositivo()">
@@ -586,6 +624,14 @@
                 <span id="btnVipText">Ativar Notificações Reais</span>
                 <span class="vip-badge" id="vipBadgeStatus">VIP</span>
             </button>
+
+            <a class="btn-instagram" href="https://instagram.com" target="_blank">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>Siga-nos no Instagram</span>
+            </a>
+
             <div class="status-device" id="deviceStatusText">Verificando acesso...</div>
         </div>
     </div>
@@ -598,7 +644,7 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span>Cliques Link</span>
+                <span>Cliques</span>
                 <h3 id="statCliquesNum">0</h3>
             </div>
             <div class="stat-card">
@@ -611,16 +657,22 @@
             </div>
         </div>
 
-        <button class="btn-refresh" onclick="carregarDadosAdmin()">Atualizar Dados da Planilha</button>
+        <button class="btn-refresh" onclick="carregarDadosAdmin()">Atualizar Painel</button>
 
         <div class="logs-section">
             <div class="logs-title">
-                <span>Logs de Vendas e Chaves</span>
-                <span id="statusSync" style="font-size: 0.55rem; color: #666;">Sincronizado</span>
+                <span>Logs e Vendas</span>
+                <span id="statusSync" style="font-size: 0.55rem; color: #666;">Conectado</span>
             </div>
-            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto;">
-                <div style="text-align: center; color: #688; padding: 10px; font-size: 0.7rem;">Carregando logs...</div>
+            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1;">
+                <div style="text-align: center; color: #688; padding: 10px; font-size: 0.7rem;">Carregando...</div>
             </div>
+        </div>
+
+        <div class="admin-actions-grid">
+            <button class="btn-admin-act success" onclick="liberarMeuAcessoGratis()">Liberar Meu VIP</button>
+            <button class="btn-admin-act" onclick="toggleModoManutencao()">Manutenção</button>
+            <button class="btn-admin-act danger" onclick="limparTodosLogsPlanilha()" style="grid-column: span 2;">Excluir Todos os Logs</button>
         </div>
 
         <button class="btn-back-app" onclick="fecharPainelAdmin()">Voltar para o App</button>
@@ -642,12 +694,12 @@
     <div class="custom-overlay" id="admin-password-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Painel Administrativo</div>
-            <div class="checkout-subtitle">Digite a senha de segurança para acessar</div>
+            <div class="checkout-subtitle">Digite a senha de segurança</div>
             
             <div class="key-input-area">
-                <label>Senha de Acesso:</label>
-                <input type="password" id="inputAdminSenha" placeholder="Digite a senha...">
-                <button class="btn-action-checkout" onclick="verificarSenhaAdmin()">Entrar no Painel</button>
+                <label>Senha:</label>
+                <input type="password" id="inputAdminSenha" placeholder="Senha...">
+                <button class="btn-action-checkout" onclick="verificarSenhaAdmin()">Entrar</button>
             </div>
 
             <button class="btn-close-checkout" onclick="fecharModalSenhaAdmin()">Cancelar</button>
@@ -656,8 +708,8 @@
 
     <div class="custom-overlay" id="vip-checkout-overlay">
         <div class="checkout-card">
-            <div class="checkout-title">Escolha seu Plano VIP</div>
-            <div class="checkout-subtitle">O QR Code e Pix Copia e Cola geram na hora</div>
+            <div class="checkout-title">Ativar Notificações VIP</div>
+            <div class="checkout-subtitle">QR Code e Pix Copia e Cola instantâneo</div>
             
             <div class="plan-options" id="planOptionsArea">
                 <div class="plan-card" id="plano1" onclick="selecionarPlano(1, '5,99', '15 Dias')">
@@ -665,27 +717,21 @@
                     <div class="duration">15 Dias VIP</div>
                 </div>
                 <div class="plan-card selected" id="plano2" onclick="selecionarPlano(2, '11,90', '30 Dias')">
-                    <div class="plan-badge-top">MAIS USADO</div>
+                    <div class="plan-badge-top">POPULAR</div>
                     <div class="price">R$ 11,90</div>
                     <div class="duration">30 Dias VIP</div>
                 </div>
             </div>
 
             <button class="btn-action-checkout" id="btnGerarPixNativo" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%);" onclick="gerarPixNativo()">
-                Gerar Pix (QR Code & Copia e Cola)
+                Gerar Pix Automático
             </button>
 
             <div id="pix-native-container">
                 <div class="qr-box" id="qrCodeBox"></div>
-                <div class="waiting-pulse">Aguardando pagamento automático...</div>
-                <div class="pix-copia-cola-box" id="pixCopiaColaText">Gerando código...</div>
+                <div class="waiting-pulse">Aguardando confirmação do Pix...</div>
+                <div class="pix-copia-cola-box" id="pixCopiaColaText">Gerando...</div>
                 <button class="btn-action-checkout" onclick="copiarPixCopiaCola()" style="background-color: #333; margin-top: 2px;">Copiar Código Pix</button>
-            </div>
-
-            <div class="key-input-area" id="fallbackKeyArea" style="margin-top: 10px;">
-                <label>Ou digite sua Key de ativação oficial:</label>
-                <input type="text" id="inputUserKey" placeholder="EX: VIP-XXXX-XXXX">
-                <button class="btn-action-checkout" id="btnValidarKey" onclick="validarKeyDeAcesso()">Ativar com Key Manual</button>
             </div>
 
             <button class="btn-close-checkout" onclick="fecharCheckoutVip()">Fechar</button>
@@ -695,19 +741,16 @@
     <div class="custom-overlay" id="custom-alert-overlay">
         <div class="modal-custom-alert">
             <h3 id="customAlertTitle">Aviso</h3>
-            <p id="customAlertMessage">Mensagem do sistema...</p>
+            <p id="customAlertMessage">Mensagem...</p>
             <button class="btn-action-checkout" onclick="fecharAlertaCustom()">Entendido</button>
         </div>
     </div>
 
     <script>
-        // NOVA URL ATUALIZADA DA SUA PLANILHA GOOGLE APPS SCRIPT
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywjm1_KzFGN_7xNyfKy-RhUfRhxvclsweZ-Kx3GkVfiSLdSYyggIOMpItP8gn4q9qS/exec";
-        
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjq89s8f2MV6Ada40CkOmNessqp76DgJv-eLQXadN0Ybhphr-IX6w2zmmMjovzz7j1/exec";
         const SENHA_ADMIN_CORRETA = "@171020";
         let meuDeviceId = "";
         let planoSelecionadoValor = "11,90";
-        let tempoSelecaoPlano = "30 Dias";
         let checagemPagamentoInterval = null;
 
         async function inicializarDispositivo() {
@@ -729,9 +772,10 @@
                 if (resultado.status === "liberado") {
                     aplicarModoLiberado();
                 }
-            } catch (e) {
-                console.log("Erro de sincronização inicial");
-            }
+                if (resultado.manutencao === "sim") {
+                    mostrarAlertaCustom("Em Breve", "O aplicativo está em atualização brevemente. Volte mais tarde!");
+                }
+            } catch (e) {}
         }
 
         function registrarCliqueLink() {
@@ -775,7 +819,7 @@
                 fecharModalSenhaAdmin();
                 abrirPainelAdmin();
             } else {
-                mostrarAlertaCustom("Acesso Negado", "Senha administrativa incorreta.");
+                mostrarAlertaCustom("Acesso Negado", "Senha incorreta.");
             }
         }
 
@@ -806,7 +850,7 @@
                     data.logs.forEach(log => {
                         logsHtml += `<div class="log-item">
                             <div class="log-row"><span><b>${log.data}</b></span><span class="badge-ativo">${log.valor}</span></div>
-                            <div class="log-row"><span>ID: ${log.deviceId}</span><span>Key: ${log.key || 'N/A'}</span></div>
+                            <div class="log-row"><span>ID: ${log.deviceId.substring(0, 10)}...</span><span>Status: ${log.status}</span></div>
                         </div>`;
                     });
                 } else {
@@ -814,7 +858,58 @@
                 }
                 document.getElementById('listaLogs').innerHTML = logsHtml;
             } catch (e) {
-                document.getElementById('listaLogs').innerHTML = `<div style="text-align: center; color: #f55; padding: 10px; font-size: 0.7rem;">Erro ao carregar dados.</div>`;
+                document.getElementById('listaLogs').innerHTML = `<div style="text-align: center; color: #f55; padding: 10px; font-size: 0.7rem;">Erro ao carregar.</div>`;
+            }
+        }
+
+        async function liberarMeuAcessoGratis() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "liberar_admin", deviceId: meuDeviceId })
+                });
+                const res = await response.json();
+                if (res.status === "sucesso") {
+                    aplicarModoLiberado();
+                    mostrarAlertaCustom("VIP Liberado!", "Seu dispositivo foi aprovado de graça pelo painel admin!");
+                    carregarDadosAdmin();
+                } else {
+                    mostrarAlertaCustom("Erro", "Não foi possível liberar o acesso.");
+                }
+            } catch(e) {
+                mostrarAlertaCustom("Erro", "Falha de conexão.");
+            }
+        }
+
+        async function limparTodosLogsPlanilha() {
+            if (!confirm("Tem certeza que deseja apagar todos os registros e logs da planilha?")) return;
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "limpar_logs" })
+                });
+                const res = await response.json();
+                if (res.status === "sucesso") {
+                    mostrarAlertaCustom("Sucesso", "Logs limpos com sucesso!");
+                    carregarDadosAdmin();
+                } else {
+                    mostrarAlertaCustom("Erro", "Não foi possível limpar os logs.");
+                }
+            } catch(e) {
+                mostrarAlertaCustom("Erro", "Falha de conexão.");
+            }
+        }
+
+        async function toggleModoManutencao() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "toggle_manutencao" })
+                });
+                const res = await response.json();
+                mostrarAlertaCustom("Manutenção", "Status de atualização alterado para: " + res.manutencao.toUpperCase());
+            } catch(e) {
+                mostrarAlertaCustom("Erro", "Falha ao alterar manutenção.");
             }
         }
 
@@ -823,7 +918,6 @@
             document.getElementById('plano2').classList.remove('selected');
             document.getElementById('plano' + id).classList.add('selected');
             planoSelecionadoValor = valor;
-            tempoSelecaoPlano = tempo;
         }
 
         function abrirCheckoutVip() {
@@ -833,8 +927,7 @@
             const btnGen = document.getElementById('btnGerarPixNativo');
             btnGen.style.display = "block";
             btnGen.disabled = false;
-            btnGen.innerText = "Gerar Pix (QR Code & Copia e Cola)";
-            document.getElementById('fallbackKeyArea').style.display = "flex";
+            btnGen.innerText = "Gerar Pix Automático";
         }
 
         function fecharCheckoutVip() {
@@ -861,7 +954,6 @@
                 if (res.status === "sucesso") {
                     document.getElementById('planOptionsArea').style.display = "none";
                     btn.style.display = "none";
-                    document.getElementById('fallbackKeyArea').style.display = "none";
                     
                     const containerPix = document.getElementById('pix-native-container');
                     containerPix.style.display = "flex";
@@ -873,36 +965,12 @@
                 } else {
                     mostrarAlertaCustom("Erro", res.mensagem || "Não foi possível gerar o Pix.");
                     btn.disabled = false;
-                    btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
+                    btn.innerText = "Gerar Pix Automático";
                 }
             } catch (e) {
                 mostrarAlertaCustom("Erro", "Falha de conexão ao gerar o Pix.");
                 btn.disabled = false;
-                btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
-            }
-        }
-
-        async function validarKeyDeAcesso() {
-            const key = document.getElementById('inputUserKey').value.trim();
-            if (!key) {
-                mostrarAlertaCustom("Aviso", "Digite uma chave VIP válida.");
-                return;
-            }
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ acao: "validar_key", deviceId: meuDeviceId, key: key })
-                });
-                const res = await response.json();
-                if (res.status === "sucesso") {
-                    aplicarModoLiberado();
-                    fecharCheckoutVip();
-                    mostrarAlertaCustom("Sucesso", "Chave ativada com sucesso!");
-                } else {
-                    mostrarAlertaCustom("Erro", res.mensagem || "Chave inválida ou já utilizada.");
-                }
-            } catch (e) {
-                mostrarAlertaCustom("Erro", "Falha ao validar a chave.");
+                btn.innerText = "Gerar Pix Automático";
             }
         }
 
@@ -933,9 +1001,9 @@
         function copiarPixCopiaCola() {
             const texto = document.getElementById('pixCopiaColaText').innerText;
             navigator.clipboard.writeText(texto).then(() => {
-                mostrarAlertaCustom("Copiado!", "Código Pix Copia e Cola copiado para a área de transferência.");
+                mostrarAlertaCustom("Copiado!", "Código Pix Copia e Cola copiado!");
             }).catch(() => {
-                mostrarAlertaCustom("Aviso", "Não foi possível copiar automaticamente.");
+                mostrarAlertaCustom("Aviso", "Erro ao copiar.");
             });
         }
 
