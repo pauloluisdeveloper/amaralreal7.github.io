@@ -1,3 +1,13 @@
+Para fazer exatamente o que você quer — **gerar o Pix Copia e Cola e o QR Code direto dentro do seu aplicativo** e deixar o sistema monitorando o pagamento em tempo real para liberar a Key automático — nós vamos modificar o modal do app.
+
+Vou reescrever o código do seu projeto para que:
+
+1. No lugar do botão verde de redirecionamento externo, o modal mostre a **Chave Pix (Copia e Cola)** e o **QR Code** gerados na hora para o usuário escanear ou copiar.
+2. O aplicativo fique escutando o **Webhook da InfinitePay** que você cadastrou no painel para detectar o pagamento instantaneamente, gerar a Key e liberar o acesso na tela sem que o usuário precise fazer mais nada.
+
+Aqui está o **código completo e atualizado** ajustado com o fluxo de Pix nativo no app:
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -424,12 +434,12 @@
             color: #fff;
             border: none;
             width: 100%;
-            padding: 9px;
+            padding: 10px;
             border-radius: 10px;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 4px;
+            margin-top: 6px;
             box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
             transition: opacity 0.2s;
         }
@@ -446,7 +456,59 @@
             font-size: 0.7rem;
             cursor: pointer;
             padding: 4px;
-            margin-top: 2px;
+            margin-top: 6px;
+        }
+
+        /* Área do QR Code e Pix Copia e Cola Nativo */
+        #pix-native-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .qr-box {
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .pix-copia-cola-box {
+            background: #141414;
+            border: 1px solid #222;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            color: #aaa;
+            word-break: break-all;
+            max-height: 55px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .waiting-pulse {
+            font-size: 0.7rem;
+            color: #a855f7;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
         }
 
         .modal-custom-alert {
@@ -603,12 +665,13 @@
         </div>
     </div>
 
+    <!-- Modal de Pagamento com Pix Nativo e QR Code -->
     <div class="custom-overlay" id="vip-checkout-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Escolha seu Plano VIP</div>
-            <div class="checkout-subtitle">Planos otimizados com desconto especial</div>
+            <div class="checkout-subtitle">O QR Code e Pix Copia e Cola geram na hora</div>
             
-            <div class="plan-options">
+            <div class="plan-options" id="planOptionsArea">
                 <div class="plan-card" id="plano1" onclick="selecionarPlano(1, '5,99', '15 Dias')">
                     <div class="price">R$ 5,99</div>
                     <div class="duration">15 Dias VIP</div>
@@ -620,18 +683,28 @@
                 </div>
             </div>
 
-            <!-- Botão oficial conectado ao seu Checkout InfinitePay -->
-            <button class="btn-action-checkout" id="btnPagarInfinitePay" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%); margin-bottom: 8px; padding: 12px; font-size: 0.8rem;" onclick="abrirCheckoutInfinitePay()">
-                Pagar com InfinitePay (Checkout)
+            <!-- Botão para gerar o Pix direto na tela -->
+            <button class="btn-action-checkout" id="btnGerarPixNativo" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%);" onclick="gerarPixNativo()">
+                Gerar Pix (QR Code & Copia e Cola)
             </button>
 
-            <div class="key-input-area">
+            <!-- Container do Pix Nativo (Oculto até gerar) -->
+            <div id="pix-native-container">
+                <div class="qr-box" id="qrCodeBox">
+                    <!-- QR Code gerado dinamicamente -->
+                </div>
+                <div class="waiting-pulse">Aguardando pagamento automático...</div>
+                <div class="pix-copia-cola-box" id="pixCopiaColaText">Gerando código...</div>
+                <button class="btn-action-checkout" onclick="copiarPixCopiaCola()" style="background-color: #333; margin-top: 2px;">Copiar Código Pix</button>
+            </div>
+
+            <div class="key-input-area" id="fallbackKeyArea" style="margin-top: 10px;">
                 <label>Ou digite sua Key de ativação oficial:</label>
                 <input type="text" id="inputUserKey" placeholder="EX: VIP-XXXX-XXXX">
                 <button class="btn-action-checkout" id="btnValidarKey" onclick="validarKeyDeAcesso()">Ativar com Key Manual</button>
             </div>
 
-            <button class="btn-close-checkout" onclick="fecharCheckoutVip()" style="margin-top: 8px;">Fechar</button>
+            <button class="btn-close-checkout" onclick="fecharCheckoutVip()">Fechar</button>
         </div>
     </div>
 
@@ -650,6 +723,7 @@
         let planoSelecionadoValor = "11,90";
         let tempoSelecaoPlano = "30 Dias";
         let isProcessing = false;
+        let checagemPagamentoInterval = null;
 
         async function inicializarDispositivo() {
             let deviceIdSalvo = localStorage.getItem('nubank_device_id');
@@ -692,6 +766,7 @@
             badge.innerText = "ATIVO";
             badge.style.backgroundColor = "#00C853";
             document.getElementById('deviceStatusText').innerText = "Acesso verificado e liberado!";
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
         }
 
         function atualizarSistemaInstantaneo() {
@@ -742,16 +817,87 @@
 
         function abrirCheckoutVip() {
             document.getElementById('vip-checkout-overlay').classList.add('active');
+            // Reseta para o estado inicial do modal
+            document.getElementById('pix-native-container').style.display = "none";
+            document.getElementById('planOptionsArea').style.display = "grid";
+            document.getElementById('btnGerarPixNativo').style.display = "block";
+            document.getElementById('fallbackKeyArea').style.display = "flex";
         }
 
         function fecharCheckoutVip() {
             document.getElementById('vip-checkout-overlay').classList.remove('active');
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
         }
 
-        // Abre o seu link oficial do InfinitePay criado
-        function abrirCheckoutInfinitePay() {
-            const linkInfinitePay = "https://checkout.infinitepay.io/djene-teixeira/y7ozcTWvMy";
-            window.open(linkInfinitePay, '_blank');
+        // Função que solicita a geração do Pix nativo via Google Apps Script / API InfinitePay
+        async function gerarPixNativo() {
+            const btn = document.getElementById('btnGerarPixNativo');
+            btn.disabled = true;
+            btn.innerText = "Gerando Pix...";
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ 
+                        acao: "gerar_pix", 
+                        deviceId: meuDeviceId, 
+                        valor: planoSelecionadoValor 
+                    })
+                });
+                const res = await response.json();
+
+                if (res.status === "sucesso") {
+                    // Esconde opções e botão de gerar, exibe o container do Pix nativo
+                    document.getElementById('planOptionsArea').style.display = "none";
+                    btn.style.display = "none";
+                    document.getElementById('fallbackKeyArea').style.display = "none";
+                    
+                    const containerPix = document.getElementById('pix-native-container');
+                    containerPix.style.display = "flex";
+
+                    // Preenche o copia e cola e o QR Code (usando API pública de QR Code com base no texto do pix)
+                    document.getElementById('pixCopiaColaText').innerText = res.copiaECola;
+                    document.getElementById('qrCodeBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(res.copiaECola)}" alt="QR Code Pix">`;
+
+                    // Inicia verificação em tempo real (Polling a cada 4 segundos checando se o webhook aprovou)
+                    iniciarVerificacaoPagamentoReal();
+                } else {
+                    mostrarAlertaCustom("Erro", res.mensagem || "Não foi possível gerar o Pix.");
+                    btn.disabled = false;
+                    btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
+                }
+            } catch (e) {
+                mostrarAlertaCustom("Erro", "Falha de conexão ao gerar o Pix.");
+                btn.disabled = false;
+                btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
+            }
+        }
+
+        function copiarPixCopiaCola() {
+            const texto = document.getElementById('pixCopiaColaText').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                mostrarAlertaCustom("Copiado!", "Código Pix Copia e Cola copiado com sucesso. Cole no seu banco.");
+            });
+        }
+
+        // Fica checando o status na planilha para ver se o webhook da InfinitePay confirmou o pagamento
+        function iniciarVerificacaoPagamentoReal() {
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
+            
+            checagemPagamentoInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ acao: "verificar", deviceId: meuDeviceId })
+                    });
+                    const resultado = await response.json();
+                    if (resultado.status === "liberado") {
+                        aplicarModoLiberado();
+                        fecharCheckoutVip();
+                        mostrarAlertaCustom("Pagamento Aprovado!", "Seu Pix foi confirmado automaticamente e o VIP foi liberado!");
+                    }
+                } catch (e) {}
+            }, 4000); // Checa a cada 4 segundos
         }
 
         function mostrarAlertaCustom(titulo, mensagem) {
@@ -872,3 +1018,5 @@
     </script>
 </body>
 </html>
+
+```
