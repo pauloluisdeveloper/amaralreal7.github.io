@@ -1,119 +1,1010 @@
-function doPost(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-
-  try {
-    var dados = {};
-    if (e && e.postData && e.postData.contents) {
-      dados = JSON.parse(e.postData.contents);
-    }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Nubank - VIP & Admin</title>
     
-    var acao = dados.acao;
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nubank">
+    <meta name="application-name" content="Nubank">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
 
-    // 1. Ação para gerar o Pix
-    if (acao === "gerar_pix") {
-      var valor = dados.valor || "11,90";
-      var deviceId = dados.deviceId;
-
-      var copiaEColaSimulado = "00020126580014br.gov.bcb.pix0136suachavepixaqui5204000053039865802BR5925Djene Teixeira6009Sao Paulo62070503***63041D3D";
-
-      return ContentService.createTextOutput(JSON.stringify({
-        status: "sucesso",
-        copiaECola: copiaEColaSimulado
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // 2. Verificar status do dispositivo
-    if (acao === "verificar") {
-      var deviceId = dados.deviceId;
-      var rows = sheet.getDataRange().getValues();
-      var liberado = false;
-
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][1] === deviceId && rows[i][3] === "AProvado") {
-          liberado = true;
-          break;
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-      }
 
-      return ContentService.createTextOutput(JSON.stringify({
-        status: liberado ? "liberado" : "pendente"
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 15px;
+        }
 
-    // 3. Validar Key Manual
-    if (acao === "validar_key") {
-      var keyDigitada = dados.key;
-      var deviceId = dados.deviceId;
-      
-      if (keyDigitada && typeof keyDigitada === "string" && keyDigitada.trim().startsWith("VIP-")) {
-        sheet.appendRow([new Date(), deviceId, keyDigitada.trim(), "AProvado", dados.valor || "11,90"]);
-        return ContentService.createTextOutput(JSON.stringify({
-          status: "sucesso"
-        })).setMimeType(ContentService.MimeType.JSON);
-      } else {
-        return ContentService.createTextOutput(JSON.stringify({
-          status: "erro",
-          mensagem: "Key inválida ou vazia. Deve começar com VIP-."
-        })).setMimeType(ContentService.MimeType.JSON);
-      }
-    }
+        .screen-container {
+            width: 100%;
+            max-width: 380px;
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            overflow: hidden;
+            padding: 24px;
+        }
 
-    // 4. Dados para o Painel Admin
-    if (acao === "admin_dados") {
-      var rows = sheet.getDataRange().getValues();
-      var totalVendas = 0;
-      var faturamento = 0;
-      var registros = [];
+        #app-screen {
+            display: flex;
+        }
 
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][3] === "AProvado") {
-          totalVendas++;
-          faturamento += parseFloat(rows[i][4] ? rows[i][4].toString().replace(',', '.') : 0);
-          
-          var dataFormatada = "";
-          try {
-            if (rows[i][0]) {
-              dataFormatada = Utilities.formatDate(new Date(rows[i][0]), "GMT-3", "dd/MM HH:mm");
+        #admin-panel-screen {
+            display: none;
+            background-color: #050505;
+            border-color: #222;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nu-logo-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #820AD1;
+            flex-shrink: 0;
+        }
+
+        .nu-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title-app {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+
+        .btn-top-action {
+            background-color: #121212;
+            border: 1px solid #262626;
+            color: #888;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-top-action svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: transform 0.4s ease;
+        }
+
+        .btn-top-action.rotating svg {
+            transform: rotate(360deg);
+        }
+
+        .btn-shield {
+            background-color: #121212;
+            border: 1px solid #820AD1;
+            color: #a855f7;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            color: #777;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            background-color: #0b0b0b;
+            border: 1px solid #1f1f1f;
+            color: #ffffff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #820AD1;
+        }
+
+        .btn-nu {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            box-shadow: 0 4px 15px rgba(130, 10, 209, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-white-vip {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+        }
+
+        .vip-badge {
+            background-color: #820AD1;
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-device {
+            font-size: 0.65rem;
+            color: #555;
+            text-align: center;
+            margin-top: -4px;
+        }
+
+        #bank-notification {
+            position: fixed;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150px);
+            width: 90%;
+            max-width: 380px;
+            background: rgba(18, 18, 18, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(130, 10, 209, 0.4);
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 99999;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #bank-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notif-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background-color: #820AD1;
+        }
+
+        .notif-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .notif-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .notif-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .notif-app-name {
+            font-size: 0.65rem;
+            color: #a855f7;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .notif-time {
+            font-size: 0.6rem;
+            color: #888;
+        }
+
+        .notif-text {
+            font-size: 0.85rem;
+            color: #f3f4f6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .notif-text b {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .custom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .checkout-card {
+            width: 90%;
+            max-width: 320px;
+            background-color: #0c0c0c;
+            border: 1px solid #262626;
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .custom-overlay.active .checkout-card {
+            transform: scale(1);
+        }
+
+        .checkout-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .checkout-subtitle {
+            font-size: 0.72rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .plan-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .plan-card {
+            background: #141414;
+            border: 1px solid #222;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            position: relative;
+        }
+
+        .plan-card.selected {
+            border-color: #820AD1;
+            background: rgba(130, 10, 209, 0.15);
+        }
+
+        .plan-badge-top {
+            position: absolute;
+            top: -6px;
+            right: 8px;
+            background: #820AD1;
+            color: #fff;
+            font-size: 0.5rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+
+        .plan-card .price {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .plan-card .duration {
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .key-input-area {
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: left;
+        }
+
+        .key-input-area label {
+            font-size: 0.65rem;
+            color: #aaa;
+        }
+
+        .btn-action-checkout {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+            box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
+            transition: opacity 0.2s;
+        }
+
+        .btn-action-checkout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-close-checkout {
+            background: transparent;
+            color: #666;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 4px;
+            margin-top: 6px;
+        }
+
+        /* Área do QR Code e Pix Copia e Cola Nativo */
+        #pix-native-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .qr-box {
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .pix-copia-cola-box {
+            background: #141414;
+            border: 1px solid #222;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            color: #aaa;
+            word-break: break-all;
+            max-height: 55px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .waiting-pulse {
+            font-size: 0.7rem;
+            color: #a855f7;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        .modal-custom-alert {
+            width: 90%;
+            max-width: 280px;
+            background-color: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+        }
+
+        .modal-custom-alert h3 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .modal-custom-alert p {
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 12px; }
+        .admin-header h2 { font-size: 0.95rem; color: #a855f7; font-weight: 700; }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+        .stat-card { background: #111; border: 1px solid #222; padding: 8px 4px; border-radius: 12px; text-align: center; }
+        .stat-card span { font-size: 0.55rem; color: #888; text-transform: uppercase; font-weight: 600; display: block; }
+        .stat-card h3 { font-size: 0.9rem; color: #fff; margin-top: 2px; }
+        
+        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+        .logs-title { font-size: 0.75rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
+        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 6px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 0.65rem; }
+        .log-row { display: flex; justify-content: space-between; color: #aaa; }
+        .log-row b { color: #fff; }
+        .badge-ativo { color: #00C853; font-weight: 800; }
+        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 9px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.75rem; margin-bottom: 8px; }
+        .btn-back-app { background: transparent; color: #666; border: none; font-size: 0.7rem; text-align: center; cursor: pointer; margin-top: 8px; text-decoration: underline; width: 100%; }
+    </style>
+</head>
+<body onload="inicializarDispositivo()">
+
+    <div class="screen-container" id="app-screen">
+        <div class="top-bar">
+            <div class="top-left">
+                <div class="nu-logo-box">
+                    <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
+                </div>
+                <div class="title-app">Nubank</div>
+            </div>
+            
+            <div class="top-right-actions">
+                <button class="btn-shield" onclick="abrirModalSenhaAdmin()" title="Painel Admin">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                    </svg>
+                </button>
+                <button class="btn-top-action" id="reloadBtn" onclick="atualizarSistemaInstantaneo()" title="Atualizar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="form-group">
+                <label>Nome do Pagador</label>
+                <input type="text" id="nomePagador" value="Carlos Eduardo">
+            </div>
+
+            <div class="form-group">
+                <label>Valor Recebido (R$)</label>
+                <input type="text" id="valorPix" value="250,00">
+            </div>
+
+            <button class="btn-nu" onclick="dispararNotificacao()">
+                <span>Gerar Notificação Pix</span>
+            </button>
+            
+            <button class="btn-white-vip" onclick="abrirCheckoutVip()">
+                <span id="btnVipText">Ativar Notificações Reais</span>
+                <span class="vip-badge" id="vipBadgeStatus">VIP</span>
+            </button>
+            <div class="status-device" id="deviceStatusText">Verificando acesso...</div>
+        </div>
+    </div>
+
+    <div class="screen-container" id="admin-panel-screen">
+        <div class="admin-header">
+            <h2>Painel Admin VIP</h2>
+            <span style="font-size: 0.6rem; color: #00C853; font-weight: 700;">● LIVE</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span>Cliques Link</span>
+                <h3 id="statCliquesNum">0</h3>
+            </div>
+            <div class="stat-card">
+                <span>Ativações</span>
+                <h3 id="totalVendasNum">0</h3>
+            </div>
+            <div class="stat-card">
+                <span>Faturamento</span>
+                <h3 id="faturamentoNum">R$ 0,00</h3>
+            </div>
+        </div>
+
+        <button class="btn-refresh" onclick="carregarDadosAdmin()">Atualizar Dados da Planilha</button>
+
+        <div class="logs-section">
+            <div class="logs-title">
+                <span>Logs de Vendas e Chaves</span>
+                <span id="statusSync" style="font-size: 0.55rem; color: #666;">Sincronizado</span>
+            </div>
+            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto;">
+                <div style="text-align: center; color: #688; padding: 10px; font-size: 0.7rem;">Carregando logs...</div>
+            </div>
+        </div>
+
+        <button class="btn-back-app" onclick="fecharPainelAdmin()">Voltar para o App</button>
+    </div>
+
+    <div id="bank-notification">
+        <div class="notif-icon">
+            <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
+        </div>
+        <div class="notif-content">
+            <div class="notif-header-row">
+                <span class="notif-app-name">Nubank</span>
+                <span class="notif-time">agora</span>
+            </div>
+            <div class="notif-text" id="notifBodyText">Você recebeu um Pix de <b>R$ 250,00</b> de Carlos Eduardo</div>
+        </div>
+    </div>
+
+    <div class="custom-overlay" id="admin-password-overlay">
+        <div class="checkout-card">
+            <div class="checkout-title">Painel Administrativo</div>
+            <div class="checkout-subtitle">Digite a senha de segurança para acessar</div>
+            
+            <div class="key-input-area">
+                <label>Senha de Acesso:</label>
+                <input type="password" id="inputAdminSenha" placeholder="Digite a senha...">
+                <button class="btn-action-checkout" onclick="verificarSenhaAdmin()">Entrar no Painel</button>
+            </div>
+
+            <button class="btn-close-checkout" onclick="fecharModalSenhaAdmin()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Pagamento com Pix Nativo e QR Code -->
+    <div class="custom-overlay" id="vip-checkout-overlay">
+        <div class="checkout-card">
+            <div class="checkout-title">Escolha seu Plano VIP</div>
+            <div class="checkout-subtitle">O QR Code e Pix Copia e Cola geram na hora</div>
+            
+            <div class="plan-options" id="planOptionsArea">
+                <div class="plan-card" id="plano1" onclick="selecionarPlano(1, '5,99', '15 Dias')">
+                    <div class="price">R$ 5,99</div>
+                    <div class="duration">15 Dias VIP</div>
+                </div>
+                <div class="plan-card selected" id="plano2" onclick="selecionarPlano(2, '11,90', '30 Dias')">
+                    <div class="plan-badge-top">MAIS USADO</div>
+                    <div class="price">R$ 11,90</div>
+                    <div class="duration">30 Dias VIP</div>
+                </div>
+            </div>
+
+            <!-- Botão para gerar o Pix direto na tela -->
+            <button class="btn-action-checkout" id="btnGerarPixNativo" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%);" onclick="gerarPixNativo()">
+                Gerar Pix (QR Code & Copia e Cola)
+            </button>
+
+            <!-- Container do Pix Nativo (Oculto até gerar) -->
+            <div id="pix-native-container">
+                <div class="qr-box" id="qrCodeBox">
+                    <!-- QR Code gerado dinamicamente -->
+                </div>
+                <div class="waiting-pulse">Aguardando pagamento automático...</div>
+                <div class="pix-copia-cola-box" id="pixCopiaColaText">Gerando código...</div>
+                <button class="btn-action-checkout" onclick="copiarPixCopiaCola()" style="background-color: #333; margin-top: 2px;">Copiar Código Pix</button>
+            </div>
+
+            <div class="key-input-area" id="fallbackKeyArea" style="margin-top: 10px;">
+                <label>Ou digite sua Key de ativação oficial:</label>
+                <input type="text" id="inputUserKey" placeholder="EX: VIP-XXXX-XXXX">
+                <button class="btn-action-checkout" id="btnValidarKey" onclick="validarKeyDeAcesso()">Ativar com Key Manual</button>
+            </div>
+
+            <button class="btn-close-checkout" onclick="fecharCheckoutVip()">Fechar</button>
+        </div>
+    </div>
+
+    <div class="custom-overlay" id="custom-alert-overlay">
+        <div class="modal-custom-alert">
+            <h3 id="customAlertTitle">Aviso</h3>
+            <p id="customAlertMessage">Mensagem do sistema...</p>
+            <button class="btn-action-checkout" onclick="fecharAlertaCustom()">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuvhvS8auXVaaGJ_P0P4LirQfxDEfpeOGteLAOXA0Y3dDrmUwXmVlWeQ4-O2A_Yqp8/exec";
+        const SENHA_ADMIN_CORRETA = "@171020";
+        let meuDeviceId = "";
+        let planoSelecionadoValor = "11,90";
+        let tempoSelecaoPlano = "30 Dias";
+        let isProcessing = false;
+        let checagemPagamentoInterval = null;
+
+        async function inicializarDispositivo() {
+            let deviceIdSalvo = localStorage.getItem('nubank_device_id');
+            if (!deviceIdSalvo) {
+                deviceIdSalvo = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('nubank_device_id', deviceIdSalvo);
+                registrarCliqueLink();
             }
-          } catch (err) {
-            dataFormatada = "Data inválida";
-          }
+            meuDeviceId = deviceIdSalvo;
+            document.getElementById('deviceStatusText').innerText = `ID: ${meuDeviceId.substring(0, 10)}...`;
 
-          registros.push({
-            data: dataFormatada,
-            deviceId: rows[i][1] || "",
-            key: rows[i][2] || "",
-            status: rows[i][3] || ""
-          });
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "verificar", deviceId: meuDeviceId })
+                });
+                const resultado = await response.json();
+                if (resultado.status === "liberado") {
+                    aplicarModoLiberado();
+                }
+            } catch (e) {
+                console.log("Erro de sincronização inicial");
+            }
         }
-      }
 
-      return ContentService.createTextOutput(JSON.stringify({
-        status: "sucesso",
-        totalVendas: totalVendas,
-        faturamento: faturamento.toFixed(2).replace('.', ','),
-        registros: registros.reverse()
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
+        function registrarCliqueLink() {
+            let cliques = parseInt(localStorage.getItem('nu_total_cliques') || '0') + 1;
+            localStorage.setItem('nu_total_cliques', cliques);
+            try {
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "registrar_clique" })
+                });
+            } catch(e) {}
+        }
 
-    // 5. Registrar clique
-    if (acao === "registrar_clique") {
-      return ContentService.createTextOutput(JSON.stringify({ status: "ok" })).setMimeType(ContentService.MimeType.JSON);
-    }
+        function aplicarModoLiberado() {
+            document.getElementById('btnVipText').innerText = "Sistema VIP Ativo";
+            const badge = document.getElementById('vipBadgeStatus');
+            badge.innerText = "ATIVO";
+            badge.style.backgroundColor = "#00C853";
+            document.getElementById('deviceStatusText').innerText = "Acesso verificado e liberado!";
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
+        }
 
-    return ContentService.createTextOutput(JSON.stringify({
-      status: "erro",
-      mensagem: "Ação desconhecida."
-    })).setMimeType(ContentService.MimeType.JSON);
+        function atualizarSistemaInstantaneo() {
+            const btn = document.getElementById('reloadBtn');
+            btn.classList.add('rotating');
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
 
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({
-      status: "erro",
-      mensagem: error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
-  }
-}
+        function abrirModalSenhaAdmin() {
+            document.getElementById('admin-password-overlay').classList.add('active');
+            document.getElementById('inputAdminSenha').value = "";
+        }
+
+        function fecharModalSenhaAdmin() {
+            document.getElementById('admin-password-overlay').classList.remove('active');
+        }
+
+        function verificarSenhaAdmin() {
+            const senhaDigitada = document.getElementById('inputAdminSenha').value;
+            if (senhaDigitada === SENHA_ADMIN_CORRETA) {
+                fecharModalSenhaAdmin();
+                abrirPainelAdmin();
+            } else {
+                mostrarAlertaCustom("Acesso Negado", "Senha administrativa incorreta.");
+            }
+        }
+
+        function abrirPainelAdmin() {
+            document.getElementById('app-screen').style.display = "none";
+            document.getElementById('admin-panel-screen').style.display = "flex";
+            carregarDadosAdmin();
+        }
+
+        function fecharPainelAdmin() {
+            document.getElementById('admin-panel-screen').style.display = "none";
+            document.getElementById('app-screen').style.display = "flex";
+        }
+
+        function selecionarPlano(id, valor, tempo) {
+            document.getElementById('plano1').classList.remove('selected');
+            document.getElementById('plano2').classList.remove('selected');
+            document.getElementById('plano' + id).classList.add('selected');
+            planoSelecionadoValor = valor;
+            tempoSelecaoPlano = tempo;
+        }
+
+        function abrirCheckoutVip() {
+            document.getElementById('vip-checkout-overlay').classList.add('active');
+            // Reseta para o estado inicial do modal
+            document.getElementById('pix-native-container').style.display = "none";
+            document.getElementById('planOptionsArea').style.display = "grid";
+            document.getElementById('btnGerarPixNativo').style.display = "block";
+            document.getElementById('fallbackKeyArea').style.display = "flex";
+        }
+
+        function fecharCheckoutVip() {
+            document.getElementById('vip-checkout-overlay').classList.remove('active');
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
+        }
+
+        // Função que solicita a geração do Pix nativo via Google Apps Script / API InfinitePay
+        async function gerarPixNativo() {
+            const btn = document.getElementById('btnGerarPixNativo');
+            btn.disabled = true;
+            btn.innerText = "Gerando Pix...";
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ 
+                        acao: "gerar_pix", 
+                        deviceId: meuDeviceId, 
+                        valor: planoSelecionadoValor 
+                    })
+                });
+                const res = await response.json();
+
+                if (res.status === "sucesso") {
+                    // Esconde opções e botão de gerar, exibe o container do Pix nativo
+                    document.getElementById('planOptionsArea').style.display = "none";
+                    btn.style.display = "none";
+                    document.getElementById('fallbackKeyArea').style.display = "none";
+                    
+                    const containerPix = document.getElementById('pix-native-container');
+                    containerPix.style.display = "flex";
+
+                    // Preenche o copia e cola e o QR Code (usando API pública de QR Code com base no texto do pix)
+                    document.getElementById('pixCopiaColaText').innerText = res.copiaECola;
+                    document.getElementById('qrCodeBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(res.copiaECola)}" alt="QR Code Pix">`;
+
+                    // Inicia verificação em tempo real (Polling a cada 4 segundos checando se o webhook aprovou)
+                    iniciarVerificacaoPagamentoReal();
+                } else {
+                    mostrarAlertaCustom("Erro", res.mensagem || "Não foi possível gerar o Pix.");
+                    btn.disabled = false;
+                    btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
+                }
+            } catch (e) {
+                mostrarAlertaCustom("Erro", "Falha de conexão ao gerar o Pix.");
+                btn.disabled = false;
+                btn.innerText = "Gerar Pix (QR Code & Copia e Cola)";
+            }
+        }
+
+        function copiarPixCopiaCola() {
+            const texto = document.getElementById('pixCopiaColaText').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                mostrarAlertaCustom("Copiado!", "Código Pix Copia e Cola copiado com sucesso. Cole no seu banco.");
+            });
+        }
+
+        // Fica checando o status na planilha para ver se o webhook da InfinitePay confirmou o pagamento
+        function iniciarVerificacaoPagamentoReal() {
+            if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
+            
+            checagemPagamentoInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ acao: "verificar", deviceId: meuDeviceId })
+                    });
+                    const resultado = await response.json();
+                    if (resultado.status === "liberado") {
+                        aplicarModoLiberado();
+                        fecharCheckoutVip();
+                        mostrarAlertaCustom("Pagamento Aprovado!", "Seu Pix foi confirmado automaticamente e o VIP foi liberado!");
+                    }
+                } catch (e) {}
+            }, 4000); // Checa a cada 4 segundos
+        }
+
+        function mostrarAlertaCustom(titulo, mensagem) {
+            document.getElementById('customAlertTitle').innerText = titulo;
+            document.getElementById('customAlertMessage').innerText = mensagem;
+            document.getElementById('custom-alert-overlay').classList.add('active');
+        }
+
+        function fecharAlertaCustom() {
+            document.getElementById('custom-alert-overlay').classList.remove('active');
+        }
+
+        async function validarKeyDeAcesso() {
+            if (isProcessing) return;
+
+            const inputKey = document.getElementById('inputUserKey').value.trim();
+            if (!inputKey || inputKey.length < 5) {
+                mostrarAlertaCustom("Atenção", "Por favor, digite uma Key de ativação válida!");
+                return;
+            }
+
+            const btn = document.getElementById('btnValidarKey');
+            isProcessing = true;
+            btn.disabled = true;
+            btn.innerText = "Validando Key...";
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ 
+                        acao: "validar_key", 
+                        deviceId: meuDeviceId, 
+                        key: inputKey, 
+                        valor: planoSelecionadoValor 
+                    })
+                });
+                const res = await response.json();
+                
+                if(res.status === "sucesso") {
+                    aplicarModoLiberado();
+                    fecharCheckoutVip();
+                    mostrarAlertaCustom("Sucesso!", "Acesso VIP ativado com sucesso!");
+                } else {
+                    mostrarAlertaCustom("Erro", res.mensagem || "Key inválida ou já utilizada.");
+                }
+            } catch (e) {
+                mostrarAlertaCustom("Erro de Conexão", "Não foi possível validar com o servidor.");
+            } finally {
+                isProcessing = false;
+                btn.disabled = false;
+                btn.innerText = "Ativar com Key Manual";
+            }
+        }
+
+        async function carregarDadosAdmin() {
+            document.getElementById('statusSync').innerText = "Atualizando...";
+            
+            const totalCliques = localStorage.getItem('nu_total_cliques') || '1';
+            document.getElementById('statCliquesNum').innerText = totalCliques;
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "admin_dados" })
+                });
+                const res = await response.json();
+                
+                if(res.status === "sucesso") {
+                    document.getElementById('totalVendasNum').innerText = res.totalVendas;
+                    document.getElementById('faturamentoNum').innerText = `R$ ${res.faturamento}`;
+                    
+                    const lista = document.getElementById('listaLogs');
+                    lista.innerHTML = "";
+                    
+                    if(res.registros.length === 0) {
+                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 10px; font-size: 0.7rem;">Nenhuma venda registrada.</div>`;
+                    } else {
+                        res.registros.forEach(reg => {
+                            lista.innerHTML += `
+                                <div class="log-item">
+                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 10)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
+                                    <div class="log-row"><span>Key: <b>${reg.key}</b></span> <span>${reg.data}</span></div>
+                                </div>
+                            `;
+                        });
+                    }
+                    document.getElementById('statusSync').innerText = "Sincronizado";
+                }
+            } catch(e) {
+                document.getElementById('statusSync').innerText = "Erro ao carregar";
+            }
+        }
+
+        function dispararNotificacao() {
+            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
+            const valor = document.getElementById('valorPix').value || "250,00";
+
+            const txt = document.getElementById('notifBodyText');
+            if(txt) {
+                txt.innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
+            }
+
+            const notif = document.getElementById('bank-notification');
+            if(notif) {
+                notif.classList.add('show');
+            }
+
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate(80); } catch(e) {}
+            }
+
+            setTimeout(() => {
+                if(notif) {
+                    notif.classList.remove('show');
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
