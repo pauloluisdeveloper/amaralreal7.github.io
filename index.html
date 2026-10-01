@@ -20,41 +20,36 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
+            padding: 15px;
         }
 
-        /* Container Centralizado */
+        /* Card VIP Compacto e Arredondado no Centro */
         .mobile-container {
             width: 100%;
-            max-width: 414px;
-            height: 100vh;
-            background-color: #000000;
+            max-width: 360px;
+            background-color: #0a0a0a;
+            border: 1px solid #222222;
+            border-radius: 28px;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow-y: auto;
-            padding-bottom: 40px;
-        }
-
-        @media (min-width: 480px) {
-            .mobile-container {
-                height: 88vh;
-                border-radius: 36px;
-                border: 2px solid #222;
-            }
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.04), 0 0 20px rgba(0,0,0,0.8);
+            overflow: hidden;
+            padding: 22px;
         }
 
         /* Top Bar */
         .top-bar {
-            padding: 24px 20px 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 18px;
         }
 
         .title-app {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
             color: #fff;
         }
 
@@ -62,77 +57,101 @@
             background: #000;
             border: 1.5px solid #ffffff;
             color: #ffffff;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             box-shadow: 0 0 10px rgba(255,255,255,0.1);
+            transition: 0.2s;
+        }
+        .admin-shield:hover {
+            background: #1a1a1a;
         }
 
         /* Content Area */
         .content {
-            padding: 5px 20px 20px 20px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #888;
             font-weight: 500;
         }
 
         input, select {
             width: 100%;
-            background-color: #111111;
-            border: 1px solid #262626;
+            background-color: #141414;
+            border: 1px solid #282828;
             color: #ffffff;
-            padding: 13px;
-            border-radius: 12px;
-            font-size: 0.95rem;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         input:focus, select:focus {
             border-color: #666;
         }
 
-        /* Botão Branco White */
+        /* Botão Branco VIP */
         .btn-white {
             background-color: #ffffff;
             color: #000000;
             border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 5px;
+            margin-top: 4px;
+            transition: opacity 0.2s;
         }
 
         .btn-white:hover {
             opacity: 0.9;
         }
 
-        /* Notificação Visual Estilo Banco no Topo */
+        /* Botão Secundário para Notificações Reais */
+        .btn-outline {
+            background-color: transparent;
+            color: #aaa;
+            border: 1px dashed #444;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        /* Notificação Visual Interna (Fallback elegante) */
         #bank-notification {
             position: fixed;
             top: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 92%;
-            max-width: 390px;
+            width: 90%;
+            max-width: 380px;
             background: rgba(20, 20, 20, 0.96);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -152,14 +171,14 @@
         }
 
         .notif-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             flex-shrink: 0;
         }
 
@@ -178,19 +197,19 @@
         }
 
         .notif-app-name {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #aaa;
             font-weight: 600;
             text-transform: uppercase;
         }
 
         .notif-time {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #777;
         }
 
         .notif-text {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: #f3f4f6;
             white-space: nowrap;
             overflow: hidden;
@@ -220,54 +239,57 @@
             background: #111;
             border: 1px solid #333;
             width: 100%;
-            max-width: 360px;
-            padding: 24px;
+            max-width: 330px;
+            padding: 20px;
             border-radius: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .admin-box h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .admin-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .btn-close {
             background: #222;
             color: #fff;
             border: none;
-            padding: 10px;
+            padding: 9px;
             border-radius: 8px;
             flex: 1;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .btn-save {
             background: #fff;
             color: #000;
             border: none;
-            padding: 10px;
+            padding: 9px;
             border-radius: 8px;
             flex: 1;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
+    <!-- Container VIP Compacto Arredondado no Centro -->
     <div class="mobile-container">
         <!-- Top Bar com Selo de Escudo Branco -->
         <div class="top-bar">
-            <div class="title-app" id="uiTitle">Gerador de Notificações</div>
-            <div class="admin-shield" onclick="abrirAdmin()" title="Painel de Administração">🛡️</div>
+            <div class="title-app" id="uiTitle">Gerador Pix VIP</div>
+            <div class="admin-shield" onclick="abrirAdmin()" title="Administração">🛡️</div>
         </div>
 
         <!-- Formulário Principal -->
@@ -300,10 +322,11 @@
             </div>
 
             <button class="btn-white" onclick="dispararNotificacao()" id="uiBtnText">Gerar Notificação Pix</button>
+            <button class="btn-outline" onclick="pedirPermissaoNotificacao()">🔔 Ativar Notificações Reais do Celular</button>
         </div>
     </div>
 
-    <!-- Notificação Visual Integrada -->
+    <!-- Notificação Visual no Topo -->
     <div id="bank-notification">
         <div class="notif-icon" id="notifIconBox">⚡</div>
         <div class="notif-content">
@@ -319,17 +342,17 @@
     <div id="admin-modal">
         <div class="admin-box">
             <h3>Área de Administração</h3>
-            <p style="font-size: 0.8rem; color: #888;">Controle restrito ao proprietário.</p>
+            <p style="font-size: 0.75rem; color: #888;">Controle restrito ao proprietário.</p>
             
             <div class="form-group">
                 <label>Senha de Acesso</label>
                 <input type="password" id="adminPass" placeholder="Senha (padrão: admin)">
             </div>
 
-            <div id="adminEditArea" style="display:none; flex-direction: column; gap: 12px;">
+            <div id="adminEditArea" style="display:none; flex-direction: column; gap: 10px;">
                 <div class="form-group">
-                    <label>Título do App</label>
-                    <input type="text" id="editTitle" value="Gerador de Notificações">
+                    <label>Título do Card</label>
+                    <input type="text" id="editTitle" value="Gerador Pix VIP">
                 </div>
                 <div class="form-group">
                     <label>Texto do Botão</label>
@@ -356,7 +379,23 @@
             if(localStorage.getItem('appBtn')) document.getElementById('uiBtnText').innerText = localStorage.getItem('appBtn');
         });
 
-        // Disparar Notificação perfeitamente alinhada
+        // Solicitar Permissão Real do Sistema Operacional
+        function pedirPermissaoNotificacao() {
+            if (!("Notification" in window)) {
+                alert("Este navegador não suporta notificações nativas.");
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("Notificações reais ativadas com sucesso! Agora as notificações aparecerão na tela de bloqueio.");
+                } else {
+                    alert("Permissão negada. Você precisa permitir nas configurações do navegador/celular.");
+                }
+            });
+        }
+
+        // Disparar Notificação (Real do Sistema + Visual Interna + Som)
         function dispararNotificacao() {
             const bancoKey = document.getElementById('bancoSelect').value;
             const banco = bancosConfig[bancoKey];
@@ -364,6 +403,20 @@
             const valor = document.getElementById('valorPix').value || "0,00";
             const somTipo = document.getElementById('somSelect').value;
 
+            // 1. Disparar Notificação Real na Tela de Bloqueio do Dispositivo
+            if ("Notification" in window && Notification.permission === "granted") {
+                try {
+                    new Notification(banco.nome, {
+                        body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+                        tag: 'pix-notif'
+                    });
+                } catch (e) {
+                    console.log("Erro ao disparar notificação do sistema:", e);
+                }
+            }
+
+            // 2. Disparar Notificação Visual Interna (Banner elegante no topo)
             const iconBox = document.getElementById('notifIconBox');
             iconBox.innerText = banco.icone;
             iconBox.style.backgroundColor = banco.cor;
@@ -375,6 +428,7 @@
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
+            // 3. Tocar Som Personalizado
             tocarSom(somTipo);
 
             setTimeout(() => {
@@ -382,7 +436,7 @@
             }, 4000);
         }
 
-        // Sistema de som via Web Audio API (Sino iPhone / Beep Android)
+        // Sistema de som via Web Audio API
         function tocarSom(tipo) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -394,7 +448,7 @@
                     tocarNota(ctx, 1046.50, 0, 0.15);  // C6 (Android)
                 }
             } catch (e) {
-                // Áudio bloqueado pelo navegador antes do clique
+                // Áudio bloqueado pelo navegador
             }
         }
 
