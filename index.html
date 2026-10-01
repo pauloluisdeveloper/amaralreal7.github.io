@@ -19,41 +19,43 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* Container Mobile PWA */
+        /* Container Mobile Centralizado */
         .mobile-container {
             width: 100%;
             max-width: 414px;
             height: 100vh;
-            max-height: 896px;
+            max-height: 850px;
             background-color: #000000;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.04);
             overflow-y: auto;
+            border: 1px solid #1a1a1a;
+            border-radius: 30px;
         }
 
         @media (min-width: 480px) {
             .mobile-container {
-                height: 85vh;
-                border-radius: 40px;
+                height: 82vh;
+                border-radius: 36px;
                 border: 2px solid #222;
             }
         }
 
         /* Top Bar */
         .top-bar {
-            padding: 24px 20px 10px 20px;
+            padding: 22px 20px 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .title-app {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: #fff;
@@ -70,13 +72,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: 0.2s;
             box-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
         .admin-shield:hover {
             background: #111;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
         /* Content Area */
@@ -85,7 +86,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 15px;
         }
 
         .form-group {
@@ -105,7 +106,7 @@
             background-color: #111111;
             border: 1px solid #262626;
             color: #ffffff;
-            padding: 13px;
+            padding: 12px;
             border-radius: 12px;
             font-size: 0.95rem;
             outline: none;
@@ -116,7 +117,7 @@
             border-color: #666;
         }
 
-        /* White Action Button */
+        /* Botão Branco White */
         .btn-white {
             background-color: #ffffff;
             color: #000000;
@@ -126,7 +127,7 @@
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 5px;
             transition: opacity 0.2s;
         }
 
@@ -134,7 +135,22 @@
             opacity: 0.9;
         }
 
-        /* --- NOTIFICAÇÃO COMPACTA ESTILO BANCO (CENTRALIZADA LÁ EM CIMA) --- */
+        .btn-permission {
+            background: transparent;
+            border: 1px dashed #444;
+            color: #aaa;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-permission:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        /* Notificação Visual Flutuante Estilo Banco */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -142,13 +158,13 @@
             transform: translateX(-50%);
             width: 92%;
             max-width: 390px;
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(20, 20, 20, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #fff;
             padding: 12px 14px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -157,7 +173,7 @@
         }
 
         #bank-notification.show {
-            top: 15px;
+            top: 20px;
         }
 
         .notif-icon {
@@ -212,7 +228,7 @@
             font-weight: 600;
         }
 
-        /* --- MODAL DE ADMINISTRAÇÃO --- */
+        /* Modal de Administração */
         #admin-modal {
             position: fixed;
             top: 0;
@@ -237,13 +253,10 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         .admin-box h3 {
             font-size: 1.1rem;
-            margin-bottom: 5px;
         }
 
         .admin-actions {
@@ -278,10 +291,10 @@
 <body>
 
     <div class="mobile-container">
-        <!-- Top Bar com Escudo Branco de Administração -->
+        <!-- Top Bar com Selo de Escudo Branco -->
         <div class="top-bar">
             <div class="title-app" id="uiTitle">Gerador de Notificações</div>
-            <div class="admin-shield" onclick="abrirAdmin()" title="Painel do Dono">🛡️</div>
+            <div class="admin-shield" onclick="abrirAdmin()" title="Painel de Administração">🛡️</div>
         </div>
 
         <!-- Formulário Principal -->
@@ -305,11 +318,21 @@
                 <input type="text" id="valorPix" value="250,00">
             </div>
 
+            <div class="form-group">
+                <label>Toque de Notificação</label>
+                <select id="somSelect">
+                    <option value="iphone">Sino do iPhone (Tri-tone)</option>
+                    <option value="android">Toque do Android (Beep)</option>
+                </select>
+            </div>
+
             <button class="btn-white" onclick="dispararNotificacao()" id="uiBtnText">Simular Notificação Pix</button>
+            
+            <button class="btn-permission" onclick="pedirPermissaoNotificacao()">Ativar Notificações Reais do Celular</button>
         </div>
     </div>
 
-    <!-- Notificação Realista Compacta -->
+    <!-- Notificação Visual Integrada -->
     <div id="bank-notification">
         <div class="notif-icon" id="notifIconBox">⚡</div>
         <div class="notif-content">
@@ -321,20 +344,20 @@
         </div>
     </div>
 
-    <!-- Modal de Administração (Dono) -->
+    <!-- Modal de Administração -->
     <div id="admin-modal">
         <div class="admin-box">
             <h3>Área de Administração</h3>
-            <p style="font-size: 0.8rem; color: #888;">Edite as configurações do sistema.</p>
+            <p style="font-size: 0.8rem; color: #888;">Controle restrito ao proprietário.</p>
             
             <div class="form-group">
                 <label>Senha de Acesso</label>
-                <input type="password" id="adminPass" placeholder="Digite a senha (padrão: admin)">
+                <input type="password" id="adminPass" placeholder="Senha (padrão: admin)">
             </div>
 
             <div id="adminEditArea" style="display:none; flex-direction: column; gap: 12px;">
                 <div class="form-group">
-                    <label>Título do App no Topo</label>
+                    <label>Título do App</label>
                     <input type="text" id="editTitle" value="Gerador de Notificações">
                 </div>
                 <div class="form-group">
@@ -351,26 +374,41 @@
     </div>
 
     <script>
-        // Configuração dos 3 Bancos Solicitados
         const bancosConfig = {
             nubank: { nome: 'Nubank', cor: '#820AD1', icone: 'Nu' },
             inter: { nome: 'Banco Inter', cor: '#FF7A00', icone: 'Inter' },
             picpay: { nome: 'PicPay', cor: '#11C76F', icone: 'Pay' }
         };
 
-        // Carregar dados salvos permanentemente
         window.addEventListener('DOMContentLoaded', () => {
             if(localStorage.getItem('appTitle')) document.getElementById('uiTitle').innerText = localStorage.getItem('appTitle');
             if(localStorage.getItem('appBtn')) document.getElementById('uiBtnText').innerText = localStorage.getItem('appBtn');
         });
 
-        // Disparar Notificação Compacta
+        // Solicitar permissão para notificações oficiais do sistema operacional do celular
+        function pedirPermissaoNotificacao() {
+            if (!("Notification" in window)) {
+                alert("Este navegador não suporta notificações nativas do sistema.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("Notificações do sistema ativadas com sucesso!");
+                } else {
+                    alert("Permissão negada para notificações do sistema.");
+                }
+            });
+        }
+
+        // Disparar Notificação
         function dispararNotificacao() {
             const bancoKey = document.getElementById('bancoSelect').value;
             const banco = bancosConfig[bancoKey];
             const nome = document.getElementById('nomePagador').value || "Alguém";
             const valor = document.getElementById('valorPix').value || "0,00";
+            const somTipo = document.getElementById('somSelect').value;
 
+            // Visual dentro da tela
             const iconBox = document.getElementById('notifIconBox');
             iconBox.innerText = banco.icone;
             iconBox.style.backgroundColor = banco.cor;
@@ -382,24 +420,37 @@
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
-            tocarSomIPhone();
+            // Tocar som escolhido (iPhone ou Android)
+            tocarSom(somTipo);
+
+            // Disparar também na barra de notificações nativa do celular se permitido
+            if (window.Notification && Notification.permission === "granted") {
+                new Notification(`${banco.nome} - Pix Recebido`, {
+                    body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+                });
+            }
 
             setTimeout(() => {
                 notif.classList.remove('show');
             }, 4000);
         }
 
-        // Toque de Sino do iPhone (Tri-tone / Bell autêntico)
-        function tocarSomIPhone() {
+        // Motor de Sons (iPhone Tri-tone vs Android Beep)
+        function tocarSom(tipo) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Três acordes simulando o sino tri-tone clássico do iOS
-                tocarNota(ctx, 659.25, 0, 0.12);    // E5
-                tocarNota(ctx, 830.61, 0.12, 0.12); // G#5
-                tocarNota(ctx, 987.77, 0.24, 0.35); // B5 (Sino principal mais longo)
+                if (tipo === 'iphone') {
+                    // Sino autêntico do iPhone (Tri-tone)
+                    tocarNota(ctx, 659.25, 0, 0.12);    // E5
+                    tocarNota(ctx, 830.61, 0.12, 0.12); // G#5
+                    tocarNota(ctx, 987.77, 0.24, 0.35); // B5
+                } else {
+                    // Toque clássico do Android
+                    tocarNota(ctx, 1046.50, 0, 0.15);  // C6
+                }
             } catch (e) {
-                // Áudio bloqueado sem interação prévia
+                // Áudio bloqueado pelo navegador
             }
         }
 
@@ -420,7 +471,7 @@
             osc.stop(ctx.currentTime + inicio + duracao);
         }
 
-        // Painel de Administração
+        // Admin Panel
         function abrirAdmin() {
             document.getElementById('admin-modal').style.display = 'flex';
         }
