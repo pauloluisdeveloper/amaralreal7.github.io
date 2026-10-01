@@ -449,7 +449,6 @@
             margin-top: 6px;
         }
 
-        /* Área do QR Code e Pix Copia e Cola Nativo */
         #pix-native-container {
             display: none;
             flex-direction: column;
@@ -655,7 +654,6 @@
         </div>
     </div>
 
-    <!-- Modal de Pagamento com Pix Nativo e QR Code -->
     <div class="custom-overlay" id="vip-checkout-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Escolha seu Plano VIP</div>
@@ -673,16 +671,12 @@
                 </div>
             </div>
 
-            <!-- Botão para gerar o Pix direto na tela -->
             <button class="btn-action-checkout" id="btnGerarPixNativo" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%);" onclick="gerarPixNativo()">
                 Gerar Pix (QR Code & Copia e Cola)
             </button>
 
-            <!-- Container do Pix Nativo (Oculto até gerar) -->
             <div id="pix-native-container">
-                <div class="qr-box" id="qrCodeBox">
-                    <!-- QR Code gerado dinamicamente -->
-                </div>
+                <div class="qr-box" id="qrCodeBox"></div>
                 <div class="waiting-pulse">Aguardando pagamento automático...</div>
                 <div class="pix-copia-cola-box" id="pixCopiaColaText">Gerando código...</div>
                 <button class="btn-action-checkout" onclick="copiarPixCopiaCola()" style="background-color: #333; margin-top: 2px;">Copiar Código Pix</button>
@@ -712,7 +706,6 @@
         let meuDeviceId = "";
         let planoSelecionadoValor = "11,90";
         let tempoSelecaoPlano = "30 Dias";
-        let isProcessing = false;
         let checagemPagamentoInterval = null;
 
         async function inicializarDispositivo() {
@@ -740,8 +733,6 @@
         }
 
         function registrarCliqueLink() {
-            let cliques = parseInt(localStorage.getItem('nu_total_cliques') || '0') + 1;
-            localStorage.setItem('nu_total_cliques', cliques);
             try {
                 fetch(APPS_SCRIPT_URL, {
                     method: "POST",
@@ -797,6 +788,34 @@
             document.getElementById('app-screen').style.display = "flex";
         }
 
+        async function carregarDadosAdmin() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "admin_dados" })
+                });
+                const data = await response.json();
+                document.getElementById('statCliquesNum').innerText = data.cliques || 0;
+                document.getElementById('totalVendasNum').innerText = data.ativacoes || 0;
+                document.getElementById('faturamentoNum').innerText = `R$ ${data.faturamento || '0,00'}`;
+                
+                let logsHtml = "";
+                if (data.logs && data.logs.length > 0) {
+                    data.logs.forEach(log => {
+                        logsHtml += `<div class="log-item">
+                            <div class="log-row"><span><b>${log.data}</b></span><span class="badge-ativo">${log.valor}</span></div>
+                            <div class="log-row"><span>ID: ${log.deviceId}</span><span>Key: ${log.key || 'N/A'}</span></div>
+                        </div>`;
+                    });
+                } else {
+                    logsHtml = `<div style="text-align: center; color: #688; padding: 10px; font-size: 0.7rem;">Nenhum registro encontrado.</div>`;
+                }
+                document.getElementById('listaLogs').innerHTML = logsHtml;
+            } catch (e) {
+                document.getElementById('listaLogs').innerHTML = `<div style="text-align: center; color: #f55; padding: 10px; font-size: 0.7rem;">Erro ao carregar dados.</div>`;
+            }
+        }
+
         function selecionarPlano(id, valor, tempo) {
             document.getElementById('plano1').classList.remove('selected');
             document.getElementById('plano2').classList.remove('selected');
@@ -807,10 +826,12 @@
 
         function abrirCheckoutVip() {
             document.getElementById('vip-checkout-overlay').classList.add('active');
-            // Reseta para o estado inicial do modal
             document.getElementById('pix-native-container').style.display = "none";
             document.getElementById('planOptionsArea').style.display = "grid";
-            document.getElementById('btnGerarPixNativo').style.display = "block";
+            const btnGen = document.getElementById('btnGerarPixNativo');
+            btnGen.style.display = "block";
+            btnGen.disabled = false;
+            btnGen.innerText = "Gerar Pix (QR Code & Copia e Cola)";
             document.getElementById('fallbackKeyArea').style.display = "flex";
         }
 
@@ -819,7 +840,6 @@
             if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
         }
 
-        // Função que solicita a geração do Pix nativo via Google Apps Script / API InfinitePay
         async function gerarPixNativo() {
             const btn = document.getElementById('btnGerarPixNativo');
             btn.disabled = true;
@@ -837,7 +857,6 @@
                 const res = await response.json();
 
                 if (res.status === "sucesso") {
-                    // Esconde opções e botão de gerar, exibe o container do Pix nativo
                     document.getElementById('planOptionsArea').style.display = "none";
                     btn.style.display = "none";
                     document.getElementById('fallbackKeyArea').style.display = "none";
@@ -845,11 +864,9 @@
                     const containerPix = document.getElementById('pix-native-container');
                     containerPix.style.display = "flex";
 
-                    // Preenche o copia e cola e o QR Code (usando API pública de QR Code com base no texto do pix)
                     document.getElementById('pixCopiaColaText').innerText = res.copiaECola;
                     document.getElementById('qrCodeBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(res.copiaECola)}" alt="QR Code Pix">`;
 
-                    // Inicia verificação em tempo real (Polling a cada 4 segundos checando se o webhook aprovou)
                     iniciarVerificacaoPagamentoReal();
                 } else {
                     mostrarAlertaCustom("Erro", res.mensagem || "Não foi possível gerar o Pix.");
@@ -863,6 +880,30 @@
             }
         }
 
+        async function validarKeyDeAcesso() {
+            const key = document.getElementById('inputUserKey').value.trim();
+            if (!key) {
+                mostrarAlertaCustom("Aviso", "Digite uma chave VIP válida.");
+                return;
+            }
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "validar_key", deviceId: meuDeviceId, key: key })
+                });
+                const res = await response.json();
+                if (res.status === "sucesso") {
+                    aplicarModoLiberado();
+                    fecharCheckoutVip();
+                    mostrarAlertaCustom("Sucesso", "Chave ativada com sucesso!");
+                } else {
+                    mostrarAlertaCustom("Erro", res.mensagem || "Chave inválida ou já utilizada.");
+                }
+            } catch (e) {
+                mostrarAlertaCustom("Erro", "Falha ao validar a chave.");
+            }
+        }
+
         function copiarPixCopiaCola() {
             const texto = document.getElementById('pixCopiaColaText').innerText;
             navigator.clipboard.writeText(texto).then(() => {
@@ -870,7 +911,6 @@
             });
         }
 
-        // Fica checando o status na planilha para ver se o webhook da InfinitePay confirmou o pagamento
         function iniciarVerificacaoPagamentoReal() {
             if (checagemPagamentoInterval) clearInterval(checagemPagamentoInterval);
             
@@ -887,7 +927,21 @@
                         mostrarAlertaCustom("Pagamento Aprovado!", "Seu Pix foi confirmado automaticamente e o VIP foi liberado!");
                     }
                 } catch (e) {}
-            }, 4000); // Checa a cada 4 segundos
+            }, 4000);
+        }
+
+        function dispararNotificacao() {
+            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
+            const valor = document.getElementById('valorPix').value || "250,00";
+            
+            document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
+            
+            const notif = document.getElementById('bank-notification');
+            notif.classList.add('show');
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 4000);
         }
 
         function mostrarAlertaCustom(titulo, mensagem) {
@@ -898,112 +952,6 @@
 
         function fecharAlertaCustom() {
             document.getElementById('custom-alert-overlay').classList.remove('active');
-        }
-
-        async function validarKeyDeAcesso() {
-            if (isProcessing) return;
-
-            const inputKey = document.getElementById('inputUserKey').value.trim();
-            if (!inputKey || inputKey.length < 5) {
-                mostrarAlertaCustom("Atenção", "Por favor, digite uma Key de ativação válida!");
-                return;
-            }
-
-            const btn = document.getElementById('btnValidarKey');
-            isProcessing = true;
-            btn.disabled = true;
-            btn.innerText = "Validando Key...";
-
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ 
-                        acao: "validar_key", 
-                        deviceId: meuDeviceId, 
-                        key: inputKey, 
-                        valor: planoSelecionadoValor 
-                    })
-                });
-                const res = await response.json();
-                
-                if(res.status === "sucesso") {
-                    aplicarModoLiberado();
-                    fecharCheckoutVip();
-                    mostrarAlertaCustom("Sucesso!", "Acesso VIP ativado com sucesso!");
-                } else {
-                    mostrarAlertaCustom("Erro", res.mensagem || "Key inválida ou já utilizada.");
-                }
-            } catch (e) {
-                mostrarAlertaCustom("Erro de Conexão", "Não foi possível validar com o servidor.");
-            } finally {
-                isProcessing = false;
-                btn.disabled = false;
-                btn.innerText = "Ativar com Key Manual";
-            }
-        }
-
-        async function carregarDadosAdmin() {
-            document.getElementById('statusSync').innerText = "Atualizando...";
-            
-            const totalCliques = localStorage.getItem('nu_total_cliques') || '1';
-            document.getElementById('statCliquesNum').innerText = totalCliques;
-
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ acao: "admin_dados" })
-                });
-                const res = await response.json();
-                
-                if(res.status === "sucesso") {
-                    document.getElementById('totalVendasNum').innerText = res.totalVendas;
-                    document.getElementById('faturamentoNum').innerText = `R$ ${res.faturamento}`;
-                    
-                    const lista = document.getElementById('listaLogs');
-                    lista.innerHTML = "";
-                    
-                    if(res.registros.length === 0) {
-                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 10px; font-size: 0.7rem;">Nenhuma venda registrada.</div>`;
-                    } else {
-                        res.registros.forEach(reg => {
-                            lista.innerHTML += `
-                                <div class="log-item">
-                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 10)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
-                                    <div class="log-row"><span>Key: <b>${reg.key}</b></span> <span>${reg.data}</span></div>
-                                </div>
-                            `;
-                        });
-                    }
-                    document.getElementById('statusSync').innerText = "Sincronizado";
-                }
-            } catch(e) {
-                document.getElementById('statusSync').innerText = "Erro ao carregar";
-            }
-        }
-
-        function dispararNotificacao() {
-            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
-            const valor = document.getElementById('valorPix').value || "250,00";
-
-            const txt = document.getElementById('notifBodyText');
-            if(txt) {
-                txt.innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
-            }
-
-            const notif = document.getElementById('bank-notification');
-            if(notif) {
-                notif.classList.add('show');
-            }
-
-            if ("vibrate" in navigator) {
-                try { navigator.vibrate(80); } catch(e) {}
-            }
-
-            setTimeout(() => {
-                if(notif) {
-                    notif.classList.remove('show');
-                }
-            }, 5000);
         }
     </script>
 </body>
