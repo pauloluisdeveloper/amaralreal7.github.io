@@ -1,108 +1,112 @@
-function doPost(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-
-  try {
-    var dados = JSON.parse(e.postData.contents);
-    var acao = dados.acao;
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-
-    // 1. Ação para gerar o Pix
-    if (acao === "gerar_pix") {
-      var valor = dados.valor || "5,99";
-      var deviceId = dados.deviceId;
-
-      // Código Pix Copia e Cola simulado/exemplo
-      var copiaEColaSimulado = "00020126580014br.gov.bcb.pix0136suachavepixaqui5204000053039865802BR5925Djene Teixeira6009Sao Paulo62070503***63041D3D";
-
-      return ContentService.createTextOutput(JSON.stringify({
-        status: "sucesso",
-        copiaECola: copiaEColaSimulado
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // 2. Verificar status do dispositivo
-    if (acao === "verificar") {
-      var deviceId = dados.deviceId;
-      var rows = sheet.getDataRange().getValues();
-      var liberado = false;
-
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][1] === deviceId && rows[i][3] === "AProvado") {
-          liberado = true;
-          break;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Pix - Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-      }
-
-      return ContentService.createTextOutput(JSON.stringify({
-        status: liberado ? "liberado" : "pendente"
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // 3. Validar Key Manual
-    if (acao === "validar_key") {
-      var keyDigitada = dados.key;
-      var deviceId = dados.deviceId;
-      
-      if (keyDigitada && keyDigitada.trim() !== "") {
-        sheet.appendRow([new Date(), deviceId, keyDigitada, "AProvado", dados.valor || "5,99"]);
-        return ContentService.createTextOutput(JSON.stringify({
-          status: "sucesso"
-        })).setMimeType(ContentService.MimeType.JSON);
-      } else {
-        return ContentService.createTextOutput(JSON.stringify({
-          status: "erro",
-          mensagem: "Key inválida."
-        })).setMimeType(ContentService.MimeType.JSON);
-      }
-    }
-
-    // 4. Dados para o Painel Admin
-    if (acao === "admin_dados") {
-      var rows = sheet.getDataRange().getValues();
-      var totalVendas = 0;
-      var faturamento = 0;
-      var registros = [];
-
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][3] === "AProvado") {
-          totalVendas++;
-          faturamento += parseFloat(rows[i][4] ? rows[i][4].toString().replace(',', '.') : 0);
-          registros.push({
-            data: rows[i][0] ? Utilities.formatDate(new Date(rows[i][0]), "GMT-3", "dd/MM HH:mm") : "",
-            deviceId: rows[i][1],
-            key: rows[i][2],
-            status: rows[i][3]
-          });
+        .card {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 320px;
+            text-align: center;
         }
-      }
+        h2 { margin-bottom: 20px; color: #a55eea; }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label { font-size: 12px; color: #b2bec3; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #2d3436;
+            border: 1px solid #636e72;
+            border-radius: 6px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #8854d0;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #a55eea; }
+        #resultado { margin-top: 15px; font-size: 14px; word-break: break-all; color: #00b894; }
+    </style>
+</head>
+<body>
 
-      return ContentService.createTextOutput(JSON.stringify({
-        status: "sucesso",
-        totalVendas: totalVendas,
-        faturamento: faturamento.toFixed(2).replace('.', ','),
-        registros: registros.reverse()
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
+    <div class="card">
+        <h2>Nubank / Pix</h2>
+        
+        <div class="input-group">
+            <label>Nome do Pagador</label>
+            <input type="text" id="nomePagador" value="Carlos Eduardo">
+        </div>
 
-    // 5. Registrar clique
-    if (acao === "registrar_clique") {
-      return ContentService.createTextOutput(JSON.stringify({ status: "ok" })).setMimeType(ContentService.MimeType.JSON);
-    }
+        <div class="input-group">
+            <label>Valor Recebido (R$)</label>
+            <input type="text" id="valorRecebido" value="250,00">
+        </div>
 
-    return ContentService.createTextOutput(JSON.stringify({ status: "erro", mensagem: "Ação desconhecida." })).setMimeType(ContentService.MimeType.JSON);
+        <button onclick="gerarPix()">Gerar Notificação Pix</button>
+        
+        <div id="resultado"></div>
+    </div>
 
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({
-      status: "erro",
-      mensagem: error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
-  }
-}
+    <script>
+        // Cole aqui a sua URL nova do Google Apps Script (terminada em /exec)
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz5vmEmfea0DcnJTKli0kiwAfjK2sz2AS-fAYQzr9xFVbGreQth1DjsViBSDkctjS67/exec";
 
-// Função auxiliar para teste rápido direto no editor, se necessário
-function doGet(e) {
-  return ContentService.createTextOutput("API do Aplicativo funcionando perfeitamente!").setMimeType(ContentService.MimeType.TEXT);
-}
+        async function gerarPix() {
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = "A gerenciar Pix...";
+
+            const dados = {
+                acao: "gerar_pix",
+                valor: document.getElementById("valorRecebido").value,
+                nome: document.getElementById("nomePagador").value,
+                deviceId: "DEV-WMDA2J"
+            };
+
+            try {
+                const resposta = await fetch(URL_SCRIPT, {
+                    method: "POST",
+                    body: JSON.stringify(dados)
+                });
+
+                const json = await resposta.json();
+
+                if (json.status === "sucesso") {
+                    resultadoDiv.innerHTML = `<strong>Pix Gerado com Sucesso!</strong><br><br><span style="font-size:11px;">${json.copiaECola}</span>`;
+                } else {
+                    resultadoDiv.innerHTML = "Erro ao gerar Pix.";
+                }
+            } catch (erro) {
+                resultadoDiv.innerHTML = "Falha de conexão ao gerar o Pix.";
+                console.error(erro);
+            }
+        }
+    </script>
+</body>
+</html>
