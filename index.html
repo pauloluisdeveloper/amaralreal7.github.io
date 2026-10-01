@@ -225,7 +225,6 @@
             margin-top: -4px;
         }
 
-        /* Notificação Flutuante Real */
         #bank-notification {
             position: fixed;
             top: 45px;
@@ -308,7 +307,6 @@
             color: #fff;
         }
 
-        /* Modais */
         .custom-overlay {
             position: fixed;
             top: 0;
@@ -408,37 +406,6 @@
             margin-top: 2px;
         }
 
-        .qr-placeholder {
-            width: 110px;
-            height: 110px;
-            background-color: #fff;
-            border-radius: 12px;
-            margin: 0 auto 6px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
-        }
-
-        .qr-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .pix-copy-box {
-            background-color: #141414;
-            border: 1px solid #222;
-            border-radius: 8px;
-            padding: 6px;
-            font-size: 0.58rem;
-            color: #aaa;
-            word-break: break-all;
-            margin-bottom: 6px;
-            max-height: 34px;
-            overflow-y: auto;
-        }
-
         .key-input-area {
             margin-top: 6px;
             display: flex;
@@ -482,7 +449,6 @@
             margin-top: 2px;
         }
 
-        /* Modal Customizado Estiloso (Substitui o Alert Feio) */
         .modal-custom-alert {
             width: 90%;
             max-width: 280px;
@@ -507,7 +473,6 @@
             line-height: 1.3;
         }
 
-        /* Painel Admin Otimizado (Sem bugs visuais) */
         .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 12px; }
         .admin-header h2 { font-size: 0.95rem; color: #a855f7; font-weight: 700; }
         
@@ -528,7 +493,6 @@
 </head>
 <body onload="inicializarDispositivo()">
 
-    <!-- 1. TELA DO APLICATIVO NUBANK -->
     <div class="screen-container" id="app-screen">
         <div class="top-bar">
             <div class="top-left">
@@ -575,14 +539,12 @@
         </div>
     </div>
 
-    <!-- 2. TELA DO PAINEL ADMINISTRATIVO -->
     <div class="screen-container" id="admin-panel-screen">
         <div class="admin-header">
             <h2>Painel Admin VIP</h2>
             <span style="font-size: 0.6rem; color: #00C853; font-weight: 700;">● LIVE</span>
         </div>
 
-        <!-- Estatísticas incluindo Contador de Cliques no Link -->
         <div class="stats-grid">
             <div class="stat-card">
                 <span>Cliques Link</span>
@@ -613,7 +575,6 @@
         <button class="btn-back-app" onclick="fecharPainelAdmin()">Voltar para o App</button>
     </div>
 
-    <!-- NOTIFICAÇÃO NUBANK REAL (Push na Barra de Notificações do Celular) -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -627,7 +588,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE SENHA DO ADMIN (ESCUDO) -->
     <div class="custom-overlay" id="admin-password-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Painel Administrativo</div>
@@ -643,7 +603,6 @@
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT CLIENTE & PLANOS INFINITEPAY -->
     <div class="custom-overlay" id="vip-checkout-overlay">
         <div class="checkout-card">
             <div class="checkout-title">Escolha seu Plano VIP</div>
@@ -661,16 +620,8 @@
                 </div>
             </div>
 
-            <div class="qr-placeholder" id="qrContainer">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=INFINITEPAY_CHECKOUT_URL" alt="QR Code InfinitePay">
-            </div>
-
-            <div class="pix-copy-box" id="pixCopiaColaText">
-                https://pay.infinitepay.io/seu-link-aqui (Insira seu link)
-            </div>
-            
-            <!-- Botão de Pagamento InfinitePay -->
-            <button class="btn-action-checkout" id="btnPagarInfinitePay" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%); margin-bottom: 6px;" onclick="abrirCheckoutInfinitePay()">
+            <!-- Botão oficial conectado ao seu Checkout InfinitePay -->
+            <button class="btn-action-checkout" id="btnPagarInfinitePay" style="background: linear-gradient(135deg, #00C853 0%, #009624 100%); margin-bottom: 8px; padding: 12px; font-size: 0.8rem;" onclick="abrirCheckoutInfinitePay()">
                 Pagar com InfinitePay (Checkout)
             </button>
 
@@ -680,11 +631,10 @@
                 <button class="btn-action-checkout" id="btnValidarKey" onclick="validarKeyDeAcesso()">Ativar com Key Manual</button>
             </div>
 
-            <button class="btn-close-checkout" onclick="fecharCheckoutVip()">Fechar</button>
+            <button class="btn-close-checkout" onclick="fecharCheckoutVip()" style="margin-top: 8px;">Fechar</button>
         </div>
     </div>
 
-    <!-- MODAL DE ALERTA CUSTOMIZADO BONITO (Substitui os alerts feios) -->
     <div class="custom-overlay" id="custom-alert-overlay">
         <div class="modal-custom-alert">
             <h3 id="customAlertTitle">Aviso</h3>
@@ -706,8 +656,6 @@
             if (!deviceIdSalvo) {
                 deviceIdSalvo = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
                 localStorage.setItem('nubank_device_id', deviceIdSalvo);
-                
-                // Registra +1 clique/acesso no link do app em tempo real
                 registrarCliqueLink();
             }
             meuDeviceId = deviceIdSalvo;
@@ -727,12 +675,9 @@
             }
         }
 
-        // Contador de Cliques no Link de Acesso com lógica em tempo real
         function registrarCliqueLink() {
             let cliques = parseInt(localStorage.getItem('nu_total_cliques') || '0') + 1;
             localStorage.setItem('nu_total_cliques', cliques);
-            
-            // Envia opcionalmente para o servidor se desejar salvar na planilha
             try {
                 fetch(APPS_SCRIPT_URL, {
                     method: "POST",
@@ -793,13 +738,6 @@
             document.getElementById('plano' + id).classList.add('selected');
             planoSelecionadoValor = valor;
             tempoSelecaoPlano = tempo;
-
-            // Atualiza os links e QR Code do InfinitePay com base no plano escolhido
-            if(valor === '5,99') {
-                document.getElementById('pixCopiaColaText').innerText = "https://pay.infinitepay.io/seu-link-15dias";
-            } else {
-                document.getElementById('pixCopiaColaText').innerText = "https://pay.infinitepay.io/seu-link-30dias";
-            }
         }
 
         function abrirCheckoutVip() {
@@ -810,16 +748,12 @@
             document.getElementById('vip-checkout-overlay').classList.remove('active');
         }
 
-        // INTEGRAÇÃO INFINITEPAY: Abre o link de pagamento real no navegador
+        // Abre o seu link oficial do InfinitePay criado
         function abrirCheckoutInfinitePay() {
-            const linkInfinitePay = planoSelecionadoValor === '5,99' 
-                ? "https://pay.infinitepay.io/seu-link-15dias" 
-                : "https://pay.infinitepay.io/seu-link-30dias";
-            
+            const linkInfinitePay = "https://checkout.infinitepay.io/djene-teixeira/y7ozcTWvMy";
             window.open(linkInfinitePay, '_blank');
         }
 
-        // Alerta customizado bonito combinando com o design
         function mostrarAlertaCustom(titulo, mensagem) {
             document.getElementById('customAlertTitle').innerText = titulo;
             document.getElementById('customAlertMessage').innerText = mensagem;
@@ -875,7 +809,6 @@
         async function carregarDadosAdmin() {
             document.getElementById('statusSync').innerText = "Atualizando...";
             
-            // Exibe contagem de cliques do localStorage
             const totalCliques = localStorage.getItem('nu_total_cliques') || '1';
             document.getElementById('statCliquesNum').innerText = totalCliques;
 
@@ -912,7 +845,6 @@
             }
         }
 
-        // Notificação flutuante que simula a notificação real no celular
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
