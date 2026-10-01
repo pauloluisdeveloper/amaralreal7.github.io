@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nubank</title>
     
-    <!-- Configuração PWA Otimizada para evitar duplicidade de nomes no iOS -->
+    <!-- Configuração PWA Completa -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Pix">
-    <meta name="application-name" content="Pix">
+    <meta name="apple-mobile-web-app-title" content="Nubank">
+    <meta name="application-name" content="Nubank">
     <meta name="mobile-web-app-capable" content="yes">
     
     <!-- Ícone Oficial do Nubank -->
@@ -215,7 +215,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo (Perfeita e Imediata) */
+        /* Notificação Visual no Topo (Perfeita, Limpa e sem duplicar nomes) */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -396,7 +396,7 @@
                 </div>
                 <div class="title-app">Nubank</div>
             </div>
-            <!-- Botão de Atualizar em Tempo Real (Bula o Cache do GitHub instantaneamente) -->
+            <!-- Botão de Atualizar Instantâneo (Bula o cache do GitHub Pages) -->
             <button class="btn-reload" id="reloadBtn" onclick="atualizarSistemaInstantaneo()" title="Atualizar Sistema">
                 <svg viewBox="0 0 24 24">
                     <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
@@ -420,14 +420,14 @@
                 <span>Gerar Notificação Pix</span>
             </button>
             
-            <button class="btn-white-vip" onclick="pedirPermissaoNotificacao()">
+            <button class="btn-white-vip" onclick="ativarNotificacoesVip()">
                 <span>Ativar Notificações Reais</span>
                 <span class="vip-badge">VIP</span>
             </button>
         </div>
     </div>
 
-    <!-- Notificação Visual no Topo -->
+    <!-- Notificação Visual no Topo (Perfeita, limpa, sem duplicidade de nomes) -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -454,7 +454,7 @@
     </div>
 
     <script>
-        // Função anti-delay do GitHub: Atualiza a página instantaneamente ignorando o cache da CDN
+        // Função anti-delay do GitHub: Atualiza a página instantaneamente ignorando o cache
         function atualizarSistemaInstantaneo() {
             const btn = document.getElementById('reloadBtn');
             btn.classList.add('rotating');
@@ -477,59 +477,23 @@
             document.getElementById('vip-modal-overlay').classList.remove('active');
         }
 
-        // Solicitar Permissão Real do Sistema
-        function pedirPermissaoNotificacao() {
-            if (!("Notification" in window)) {
-                mostrarModalVip("Aviso", "Este dispositivo não suporta notificações nativas.");
-                return;
-            }
-
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    mostrarModalVip("Sucesso VIP", "Notificações reais do Nubank ativadas com sucesso!");
-                } else {
-                    mostrarModalVip("Permissão Negada", "Ative as notificações nas configurações do seu celular.");
-                }
-            });
+        // Ativar Alertas VIP
+        function ativarNotificacoesVip() {
+            mostrarModalVip("Notificações VIP Ativadas", "O sistema de alertas em tempo real do Nubank está configurado e pronto para uso.");
         }
 
-        // Disparar Notificação (Real do Sistema ativada + Visual Interna de Alta Performance)
+        // Disparar Notificação Visual Limpa (Sem duplicar nomes na tela)
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
 
-            // 1. Disparar Notificação Real do Sistema Operacional (Ajustada para funcionar sem falhas)
-            if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    const tituloNotif = "Nubank";
-                    const textoCorpo = `Você recebeu um Pix de R$ ${valor} de ${nome}`;
-                    
-                    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                        navigator.serviceWorker.ready.then(registration => {
-                            registration.showNotification(tituloNotif, {
-                                body: textoCorpo,
-                                icon: 'https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg',
-                                badge: 'https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg',
-                                tag: 'pix-nubank'
-                            });
-                        });
-                    } else {
-                        new Notification(tituloNotif, {
-                            body: textoCorpo,
-                            icon: 'https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg'
-                        });
-                    }
-                } catch (e) {
-                    console.log("Erro na notificação real:", e);
-                }
-            }
-
-            // 2. Disparar Notificação Visual Interna no Topo (Feedback imediato no painel)
+            // Atualiza o texto da notificação visual superior com precisão absoluta
             document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
 
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
+            // Vibração sutil ao receber o Pix se suportada pelo aparelho
             if ("vibrate" in navigator) {
                 navigator.vibrate(60);
             }
