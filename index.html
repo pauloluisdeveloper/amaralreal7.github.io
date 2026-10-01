@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nubank</title>
     
-    <!-- Configuração PWA / Ícone e Nome na Tela Inicial -->
+    <!-- Configuração PWA Completa sem duplicações -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
+    <meta name="application-name" content="Nubank">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Ícone Oficial do Nubank na Tela Inicial -->
+    <!-- Ícone Oficial do Nubank -->
     <link rel="apple-touch-icon" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
     <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
 
@@ -31,10 +32,10 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            padding: 15px;
+            padding: env(safe-area-inset-top, 20px) 15px env(safe-area-inset-bottom, 20px) 15px;
         }
 
-        /* Card VIP Compacto, Fundo Totalmente Preto (Black) e sem brilho roxo */
+        /* Card VIP Compacto, Fundo Totalmente Preto */
         .mobile-container {
             width: 100%;
             max-width: 360px;
@@ -47,6 +48,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.9);
             overflow: hidden;
             padding: 24px;
+            margin-top: env(safe-area-inset-top, 0px);
         }
 
         /* Top Bar com Logo e Nome Nubank */
@@ -72,6 +74,7 @@
             align-items: center;
             justify-content: center;
             background-color: #820AD1;
+            flex-shrink: 0;
         }
 
         .nu-logo-box img {
@@ -87,7 +90,7 @@
             color: #fff;
         }
 
-        /* Botão de Atualizar em Tempo Real (Discreto e Moderno no Topo) */
+        /* Botão de Atualizar em Tempo Real */
         .btn-reload {
             background-color: #121212;
             border: 1px solid #262626;
@@ -206,7 +209,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo */
+        /* Notificação Visual no Topo (Ajustada para o modo PWA) */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -229,7 +232,7 @@
         }
 
         #bank-notification.show {
-            top: 20px;
+            top: max(20px, env(safe-area-inset-top, 20px));
         }
 
         .notif-icon {
@@ -287,6 +290,92 @@
         .notif-text b {
             font-weight: 600;
             color: #fff;
+        }
+
+        /* Modal VIP Personalizado (Substituindo o alerta feio) */
+        #vip-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #vip-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .vip-modal-card {
+            width: 85%;
+            max-width: 310px;
+            background-color: #0c0c0c;
+            border: 1px solid #222;
+            border-radius: 22px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #vip-modal-overlay.active .vip-modal-card {
+            transform: scale(1);
+        }
+
+        .vip-modal-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background-color: #820AD1;
+            margin: 0 auto 14px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(130, 10, 209, 0.4);
+        }
+
+        .vip-modal-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vip-modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .vip-modal-desc {
+            font-size: 0.8rem;
+            color: #999;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
+        .vip-modal-btn {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
         }
     </style>
 </head>
@@ -346,6 +435,18 @@
         </div>
     </div>
 
+    <!-- Modal VIP Personalizado -->
+    <div id="vip-modal-overlay">
+        <div class="vip-modal-card">
+            <div class="vip-modal-icon">
+                <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank">
+            </div>
+            <div class="vip-modal-title" id="vipModalTitle">Notificações VIP</div>
+            <div class="vip-modal-desc" id="vipModalDesc">Notificações reais do Nubank ativadas com sucesso em seu dispositivo.</div>
+            <button class="vip-modal-btn" onclick="fecharModalVip()">Entendido</button>
+        </div>
+    </div>
+
     <script>
         // Função para atualizar o aplicativo em tempo real limpando cache
         function atualizarSistema() {
@@ -359,30 +460,42 @@
             window.location.reload(true);
         }
 
+        // Mostrar Modal VIP customizado
+        function mostrarModalVip(titulo, descricao) {
+            document.getElementById('vipModalTitle').innerText = titulo;
+            document.getElementById('vipModalDesc').innerText = descricao;
+            document.getElementById('vip-modal-overlay').classList.add('active');
+        }
+
+        function fecharModalVip() {
+            document.getElementById('vip-modal-overlay').classList.remove('active');
+        }
+
         // Solicitar Permissão Real do Sistema Operacional
         function pedirPermissaoNotificacao() {
             if (!("Notification" in window)) {
-                alert("Este navegador não suporta notificações nativas.");
+                mostrarModalVip("Aviso", "Este dispositivo não suporta notificações nativas.");
                 return;
             }
 
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    alert("Notificações reais do Nubank ativadas com sucesso!");
+                    mostrarModalVip("Sucesso VIP", "Notificações reais do Nubank ativadas com sucesso!");
                 } else {
-                    alert("Permissão negada nas configurações.");
+                    mostrarModalVip("Permissão Negada", "Ative as notificações nas configurações do seu celular para receber os alertas.");
                 }
             });
         }
 
-        // Disparar Notificação (Real do Sistema + Visual Interna)
+        // Disparar Notificação (Real do Sistema limpa sem "from" + Visual Interna)
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
 
-            // 1. Notificação Real na Tela de Bloqueio (Nome padrão do sistema: Nubank)
+            // 1. Notificação Real na Tela de Bloqueio (Garantindo que o título seja rigorosamente 'Nubank')
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
+                    // O título da notificação nativa configurado estritamente como "Nubank" evita o texto duplicado "from" do sistema
                     new Notification("Nubank", {
                         body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
                         tag: 'pix-nubank'
