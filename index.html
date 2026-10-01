@@ -46,23 +46,23 @@
 
         /* Top Bar */
         .top-bar {
-            padding: 20px 20px 10px 20px;
+            padding: 24px 20px 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .title-app {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: #fff;
         }
 
         .admin-shield {
-            background: #111;
-            border: 1px solid #333;
-            color: #fff;
+            background: #000;
+            border: 1.5px solid #ffffff;
+            color: #ffffff;
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -70,60 +70,22 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: 0.2s;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
         .admin-shield:hover {
-            background: #222;
-        }
-
-        /* Profile Section */
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 15px 0;
-        }
-
-        .profile-wrapper {
-            position: relative;
-            width: 75px;
-            height: 75px;
-        }
-
-        .profile-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #333;
-            background-color: #1a1a1a;
-        }
-
-        .profile-edit-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: #ffffff;
-            color: #000;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            background: #111;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
         /* Content Area */
         .content {
-            padding: 0 20px 20px 20px;
+            padding: 10px 20px 20px 20px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
         .form-group {
@@ -143,8 +105,8 @@
             background-color: #111111;
             border: 1px solid #262626;
             color: #ffffff;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 13px;
+            border-radius: 12px;
             font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s;
@@ -170,15 +132,6 @@
 
         .btn-white:hover {
             opacity: 0.9;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 0.75rem;
-            color: #555;
-            letter-spacing: 0.5px;
         }
 
         /* --- NOTIFICAÇÃO COMPACTA ESTILO BANCO (CENTRALIZADA LÁ EM CIMA) --- */
@@ -325,19 +278,10 @@
 <body>
 
     <div class="mobile-container">
-        <!-- Top Bar com Escudo Administrativo -->
+        <!-- Top Bar com Escudo Branco de Administração -->
         <div class="top-bar">
             <div class="title-app" id="uiTitle">Gerador de Notificações</div>
             <div class="admin-shield" onclick="abrirAdmin()" title="Painel do Dono">🛡️</div>
-        </div>
-
-        <!-- Perfil do Usuário com Lápis -->
-        <div class="profile-section">
-            <div class="profile-wrapper">
-                <img id="profileImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="profile-avatar" alt="Perfil">
-                <div class="profile-edit-badge" onclick="document.getElementById('fileInput').click()">✏️</div>
-                <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="mudarFoto(event)">
-            </div>
         </div>
 
         <!-- Formulário Principal -->
@@ -348,11 +292,6 @@
                     <option value="nubank">Nubank</option>
                     <option value="inter">Inter</option>
                     <option value="picpay">PicPay</option>
-                    <option value="mercadopago">Mercado Pago</option>
-                    <option value="caixatem">Caixa Tem</option>
-                    <option value="bradesco">Bradesco</option>
-                    <option value="ngcash">NG.CASH</option>
-                    <option value="infinitepay">InfinitePay</option>
                 </select>
             </div>
 
@@ -366,20 +305,7 @@
                 <input type="text" id="valorPix" value="250,00">
             </div>
 
-            <div class="form-group">
-                <label>Som da Notificação</label>
-                <select id="somSelect">
-                    <option value="iphone">Toque do iPhone (Chime)</option>
-                    <option value="android">Toque do Android (Beep)</option>
-                </select>
-            </div>
-
             <button class="btn-white" onclick="dispararNotificacao()" id="uiBtnText">Simular Notificação Pix</button>
-        </div>
-
-        <!-- Rodapé Editável -->
-        <div class="footer" id="uiFooter">
-            proprietário, uamaralhz@uamaralhz
         </div>
     </div>
 
@@ -399,7 +325,7 @@
     <div id="admin-modal">
         <div class="admin-box">
             <h3>Área de Administração</h3>
-            <p style="font-size: 0.8rem; color: #888;">Edite os textos e configurações permanentes do sistema.</p>
+            <p style="font-size: 0.8rem; color: #888;">Edite as configurações do sistema.</p>
             
             <div class="form-group">
                 <label>Senha de Acesso</label>
@@ -410,10 +336,6 @@
                 <div class="form-group">
                     <label>Título do App no Topo</label>
                     <input type="text" id="editTitle" value="Gerador de Notificações">
-                </div>
-                <div class="form-group">
-                    <label>Texto do Rodapé</label>
-                    <input type="text" id="editFooter" value="proprietário, uamaralhz@uamaralhz">
                 </div>
                 <div class="form-group">
                     <label>Texto do Botão</label>
@@ -429,39 +351,18 @@
     </div>
 
     <script>
-        // Configurações de Bancos (Cores e Ícones)
+        // Configuração dos 3 Bancos Solicitados
         const bancosConfig = {
             nubank: { nome: 'Nubank', cor: '#820AD1', icone: 'Nu' },
             inter: { nome: 'Banco Inter', cor: '#FF7A00', icone: 'Inter' },
-            picpay: { nome: 'PicPay', cor: '#11C76F', iconBg: '#11C76F', icone: 'Pay' },
-            mercadopago: { nome: 'Mercado Pago', cor: '#009EE3', icone: 'MP' },
-            caixatem: { nome: 'Caixa Tem', cor: '#005CA9', icone: 'CX' },
-            bradesco: { nome: 'Bradesco', cor: '#CC092F', icone: 'Brad' },
-            ngcash: { nome: 'NG.CASH', cor: '#68F588', icone: 'NG' },
-            infinitepay: { nome: 'InfinitePay', cor: '#00D1FF', icone: 'Inf' }
+            picpay: { nome: 'PicPay', cor: '#11C76F', icone: 'Pay' }
         };
 
-        // Carregar dados salvos (persistência permanente)
+        // Carregar dados salvos permanentemente
         window.addEventListener('DOMContentLoaded', () => {
             if(localStorage.getItem('appTitle')) document.getElementById('uiTitle').innerText = localStorage.getItem('appTitle');
-            if(localStorage.getItem('appFooter')) document.getElementById('uiFooter').innerText = localStorage.getItem('appFooter');
             if(localStorage.getItem('appBtn')) document.getElementById('uiBtnText').innerText = localStorage.getItem('appBtn');
-            if(localStorage.getItem('userAvatar')) document.getElementById('profileImg').src = localStorage.getItem('userAvatar');
         });
-
-        // Trocar foto de perfil
-        function mudarFoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64 = e.target.result;
-                    document.getElementById('profileImg').src = base64;
-                    localStorage.setItem('userAvatar', base64);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
 
         // Disparar Notificação Compacta
         function dispararNotificacao() {
@@ -469,9 +370,7 @@
             const banco = bancosConfig[bancoKey];
             const nome = document.getElementById('nomePagador').value || "Alguém";
             const valor = document.getElementById('valorPix').value || "0,00";
-            const somTipo = document.getElementById('somSelect').value;
 
-            // Configurar visual do banco na notificação
             const iconBox = document.getElementById('notifIconBox');
             iconBox.innerText = banco.icone;
             iconBox.style.backgroundColor = banco.cor;
@@ -483,28 +382,24 @@
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
-            tocarSom(somTipo);
+            tocarSomIPhone();
 
             setTimeout(() => {
                 notif.classList.remove('show');
             }, 4000);
         }
 
-        // Sistema de Som (iPhone / Android)
-        function tocarSom(tipo) {
+        // Toque de Sino do iPhone (Tri-tone / Bell autêntico)
+        function tocarSomIPhone() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                if (tipo === 'iphone') {
-                    // Toque estilo iPhone (Tri-tone / Chime harmônico)
-                    tocarNota(ctx, 587.33, 0, 0.08); // D5
-                    tocarNota(ctx, 880.00, 0.08, 0.12); // A5
-                } else {
-                    // Toque Android (Beep limpo padrão)
-                    tocarNota(ctx, 1046.50, 0, 0.1); // C6
-                }
+                // Três acordes simulando o sino tri-tone clássico do iOS
+                tocarNota(ctx, 659.25, 0, 0.12);    // E5
+                tocarNota(ctx, 830.61, 0.12, 0.12); // G#5
+                tocarNota(ctx, 987.77, 0.24, 0.35); // B5 (Sino principal mais longo)
             } catch (e) {
-                // Áudio bloqueado pelo navegador antes de interação
+                // Áudio bloqueado sem interação prévia
             }
         }
 
@@ -515,8 +410,8 @@
             osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, ctx.currentTime + inicio);
             
-            gain.gain.setValueAtTime(0.15, ctx.currentTime + inicio);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + inicio + duracao);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime + inicio);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + inicio + duracao);
             
             osc.connect(gain);
             gain.connect(ctx.destination);
@@ -525,7 +420,7 @@
             osc.stop(ctx.currentTime + inicio + duracao);
         }
 
-        // Área de Administração
+        // Painel de Administração
         function abrirAdmin() {
             document.getElementById('admin-modal').style.display = 'flex';
         }
@@ -542,30 +437,24 @@
 
             if (pass === 'admin' || editArea.style.display === 'flex') {
                 if (editArea.style.display !== 'flex') {
-                    // Autenticado com sucesso, mostra os campos de edição
                     editArea.style.display = 'flex';
                     document.getElementById('editTitle').value = document.getElementById('uiTitle').innerText;
-                    document.getElementById('editFooter').value = document.getElementById('uiFooter').innerText;
                     document.getElementById('editBtn').value = document.getElementById('uiBtnText').innerText;
-                    alert('Senha correta! Agora faça as edições e clique em Salvar novamente.');
+                    alert('Senha correta! Altere os campos e clique em Salvar.');
                     return;
                 }
 
-                // Salvar dados em tempo real e de forma permanente
                 const novoTitulo = document.getElementById('editTitle').value;
-                const novoRodape = document.getElementById('editFooter').value;
                 const novoBtn = document.getElementById('editBtn').value;
 
                 document.getElementById('uiTitle').innerText = novoTitulo;
-                document.getElementById('uiFooter').innerText = novoRodape;
                 document.getElementById('uiBtnText').innerText = novoBtn;
 
                 localStorage.setItem('appTitle', novoTitulo);
-                localStorage.setItem('appFooter', novoRodape);
                 localStorage.setItem('appBtn', novoBtn);
 
                 fecharAdmin();
-                alert('Alterações salvas com sucesso!');
+                alert('Alterações salvas permanentemente!');
             } else {
                 alert('Senha incorreta!');
             }
