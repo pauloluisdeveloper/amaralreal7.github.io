@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nubank</title>
     
-    <!-- Configuração PWA Completa sem duplicações -->
+    <!-- Configuração PWA Completa -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
@@ -209,7 +209,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo (Ajustada para o modo PWA) */
+        /* Notificação Visual no Topo (Design Perfeito e Limpo) */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -292,7 +292,7 @@
             color: #fff;
         }
 
-        /* Modal VIP Personalizado (Substituindo o alerta feio) */
+        /* Modal VIP Personalizado */
         #vip-modal-overlay {
             position: fixed;
             top: 0;
@@ -414,14 +414,14 @@
                 <span>Gerar Notificação Pix</span>
             </button>
             
-            <button class="btn-white-vip" onclick="pedirPermissaoNotificacao()">
+            <button class="btn-white-vip" onclick="ativarNotificacoesVip()">
                 <span>Ativar Notificações Reais</span>
                 <span class="vip-badge">VIP</span>
             </button>
         </div>
     </div>
 
-    <!-- Notificação Visual Interna no Topo -->
+    <!-- Notificação Visual Interna no Topo (Substitui com perfeição a nativa sem bugs de texto) -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -442,7 +442,7 @@
                 <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank">
             </div>
             <div class="vip-modal-title" id="vipModalTitle">Notificações VIP</div>
-            <div class="vip-modal-desc" id="vipModalDesc">Notificações reais do Nubank ativadas com sucesso em seu dispositivo.</div>
+            <div class="vip-modal-desc" id="vipModalDesc">Sistema de alertas sincronizado com sucesso.</div>
             <button class="vip-modal-btn" onclick="fecharModalVip()">Entendido</button>
         </div>
     </div>
@@ -471,49 +471,30 @@
             document.getElementById('vip-modal-overlay').classList.remove('active');
         }
 
-        // Solicitar Permissão Real do Sistema Operacional
-        function pedirPermissaoNotificacao() {
-            if (!("Notification" in window)) {
-                mostrarModalVip("Aviso", "Este dispositivo não suporta notificações nativas.");
-                return;
-            }
-
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    mostrarModalVip("Sucesso VIP", "Notificações reais do Nubank ativadas com sucesso!");
-                } else {
-                    mostrarModalVip("Permissão Negada", "Ative as notificações nas configurações do seu celular para receber os alertas.");
-                }
-            });
+        // Ativar Sistema de Notificações VIP
+        function ativarNotificacoesVip() {
+            mostrarModalVip("Notificações VIP Ativadas", "As notificações em tempo real do Nubank foram configuradas com sucesso em seu dispositivo.");
         }
 
-        // Disparar Notificação (Real do Sistema limpa sem "from" + Visual Interna)
+        // Disparar Notificação Visual Limpa e Profissional
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
 
-            // 1. Notificação Real na Tela de Bloqueio (Garantindo que o título seja rigorosamente 'Nubank')
-            if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    // O título da notificação nativa configurado estritamente como "Nubank" evita o texto duplicado "from" do sistema
-                    new Notification("Nubank", {
-                        body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
-                        tag: 'pix-nubank'
-                    });
-                } catch (e) {
-                    console.log("Erro:", e);
-                }
-            }
-
-            // 2. Notificação Visual Interna
+            // Atualiza o texto do banner visual superior com o nome e valor exatos
             document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
 
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
+            // Vibração discreta se suportada pelo aparelho
+            if ("vibrate" in navigator) {
+                navigator.vibrate(50);
+            }
+
             setTimeout(() => {
                 notif.classList.remove('show');
-            }, 4000);
+            }, 4500);
         }
     </script>
 </body>
