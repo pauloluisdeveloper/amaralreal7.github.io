@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
     
-    <!-- Ícone Apple Touch Icon com a Logo Oficial Correta -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><path d='M120 190v158h55V235c0-15 10-25 25-25s25 10 25 25v113h55V235c0-15 10-25 25-25s25 10 25 25v113h55V190c0-38-24-58-67-58s-54 18-67 43c-13-25-24-43-67-43s-67 20-67 58z' fill='%23FFFFFF'/></svg>">
+    <!-- Ícone Apple Touch Icon usando a sua imagem hospedada -->
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
 
     <style>
         * {
@@ -47,7 +47,7 @@
             padding: 24px;
         }
 
-        /* Top Bar com Logo Oficial Nubank Perfeita */
+        /* Top Bar com a sua imagem do ícone perfeitamente encaixada */
         .top-bar {
             display: flex;
             align-items: center;
@@ -58,17 +58,19 @@
         .nu-logo-box {
             width: 42px;
             height: 42px;
-            background-color: #820AD1;
             border-radius: 12px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 14px rgba(130, 10, 209, 0.45);
+            background-color: #820AD1;
         }
 
-        .nu-logo-box svg {
-            width: 26px;
-            height: 26px;
+        .nu-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .title-app {
@@ -185,17 +187,19 @@
         .notif-icon {
             width: 36px;
             height: 36px;
-            background-color: #820AD1;
             border-radius: 9px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            background-color: #820AD1;
         }
 
-        .notif-icon svg {
-            width: 22px;
-            height: 22px;
+        .notif-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .notif-content {
@@ -244,10 +248,8 @@
     <div class="mobile-container">
         <div class="top-bar">
             <div class="nu-logo-box">
-                <!-- Vetor correto e idêntico ao da App Store do Nubank -->
-                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M120 190v158h55V235c0-15 10-25 25-25s25 10 25 25v113h55V235c0-15 10-25 25-25s25 10 25 25v113h55V190c0-38-24-58-67-58s-54 18-67 43c-13-25-24-43-67-43s-67 20-67 58z" fill="#FFFFFF"/>
-                </svg>
+                <!-- Ícone puxado diretamente da sua imagem enviada -->
+                <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
             </div>
             <div class="title-app">Nubank</div>
         </div>
@@ -275,9 +277,7 @@
     <!-- Notificação Visual Interna no Topo -->
     <div id="bank-notification">
         <div class="notif-icon">
-            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                <path d="M120 190v158h55V235c0-15 10-25 25-25s25 10 25 25v113h55V235c0-15 10-25 25-25s25 10 25 25v113h55V190c0-38-24-58-67-58s-54 18-67 43c-13-25-24-43-67-43s-67 20-67 58z" fill="#FFFFFF"/>
-            </svg>
+            <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
         </div>
         <div class="notif-content">
             <div class="notif-header-row">
