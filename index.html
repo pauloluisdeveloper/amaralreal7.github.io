@@ -2,66 +2,648 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin - Nubank VIP</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #050505; color: #fff; padding: 20px; display: flex; justify-content: center; }
-        .admin-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
-        
-        .header-admin { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 12px; }
-        .header-admin h0, h1 { font-size: 1.1rem; color: #a855f7; font-weight: 700; }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .stat-card { background: #111; border: 1px solid #222; padding: 14px; border-radius: 16px; text-align: center; }
-        .stat-card span { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 600; }
-        .stat-card h2 { font-size: 1.2rem; color: #fff; margin-top: 4px; }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Nubank - VIP & Admin</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nubank">
+    <meta name="application-name" content="Nubank">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
 
-        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-        .logs-title { font-size: 0.85rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
-        
-        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 10px; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem; }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        /* Container Padrão das Telas */
+        .screen-container {
+            width: 100%;
+            max-width: 380px;
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            overflow: hidden;
+            padding: 24px;
+        }
+
+        /* Controle de Visibilidade das Telas */
+        #app-screen {
+            display: flex;
+        }
+
+        #admin-panel-screen {
+            display: none;
+            background-color: #050505;
+            border-color: #222;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nu-logo-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #820AD1;
+            flex-shrink: 0;
+        }
+
+        .nu-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title-app {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+
+        .btn-reload {
+            background-color: #121212;
+            border: 1px solid #262626;
+            color: #888;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-reload svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: transform 0.4s ease;
+        }
+
+        .btn-reload.rotating svg {
+            transform: rotate(360deg);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            color: #777;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            background-color: #0b0b0b;
+            border: 1px solid #1f1f1f;
+            color: #ffffff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #820AD1;
+        }
+
+        .btn-nu {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            box-shadow: 0 4px 15px rgba(130, 10, 209, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-white-vip {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+        }
+
+        .vip-badge {
+            background-color: #820AD1;
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-device {
+            font-size: 0.65rem;
+            color: #555;
+            text-align: center;
+            margin-top: -4px;
+        }
+
+        .btn-admin-access {
+            background: transparent;
+            color: #666;
+            border: none;
+            font-size: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 14px;
+            text-decoration: underline;
+        }
+
+        /* Notificação Flutuante */
+        #bank-notification {
+            position: fixed;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150px);
+            width: 90%;
+            max-width: 380px;
+            background: rgba(18, 18, 18, 0.98);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(130, 10, 209, 0.4);
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 99999;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #bank-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notif-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background-color: #820AD1;
+        }
+
+        .notif-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .notif-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .notif-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .notif-app-name {
+            font-size: 0.65rem;
+            color: #a855f7;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .notif-time {
+            font-size: 0.6rem;
+            color: #888;
+        }
+
+        .notif-text {
+            font-size: 0.85rem;
+            color: #f3f4f6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .notif-text b {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Modal de Checkout */
+        #vip-checkout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #vip-checkout-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .checkout-card {
+            width: 90%;
+            max-width: 320px;
+            background-color: #0c0c0c;
+            border: 1px solid #262626;
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #vip-checkout-overlay.active .checkout-card {
+            transform: scale(1);
+        }
+
+        .checkout-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .checkout-subtitle {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 14px;
+        }
+
+        .qr-placeholder {
+            width: 130px;
+            height: 130px;
+            background-color: #fff;
+            border-radius: 12px;
+            margin: 0 auto 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .pix-copy-box {
+            background-color: #141414;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.65rem;
+            color: #aaa;
+            word-break: break-all;
+            margin-bottom: 10px;
+            max-height: 45px;
+            overflow-y: auto;
+        }
+
+        .key-input-area {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+        }
+
+        .key-input-area label {
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+
+        .btn-action-checkout {
+            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 11px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
+        }
+
+        .btn-close-checkout {
+            background: transparent;
+            color: #666;
+            border: none;
+            font-size: 0.75rem;
+            cursor: pointer;
+            padding: 6px;
+            margin-top: 4px;
+        }
+
+        /* Estilos específicos do Painel Admin */
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 14px; }
+        .admin-header h2 { font-size: 1rem; color: #a855f7; font-weight: 700; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .stat-card { background: #111; border: 1px solid #222; padding: 12px; border-radius: 14px; text-align: center; }
+        .stat-card span { font-size: 0.65rem; color: #888; text-transform: uppercase; font-weight: 600; }
+        .stat-card h3 { font-size: 1.1rem; color: #fff; margin-top: 2px; }
+        .logs-section { background: #0c0c0c; border: 1px solid #222; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .logs-title { font-size: 0.8rem; font-weight: 700; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
+        .log-item { background: #141414; border: 1px solid #1f1f1f; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.7rem; }
         .log-row { display: flex; justify-content: space-between; color: #aaa; }
         .log-row b { color: #fff; }
         .badge-ativo { color: #00C853; font-weight: 800; }
-
-        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.85rem; }
+        .btn-refresh { background: #820AD1; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; font-size: 0.8rem; margin-bottom: 10px; }
     </style>
 </head>
-<body onload="carregarDadosAdmin()">
+<body onload="inicializarDispositivo()">
 
-    <div class="admin-container">
-        <div class="header-admin">
-            <h1>Painel Admin VIP</h1>
-            <span style="font-size: 0.7rem; color: #00C853; font-weight: 700;">● LIVE</span>
+    <!-- 1. TELA DO APLICATIVO NUBANK -->
+    <div class="screen-container" id="app-screen">
+        <div class="top-bar">
+            <div class="top-left">
+                <div class="nu-logo-box">
+                    <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
+                </div>
+                <div class="title-app">Nubank</div>
+            </div>
+            <button class="btn-reload" id="reloadBtn" onclick="atualizarSistemaInstantaneo()" title="Atualizar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="content">
+            <div class="form-group">
+                <label>Nome do Pagador</label>
+                <input type="text" id="nomePagador" value="Carlos Eduardo">
+            </div>
+
+            <div class="form-group">
+                <label>Valor Recebido (R$)</label>
+                <input type="text" id="valorPix" value="250,00">
+            </div>
+
+            <button class="btn-nu" onclick="dispararNotificacao()">
+                <span>Gerar Notificação Pix</span>
+            </button>
+            
+            <button class="btn-white-vip" onclick="abrirCheckoutVip()">
+                <span id="btnVipText">Ativar Notificações Reais</span>
+                <span class="vip-badge" id="vipBadgeStatus">VIP</span>
+            </button>
+            <div class="status-device" id="deviceStatusText">Verificando acesso...</div>
+            
+            <button class="btn-admin-access" onclick="alternarPainelAdmin()">Abrir Painel Administrativo</button>
+        </div>
+    </div>
+
+    <!-- 2. TELA DO PAINEL ADMINISTRATIVO -->
+    <div class="screen-container" id="admin-panel-screen">
+        <div class="admin-header">
+            <h2>Painel Admin VIP</h2>
+            <span style="font-size: 0.65rem; color: #00C853; font-weight: 700;">● LIVE</span>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span>Total Ativações</span>
-                <h2 id="totalVendasNum">0</h2>
+                <span>Ativações</span>
+                <h3 id="totalVendasNum">0</h3>
             </div>
             <div class="stat-card">
-                <span>Faturamento Est.</span>
-                <h2 id="faturamentoNum">R$ 0,00</h2>
+                <span>Faturamento</span>
+                <h3 id="faturamentoNum">R$ 0,00</h3>
             </div>
         </div>
 
-        <button class="btn-refresh" onclick="carregarDadosAdmin()">Atualizar Dados em Tempo Real</button>
+        <button class="btn-refresh" onclick="carregarDadosAdmin()">Atualizar Dados da Planilha</button>
 
         <div class="logs-section">
             <div class="logs-title">
-                <span>Logs de Vendas / Ativações</span>
-                <span id="statusSync" style="font-size: 0.65rem; color: #666;">Sincronizado</span>
+                <span>Logs de Vendas e Chaves</span>
+                <span id="statusSync" style="font-size: 0.6rem; color: #666;">Sincronizado</span>
             </div>
-            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 8px; max-height: 350px; overflow-y: auto;">
-                <div style="text-align: center; color: #688; padding: 20px; font-size: 0.8rem;">Carregando dados da planilha...</div>
+            <div id="listaLogs" style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto;">
+                <div style="text-align: center; color: #688; padding: 15px; font-size: 0.75rem;">Carregando logs...</div>
             </div>
+        </div>
+
+        <button class="btn-admin-access" onclick="alternarPainelAdmin()">Voltar para o App</button>
+    </div>
+
+    <!-- NOTIFICAÇÃO NUBANK -->
+    <div id="bank-notification">
+        <div class="notif-icon">
+            <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
+        </div>
+        <div class="notif-content">
+            <div class="notif-header-row">
+                <span class="notif-app-name">Nubank</span>
+                <span class="notif-time">agora</span>
+            </div>
+            <div class="notif-text" id="notifBodyText">Você recebeu um Pix de <b>R$ 250,00</b> de Carlos Eduardo</div>
+        </div>
+    </div>
+
+    <!-- MODAL CHECKOUT -->
+    <div id="vip-checkout-overlay">
+        <div class="checkout-card">
+            <div class="checkout-title">Ativação VIP</div>
+            <div class="checkout-subtitle">Pague via Pix ou digite sua Key de acesso</div>
+            
+            <div class="qr-placeholder">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix..." alt="QR Code Pix">
+            </div>
+
+            <div class="pix-copy-box" id="pixCopiaColaText">
+                00020126580014br.gov.bcb.pix0136...
+            </div>
+            <button class="btn-action-checkout" style="padding: 8px; font-size: 0.75rem; margin-bottom: 10px;" onclick="copiarChavePix()">Copiar Código Pix</button>
+
+            <div class="key-input-area">
+                <label>Já pagou? Digite sua Key:</label>
+                <input type="text" id="inputUserKey" placeholder="EX: VIP-XXXX-YYYY">
+                <button class="btn-action-checkout" onclick="validarKeyDeAcesso()">Ativar com Key</button>
+            </div>
+
+            <button class="btn-close-checkout" onclick="fecharCheckoutVip()">Fechar</button>
         </div>
     </div>
 
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuvhvS8auXVaaGJ_P0P4LirQfxDEfpeOGteLAOXA0Y3dDrmUwXmVlWeQ4-O2A_Yqp8/exec";
+        let meuDeviceId = "";
+
+        async function inicializarDispositivo() {
+            let deviceIdSalvo = localStorage.getItem('nubank_device_id');
+            if (!deviceIdSalvo) {
+                deviceIdSalvo = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('nubank_device_id', deviceIdSalvo);
+            }
+            meuDeviceId = deviceIdSalvo;
+            document.getElementById('deviceStatusText').innerText = `ID: ${meuDeviceId.substring(0, 10)}...`;
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "verificar", deviceId: meuDeviceId })
+                });
+                const resultado = await response.json();
+                if (resultado.status === "liberado") {
+                    aplicarModoLiberado();
+                }
+            } catch (e) {
+                console.log("Erro ao verificar dispositivo");
+            }
+        }
+
+        function aplicarModoLiberado() {
+            document.getElementById('btnVipText').innerText = "Sistema VIP Ativo";
+            const badge = document.getElementById('vipBadgeStatus');
+            badge.innerText = "ATIVO";
+            badge.style.backgroundColor = "#00C853";
+            document.getElementById('deviceStatusText').innerText = "Acesso verificado e liberado!";
+        }
+
+        function atualizarSistemaInstantaneo() {
+            const btn = document.getElementById('reloadBtn');
+            btn.classList.add('rotating');
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        function abrirCheckoutVip() {
+            document.getElementById('vip-checkout-overlay').classList.add('active');
+        }
+
+        function fecharCheckoutVip() {
+            document.getElementById('vip-checkout-overlay').classList.remove('active');
+        }
+
+        function copiarChavePix() {
+            const codigoPix = "00020126580014br.gov.bcb.pix...";
+            navigator.clipboard.writeText(codigoPix).then(() => {
+                alert("Código Pix Copia e Cola copiado!");
+            });
+        }
+
+        async function validarKeyDeAcesso() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ acao: "gerar_key", deviceId: meuDeviceId })
+                });
+                const res = await response.json();
+                if(res.status === "sucesso") {
+                    aplicarModoLiberado();
+                    fecharCheckoutVip();
+                    alert("Acesso VIP ativado e salvo na planilha com sucesso!");
+                } else {
+                    alert("Erro ao validar na planilha.");
+                }
+            } catch (e) {
+                alert("Erro de conexão com o banco de dados.");
+            }
+        }
+
+        function alternarPainelAdmin() {
+            const telaApp = document.getElementById('app-screen');
+            const telaAdmin = document.getElementById('admin-panel-screen');
+            
+            if(telaAdmin.style.display === "flex") {
+                telaAdmin.style.display = "none";
+                telaApp.style.display = "flex";
+            } else {
+                telaApp.style.display = "none";
+                telaAdmin.style.display = "flex";
+                carregarDadosAdmin();
+            }
+        }
 
         async function carregarDadosAdmin() {
             document.getElementById('statusSync').innerText = "Atualizando...";
@@ -80,22 +662,47 @@
                     lista.innerHTML = "";
                     
                     if(res.registros.length === 0) {
-                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 20px; font-size: 0.8rem;">Nenhuma venda registrada ainda.</div>`;
+                        lista.innerHTML = `<div style="text-align: center; color: #666; padding: 15px; font-size: 0.75rem;">Nenhuma venda registrada.</div>`;
                     } else {
                         res.registros.forEach(reg => {
                             lista.innerHTML += `
                                 <div class="log-item">
-                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 16)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
+                                    <div class="log-row"><span>Dispositivo: <b>${reg.deviceId.substring(0, 14)}...</b></span> <span class="badge-ativo">${reg.status}</span></div>
                                     <div class="log-row"><span>Key: <b>${reg.key}</b></span> <span>${reg.data}</span></div>
                                 </div>
                             `;
                         });
                     }
-                    document.getElementById('statusSync').innerText = "Atualizado agora";
+                    document.getElementById('statusSync').innerText = "Sincronizado";
                 }
             } catch(e) {
-                document.getElementById('statusSync').innerText = "Erro de conexão";
+                document.getElementById('statusSync').innerText = "Erro ao carregar";
             }
+        }
+
+        function dispararNotificacao() {
+            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
+            const valor = document.getElementById('valorPix').value || "250,00";
+
+            const txt = document.getElementById('notifBodyText');
+            if(txt) {
+                txt.innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
+            }
+
+            const notif = document.getElementById('bank-notification');
+            if(notif) {
+                notif.classList.add('show');
+            }
+
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate(80); } catch(e) {}
+            }
+
+            setTimeout(() => {
+                if(notif) {
+                    notif.classList.remove('show');
+                }
+            }, 5000);
         }
     </script>
 </body>
