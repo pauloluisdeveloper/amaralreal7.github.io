@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
     
-    <!-- Ícone Apple Touch Icon com Logo Oficial Nubank (Roxo #820AD1) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><text x='50%25' y='54%25' font-family='Arial, sans-serif' font-weight='bold' font-size='280' fill='%23FFFFFF' text-anchor='middle' dominant-baseline='middle'>nu</text></svg>">
+    <!-- Ícone Apple Touch Icon com a Logo Oficial e Exata do Nubank -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23820AD1'/><path d='M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z' fill='%23FFFFFF'/></svg>">
     
     <!-- Manifesto Web PWA -->
     <link rel="manifest" href='data:application/manifest+json,{
@@ -22,7 +22,7 @@
         "background_color": "#000000",
         "theme_color": "#820AD1",
         "icons": [{
-            "src": "data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><rect width=\'512\' height=\'512\' rx=\'112\' fill=\'%23820AD1\'/><text x=\'50%25\' y=\'54%25\' font-family=\'Arial, sans-serif\' font-weight=\'bold\' font-size=\'280\' fill=\'%23FFFFFF\' text-anchor=\'middle\' dominant-baseline=\'middle\'>nu</text></svg>",
+            "src": "data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><rect width=\'512\' height=\'512\' rx=\'112\' fill=\'%23820AD1\'/><path d=\'M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z\' fill=\'%23FFFFFF\'/></svg>",
             "sizes": "512x512",
             "type": "image/svg+xml"
         }]
@@ -62,7 +62,7 @@
             padding: 24px;
         }
 
-        /* Top Bar com Logo Oficial Nubank */
+        /* Top Bar com Logo Oficial Nubank Perfeita */
         .top-bar {
             display: flex;
             align-items: center;
@@ -71,18 +71,19 @@
         }
 
         .nu-logo-box {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             background-color: #820AD1;
-            border-radius: 11px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.15rem;
-            color: #fff;
-            letter-spacing: -1px;
             box-shadow: 0 4px 14px rgba(130, 10, 209, 0.45);
+        }
+
+        .nu-logo-box svg {
+            width: 24px;
+            height: 24px;
         }
 
         .title-app {
@@ -127,7 +128,7 @@
             border-color: #820AD1;
         }
 
-        /* Botão Profissional Nubank (Alto Padrão) */
+        /* Botão Profissional Nubank */
         .btn-nu {
             background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
             color: #ffffff;
@@ -204,10 +205,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: #fff;
             flex-shrink: 0;
+        }
+
+        .notif-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
         .notif-content {
@@ -255,7 +258,12 @@
     <!-- Container VIP Compacto Arredondado no Centro -->
     <div class="mobile-container">
         <div class="top-bar">
-            <div class="nu-logo-box">nu</div>
+            <div class="nu-logo-box">
+                <!-- Vetor exato da Logo Nubank -->
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z" fill="#FFFFFF"/>
+                </svg>
+            </div>
             <div class="title-app">Nubank</div>
         </div>
 
@@ -281,7 +289,11 @@
 
     <!-- Notificação Visual Interna no Topo -->
     <div id="bank-notification">
-        <div class="notif-icon">nu</div>
+        <div class="notif-icon">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M140 332V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v105c0 14 6 22 18 22s22-8 22-22V180h42v152c0 30-18 48-48 48s-42-12-54-32c-12 20-24 32-54 32s-48-18-48-48z" fill="#FFFFFF"/>
+            </svg>
+        </div>
         <div class="notif-content">
             <div class="notif-header-row">
                 <span class="notif-app-name">Nubank</span>
