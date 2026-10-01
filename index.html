@@ -101,3 +101,8 @@ function doPost(e) {
     lock.releaseLock();
   }
 }
+
+// Função auxiliar para teste rápido direto no editor, se necessário
+function doGet(e) {
+  return ContentService.createTextOutput("API do Aplicativo funcionando perfeitamente!").setMimeType(ContentService.MimeType.TEXT);
+}
