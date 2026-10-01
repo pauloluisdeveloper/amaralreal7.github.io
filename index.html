@@ -1,487 +1,140 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Inter - Super App</title>
+import React, { useState } from 'react';
+
+// Configuração dos tipos de notificação genéricos
+const NOTIFICATION_TYPES = {
+  success: {
+    bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+    icon: '✅',
+    defaultTitle: 'Operação Concluída',
+  },
+  alert: {
+    bg: 'bg-amber-50 border-amber-200 text-amber-800',
+    icon: '⚠️',
+    defaultTitle: 'Atenção Necessária',
+  },
+  info: {
+    bg: 'bg-blue-50 border-blue-200 text-blue-800',
+    icon: 'ℹ️',
+    defaultTitle: 'Nova Mensagem',
+  },
+};
+
+export default function NotificationSimulator() {
+  const [notifications, setNotifications] = useState([]);
+  const [customTitle, setCustomTitle] = useState('');
+  const [customBody, setCustomBody] = useState('');
+  const [selectedType, setSelectedType] = useState('info');
+
+  // Função para disparar uma nova notificação de teste
+  const addNotification = (type, title, body) => {
+    const id = Date.now();
+    const config = NOTIFICATION_TYPES[type];
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#FF7A00">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { 
-            background-color: #121214; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; padding: 0; 
-            width: 100vw; height: 100vh; height: 100dvh;
-            overflow: hidden; 
-        }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
-        .modal-anim { animation: fadeIn 0.2s ease-out forwards; }
-    </style>
-</head>
-<body class="flex justify-center items-center h-dvh w-screen overflow-hidden">
+    const newNotif = {
+      id,
+      type,
+      title: title || config.defaultTitle,
+      body: body || 'Esta é uma simulação de notificação para testes de UI.',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
 
-    <div class="w-full h-full max-w-md bg-white flex flex-col justify-between relative overflow-hidden shadow-2xl">
+    setNotifications((prev) => [newNotif, ...prev]);
 
-        <!-- Toast de Notificação -->
-        <div id="toast" class="absolute inset-x-0 top-4 z-[400] flex justify-center pointer-events-none hidden px-4">
-            <div class="bg-zinc-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 border border-zinc-800">
-                <i class="fa-solid fa-circle-check text-orange-500"></i>
-                <span id="toast-text">Ação concluída com sucesso!</span>
-            </div>
+    // Remove automaticamente após 5 segundos
+    setTimeout(() => {
+      removeNotification(id);
+    }, 5000);
+  };
+
+  const removeNotification = (id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 p-6 flex flex-col items-center">
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-6 mb-6">
+        <h1 className="text-xl font-bold text-slate-800 mb-2">Simulador de Notificações (UI Testing)</h1>
+        <p className="text-sm text-slate-600 mb-6">
+          Use este painel para testar o comportamento de componentes de alerta e notificações no seu frontend.
+        </p>
+
+        {/* Formulário de Teste */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Tipo de Alerta</label>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="info">Informação (Info)</option>
+              <option value="success">Sucesso (Success)</option>
+              <option value="alert">Alerta (Warning)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Título Personalizado</label>
+            <input
+              type="text"
+              placeholder="Ex: Atualização no sistema"
+              value={customTitle}
+              onChange={(e) => setCustomTitle(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Descrição / Corpo</label>
+            <textarea
+              placeholder="Ex: O processo foi executado com sucesso."
+              value={customBody}
+              onChange={(e) => setCustomBody(e.target.value)}
+              rows="2"
+              className="w-full rounded-lg border border-slate-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            onClick={() => {
+              addNotification(selectedType, customTitle, customBody);
+              setCustomTitle('');
+              setCustomBody('');
+            }}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-colors text-sm shadow-sm"
+          >
+            Disparar Notificação de Teste
+          </button>
         </div>
+      </div>
 
-        <!-- Tela de Acesso / Login -->
-        <div id="screen-login" class="absolute inset-0 bg-white z-[300] flex flex-col justify-between p-6 overflow-y-auto">
-            <div class="pt-10 text-center">
-                <div class="w-20 h-20 rounded-full bg-orange-600 text-white font-bold text-xl flex items-center justify-center mx-auto mb-3 shadow-md border-2 border-orange-500">
-                    <span id="login-initials">UI</span>
+      {/* Container de Exibição das Notificações (Toast Container) */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 w-full max-w-sm pointer-events-none">
+        {notifications.map((notif) => {
+          const config = NOTIFICATION_TYPES[notif.type];
+          return (
+            <div
+              key={notif.id}
+              className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-lg transition-all animate-slide-up ${config.bg}`}
+            >
+              <span className="text-xl">{config.icon}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-sm truncate">{notif.title}</h4>
+                  <span className="text-[10px] opacity-75">{notif.time}</span>
                 </div>
-                <h1 class="text-xl font-black text-zinc-900">Banco Inter</h1>
-                <p class="text-xs text-zinc-500 mt-1">Simulador Oficial do Super App</p>
+                <p className="text-xs mt-1 opacity-90 leading-relaxed">{notif.body}</p>
+              </div>
+              <button
+                onClick={() => removeNotification(notif.id)}
+                className="text-slate-400 hover:text-slate-600 text-sm font-bold ml-2"
+              >
+                &times;
+              </button>
             </div>
-
-            <div class="space-y-4 my-auto">
-                <div>
-                    <label class="text-xs font-bold text-zinc-600 block mb-1">Nome do Titular</label>
-                    <input type="text" id="input-nome" value="Usuário Inter" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs font-bold text-zinc-600 block mb-1">Agência</label>
-                        <input type="text" id="input-agencia" value="0001" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-zinc-600 block mb-1">Conta</label>
-                        <input type="text" id="input-conta" value="1234567-8" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-medium">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-zinc-600 block mb-1">Saldo Inicial (R$)</label>
-                    <input type="text" id="input-saldo-inicial" value="9,60" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 font-bold text-zinc-900">
-                </div>
-            </div>
-
-            <div class="pt-4">
-                <button onclick="entrarApp()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-orange-600/30 text-sm cursor-pointer">
-                    Acessar Conta
-                </button>
-            </div>
-        </div>
-
-        <!-- Header Superior Corrigido -->
-        <header class="px-5 pt-4 pb-2 bg-white flex justify-between items-center z-10 shrink-0 border-b border-zinc-100">
-            <div class="flex items-center space-x-1.5">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-orange-500">
-                    <path d="M12 2V4M12 20V22M4 12H2M22 12H20M5.636 5.636L7.05 7.05M16.95 16.95L18.364 18.364M5.636 18.364L7.05 16.95M16.95 7.05L18.364 5.636" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-                <span class="font-black text-2xl tracking-tighter text-zinc-900">inter</span>
-            </div>
-            <div class="flex items-center space-x-4 text-zinc-700 text-base">
-                <i class="fa-regular fa-eye cursor-pointer" id="eye-icon" onclick="toggleSaldo()"></i>
-                <i class="fa-solid fa-magnifying-glass cursor-pointer" onclick="abrirModal('modal-shop')"></i>
-                <div class="w-8 h-8 rounded-full bg-zinc-200 text-zinc-700 font-bold flex items-center justify-center text-xs border border-zinc-300 cursor-pointer" id="avatar-header" onclick="abrirModal('modal-perfil')">
-                    UI
-                </div>
-            </div>
-        </header>
-
-        <!-- Home Principal -->
-        <main class="flex-1 overflow-y-auto px-5 py-3 space-y-4 hide-scrollbar bg-zinc-50">
-            
-            <!-- Abas Conta Brasil / Global -->
-            <div class="flex items-center space-x-2">
-                <div class="bg-white px-3.5 py-1.5 rounded-full flex items-center space-x-1.5 border border-zinc-200 shadow-2xs">
-                    <span class="text-xs">🇧🇷</span>
-                    <span class="text-xs font-bold text-zinc-800">Brasil</span>
-                </div>
-                <div class="bg-zinc-100 px-3.5 py-1.5 rounded-full flex items-center space-x-1.5 border border-zinc-200 opacity-70 cursor-pointer" onclick="mostrarToast('Conta Global em modo demonstração')">
-                    <span class="text-xs">🇺🇸</span>
-                    <span class="text-xs font-bold text-zinc-600">Global</span>
-                </div>
-            </div>
-
-            <!-- Card Principal de Saldo -->
-            <div class="bg-white p-5 rounded-3xl shadow-xs border border-zinc-100">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs font-medium text-zinc-500">Conta Digital</span>
-                    <i class="fa-solid fa-chevron-right text-xs text-zinc-400 cursor-pointer" onclick="abrirModal('modal-extrato')"></i>
-                </div>
-                <div class="mb-4">
-                    <h2 class="text-2xl font-extrabold text-zinc-900 tracking-tight" id="display-saldo">R$ 9,60</h2>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="abrirModal('modal-pix')" class="bg-zinc-50 hover:bg-zinc-100 py-2.5 px-4 rounded-2xl border border-zinc-100 flex items-center space-x-2.5 transition cursor-pointer">
-                        <div class="w-7 h-7 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                        <span class="text-xs font-bold text-zinc-800">Pix</span>
-                    </button>
-                    <button onclick="mostrarToast('Leitor de código de barras pronto')" class="bg-zinc-50 hover:bg-zinc-100 py-2.5 px-4 rounded-2xl border border-zinc-100 flex items-center space-x-2.5 transition cursor-pointer">
-                        <div class="w-7 h-7 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
-                            <i class="fa-solid fa-barcode"></i>
-                        </div>
-                        <span class="text-xs font-bold text-zinc-800">Pagar</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Atalhos Rápidos -->
-            <div class="grid grid-cols-4 gap-2">
-                <div onclick="abrirModal('modal-cartao')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
-                        <i class="fa-solid fa-credit-card"></i>
-                    </div>
-                    <span class="text-[11px] font-medium text-zinc-700">Cartões</span>
-                </div>
-                <div onclick="abrirModal('modal-invest')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <span class="text-[11px] font-medium text-zinc-700">Investir</span>
-                </div>
-                <div onclick="mostrarToast('Recarga de celular simulada')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
-                        <i class="fa-solid fa-mobile-screen"></i>
-                    </div>
-                    <span class="text-[11px] font-medium text-zinc-700">Recarga</span>
-                </div>
-                <div onclick="mostrarToast('Abrindo menu completo de atalhos')" class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-xs border border-zinc-100 cursor-pointer hover:bg-orange-50 transition">
-                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-1.5 text-sm">
-                        <i class="fa-solid fa-ellipsis"></i>
-                    </div>
-                    <span class="text-[11px] font-medium text-zinc-700">Mostrar mais</span>
-                </div>
-            </div>
-
-            <!-- Banner Inter Black Detalhado -->
-            <div class="bg-zinc-900 rounded-3xl p-5 text-white shadow-md relative overflow-hidden flex items-center justify-between border border-zinc-800">
-                <div class="space-y-2 z-10 max-w-[200px]">
-                    <h3 class="font-black text-lg leading-tight">Benefícios <span class="block font-normal text-xs text-zinc-400">exclusivos como você</span></h3>
-                    <div class="flex items-center space-x-3 text-[10px] text-zinc-400 pt-1">
-                        <div class="flex flex-col items-center"><i class="fa-solid fa-credit-card text-zinc-200 text-xs mb-0.5"><span>Black</span></i></div>
-                        <div class="flex flex-col items-center"><i class="fa-solid fa-utensils text-zinc-200 text-xs mb-0.5"><span>Duo</span></i></div>
-                        <div class="flex flex-col items-center"><i class="fa-solid fa-infinity text-zinc-200 text-xs mb-0.5"><span>Loop</span></i></div>
-                    </div>
-                    <button onclick="mostrarToast('Solicitação Inter Black em análise')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition cursor-pointer shadow-sm block mt-2">
-                        Quero ser Inter Black
-                    </button>
-                </div>
-                <div class="w-28 h-18 bg-gradient-to-tr from-zinc-950 to-zinc-800 rounded-xl p-2.5 flex flex-col justify-between border border-zinc-700 shadow-xl shrink-0 rotate-3">
-                    <div class="flex justify-between items-center"><span class="text-[8px] font-bold text-orange-500 tracking-widest">BLACK</span><i class="fa-solid fa-wifi text-[8px] text-zinc-400"></i></div>
-                    <div class="text-[7px] font-mono text-zinc-400">•••• 3094</div>
-                    <div class="text-[7px] font-bold text-zinc-300">inter</div>
-                </div>
-            </div>
-
-            <!-- Seção "Ser Inter é ter" - Shopping Atualizado com Produtos e Cashback -->
-            <div>
-                <h3 class="text-xs font-bold text-zinc-800 mb-2">Ser Inter é ter</h3>
-                <div onclick="abrirModal('modal-shop')" class="bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl p-5 text-white shadow-md cursor-pointer relative overflow-hidden flex justify-between items-center">
-                    <div class="space-y-1.5 z-10 max-w-[170px]">
-                        <h4 class="text-xl font-black tracking-wide">Shopping</h4>
-                        <div class="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full inline-block text-[10px] font-bold">
-                            ✨ Cashback em dobro
-                        </div>
-                    </div>
-                    <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-                    <!-- Miniatura de Produtos do Shopping (iPhone + Tag de Cashback) -->
-                    <div class="relative z-10 flex items-center space-x-1">
-                        <div class="bg-white/90 backdrop-blur-sm text-zinc-900 px-3 py-2 rounded-2xl shadow-lg flex items-center space-x-1.5">
-                            <i class="fa-solid fa-bag-shopping text-orange-600 text-xs"></i>
-                            <span class="text-[11px] font-extrabold">Ver ofertas</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Últimas Transações -->
-            <div class="bg-white p-4 rounded-3xl shadow-xs border border-zinc-100">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-xs font-bold text-zinc-800">Extrato Recente</h3>
-                    <span class="text-[11px] font-bold text-orange-600 cursor-pointer" onclick="abrirModal('modal-extrato')">Ver tudo</span>
-                </div>
-                <div class="space-y-3" id="lista-transacoes">
-                    <div class="flex items-center justify-between p-1.5">
-                        <div class="flex items-center space-x-2.5">
-                            <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-arrow-down text-xs"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-zinc-800">Pix Recebido</h4>
-                                <p class="text-[10px] text-zinc-400">Hoje, 00:01</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold text-emerald-600">+ R$ 9,60</span>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Navegação Inferior com Ícones Outline Fiéis ao App -->
-        <nav class="bg-white border-t border-zinc-200 py-2 px-6 flex justify-between items-center text-center shrink-0 z-10">
-            <div class="flex flex-col items-center text-orange-600 cursor-pointer">
-                <i class="fa-solid fa-house text-base"></i>
-                <span class="text-[9px] font-medium mt-0.5">Início</span>
-            </div>
-            <div onclick="abrirModal('modal-pix')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600">
-                <i class="fa-solid fa-bolt text-base"></i>
-                <span class="text-[9px] font-medium mt-0.5">Pix</span>
-            </div>
-            <div onclick="abrirModal('modal-cartao')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600">
-                <i class="fa-regular fa-credit-card text-base"></i>
-                <span class="text-[9px] font-medium mt-0.5">Cartões</span>
-            </div>
-            <div onclick="abrirModal('modal-invest')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600">
-                <i class="fa-solid fa-chart-line text-base"></i>
-                <span class="text-[9px] font-medium mt-0.5">Investir</span>
-            </div>
-            <div onclick="abrirModal('modal-shop')" class="flex flex-col items-center text-zinc-400 cursor-pointer hover:text-orange-600">
-                <i class="fa-solid fa-bag-shopping text-base"></i>
-                <span class="text-[9px] font-medium mt-0.5">Shop</span>
-            </div>
-        </nav>
-
-        <!-- Modais Mantidos -->
-        <div id="modal-pix" class="absolute inset-0 bg-white z-[200] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-orange-600 px-5 pt-4 pb-4 text-white flex justify-between items-center shadow-md">
-                <div>
-                    <h2 class="text-sm font-black tracking-wider">ÁREA PIX</h2>
-                    <p class="text-[10px] opacity-90">Transferência instantânea</p>
-                </div>
-                <button onclick="fecharModal('modal-pix')" class="w-8 h-8 rounded-full bg-black/20 text-white flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 space-y-4 overflow-y-auto">
-                <div>
-                    <label class="text-xs font-semibold text-zinc-600 block mb-1">Valor (R$)</label>
-                    <input type="text" id="pix-valor" value="5,00" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-orange-500">
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-zinc-600 block mb-1">Chave Pix ou CPF</label>
-                    <input type="text" id="pix-chave" value="987.654.321-10" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-orange-500">
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-zinc-600 block mb-1">Nome do Favorecido</label>
-                    <input type="text" id="pix-nome" value="Juliana Costa" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-orange-500">
-                </div>
-            </div>
-            <div class="p-4 border-t border-zinc-100">
-                <button onclick="realizarPix()" class="w-full bg-orange-600 text-white font-bold py-3.5 rounded-xl text-xs shadow-md cursor-pointer">Efetuar Pix</button>
-            </div>
-        </div>
-
-        <div id="modal-comprovante" class="absolute inset-0 bg-white z-[250] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-white px-5 pt-4 pb-3 border-b border-zinc-100 flex justify-between items-center">
-                <span class="font-black text-lg text-orange-600 tracking-tighter">inter | <span class="text-xs font-bold text-zinc-700">Comprovante</span></span>
-                <button onclick="fecharModal('modal-comprovante')" class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 bg-zinc-50 overflow-y-auto">
-                <div class="bg-white p-6 rounded-3xl border border-zinc-100 text-center space-y-4">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto text-lg">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <span class="text-xs text-zinc-400 block font-medium">Transferência Pix Realizada</span>
-                    <h3 class="text-2xl font-black text-zinc-900" id="comp-val">R$ 5,00</h3>
-                    <div class="space-y-2 text-xs text-left pt-2 border-t border-zinc-100">
-                        <div class="flex justify-between"><span class="text-zinc-400">Favorecido:</span><span class="font-bold text-zinc-800" id="comp-fav">Juliana Costa</span></div>
-                        <div class="flex justify-between"><span class="text-zinc-400">Chave:</span><span class="font-bold text-zinc-800" id="comp-chv">987.654.321-10</span></div>
-                        <div class="flex justify-between"><span class="text-zinc-400">Autenticação:</span><span class="font-mono text-[10px] text-zinc-600">89FA34BC91E</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 border-t border-zinc-100">
-                <button onclick="fecharModal('modal-comprovante')" class="w-full bg-orange-600 text-white font-bold py-3.5 rounded-xl text-xs cursor-pointer">Concluir</button>
-            </div>
-        </div>
-
-        <div id="modal-cartao" class="absolute inset-0 bg-black/60 z-[200] hidden flex items-center justify-center p-4 modal-anim">
-            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-2xl">
-                <div class="flex justify-between items-center border-b border-zinc-100 pb-3">
-                    <h3 class="font-bold text-zinc-800 text-sm">Cartão Múltiplo</h3>
-                    <i class="fa-solid fa-xmark text-zinc-400 cursor-pointer" onclick="fecharModal('modal-cartao')"></i>
-                </div>
-                <div class="w-full h-44 bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-5 text-white flex flex-col justify-between shadow-lg border border-zinc-800">
-                    <div class="flex justify-between items-center"><span class="font-bold tracking-widest text-sm text-orange-500">BLACK</span><i class="fa-solid fa-wifi rotate-90"></i></div>
-                    <div class="space-y-1"><div class="text-[10px] uppercase opacity-80">Débito / Crédito</div><div class="font-mono text-base tracking-widest">5271 •••• •••• 3094</div></div>
-                    <div class="flex justify-between items-end text-xs">
-                        <div><span class="text-[9px] block opacity-70">TITULAR</span><span class="font-bold uppercase truncate max-w-[150px] block" id="cartao-nome-titular">USUÁRIO INTER</span></div>
-                        <div><span class="text-[9px] block opacity-70">VALIDADE</span><span class="font-bold">12/32</span></div>
-                    </div>
-                </div>
-                <button onclick="fecharModal('modal-cartao')" class="w-full bg-zinc-900 text-white font-bold py-3 rounded-xl text-xs cursor-pointer">Fechar</button>
-            </div>
-        </div>
-
-        <div id="modal-extrato" class="absolute inset-0 bg-white z-[200] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-white px-5 pt-4 pb-3 border-b border-zinc-100 flex justify-between items-center">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-800">Extrato Completo</h2>
-                <button onclick="fecharModal('modal-extrato')" class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 overflow-y-auto space-y-3 bg-zinc-50" id="extrato-completo-lista">
-                <div class="bg-white p-3 rounded-2xl border border-zinc-100 flex justify-between items-center">
-                    <div><h4 class="text-xs font-bold text-zinc-800">Pix Recebido</h4><p class="text-[10px] text-zinc-400">Hoje, 00:01</p></div>
-                    <span class="text-xs font-bold text-emerald-600">+ R$ 9,60</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="modal-invest" class="absolute inset-0 bg-white z-[200] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-white px-5 pt-4 pb-3 border-b border-zinc-100 flex justify-between items-center">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-800">Investimentos</h2>
-                <button onclick="fecharModal('modal-invest')" class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 overflow-y-auto space-y-4 bg-zinc-50">
-                <div class="bg-white p-5 rounded-3xl border border-zinc-100">
-                    <span class="text-xs text-zinc-400">Patrimônio Total</span>
-                    <h3 class="text-2xl font-black text-zinc-900">R$ 9,60</h3>
-                    <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1">+100% CDI</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="modal-shop" class="absolute inset-0 bg-white z-[200] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-orange-600 px-5 pt-4 pb-4 text-white flex justify-between items-center">
-                <h2 class="text-xs font-black tracking-wider">SHOPPING INTER</h2>
-                <button onclick="fecharModal('modal-shop')" class="w-8 h-8 rounded-full bg-black/20 text-white flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 overflow-y-auto space-y-4 bg-zinc-50">
-                <div class="bg-gradient-to-r from-orange-500 to-amber-500 p-4 rounded-2xl text-white">
-                    <h3 class="text-sm font-bold">Cashback em Dobro</h3>
-                    <p class="text-[11px] opacity-90">Até 10% de volta nas melhores lojas.</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="modal-perfil" class="absolute inset-0 bg-white z-[200] hidden flex flex-col justify-between modal-anim">
-            <div class="bg-white px-5 pt-4 pb-3 border-b border-zinc-100 flex justify-between items-center">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-800">Perfil do Cliente</h2>
-                <button onclick="fecharModal('modal-perfil')" class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-5 flex-1 space-y-4 bg-zinc-50 text-center">
-                <div class="w-20 h-20 bg-zinc-300 text-zinc-700 rounded-full mx-auto flex items-center justify-center font-bold text-xl" id="perfil-avatar-big">UI</div>
-                <h3 class="font-bold text-zinc-900 text-base" id="perfil-nome-lbl">Usuário Inter</h3>
-                <p class="text-xs text-zinc-500">Ag: <span id="perfil-ag">0001</span> | Conta: <span id="perfil-cc">1234567-8</span></p>
-            </div>
-        </div>
-
+          );
+        })}
+      </div>
     </div>
-
-    <script>
-        let saldoAtual = 9.60;
-        let saldoVisivel = true;
-
-        function entrarApp() {
-            const nome = document.getElementById('input-nome').value;
-            const saldoStr = document.getElementById('input-saldo-inicial').value;
-            const agencia = document.getElementById('input-agencia').value;
-            const conta = document.getElementById('input-conta').value;
-
-            if(nome) {
-                document.getElementById('cartao-nome-titular').innerText = nome.toUpperCase();
-                document.getElementById('perfil-nome-lbl').innerText = nome;
-                const iniciais = nome.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
-                document.getElementById('login-initials').innerText = iniciais;
-                document.getElementById('avatar-header').innerText = iniciais;
-                document.getElementById('perfil-avatar-big').innerText = iniciais;
-            }
-
-            if(saldoStr) {
-                saldoAtual = parseFloat(saldoStr.replace(/\./g, '').replace(',', '.')) || 9.60;
-                atualizarDisplaySaldo();
-            }
-
-            document.getElementById('perfil-ag').innerText = agencia;
-            document.getElementById('perfil-cc').innerText = conta;
-
-            const loginScreen = document.getElementById('screen-login');
-            loginScreen.style.opacity = '0';
-            setTimeout(() => { loginScreen.style.display = 'none'; }, 300);
-        }
-
-        function abrirModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-
-        function fecharModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        function mostrarToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 2500);
-        }
-
-        function toggleSaldo() {
-            saldoVisivel = !saldoVisivel;
-            const eye = document.getElementById('eye-icon');
-            if(saldoVisivel) {
-                eye.classList.remove('fa-eye-slash');
-                eye.classList.add('fa-eye');
-                atualizarDisplaySaldo();
-            } else {
-                eye.classList.remove('fa-eye');
-                eye.classList.add('fa-eye-slash');
-                document.getElementById('display-saldo').innerText = 'R$ ••••••';
-            }
-        }
-
-        function atualizarDisplaySaldo() {
-            if(saldoVisivel) {
-                document.getElementById('display-saldo').innerText = 'R$ ' + saldoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            }
-        }
-
-        function realizarPix() {
-            const valStr = document.getElementById('pix-valor').value;
-            const nomeFav = document.getElementById('pix-nome').value;
-            const chaveFav = document.getElementById('pix-chave').value;
-            
-            const valorNum = parseFloat(valStr.replace(/\./g, '').replace(',', '.')) || 0;
-            
-            if(valorNum > saldoAtual) {
-                mostrarToast('Saldo insuficiente para a operação.');
-                return;
-            }
-
-            saldoAtual -= valorNum;
-            atualizarDisplaySaldo();
-
-            document.getElementById('comp-val').innerText = 'R$ ' + valStr;
-            document.getElementById('comp-fav').innerText = nomeFav;
-            document.getElementById('comp-chv').innerText = chaveFav;
-
-            fecharModal('modal-pix');
-            abrirModal('modal-comprovante');
-
-            const lista = document.getElementById('lista-transacoes');
-            const listaExtrato = document.getElementById('extrato-completo-lista');
-            const itemHtml = `
-                <div class="flex items-center justify-between p-1.5">
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-arrow-up text-xs"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-zinc-800">Pix Enviado</h4>
-                            <p class="text-[10px] text-zinc-400">Hoje, ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold text-rose-600">- R$ ${valStr}</span>
-                </div>`;
-            
-            lista.insertAdjacentHTML('afterbegin', itemHtml);
-            listaExtrato.insertAdjacentHTML('afterbegin', itemHtml);
-        }
-    </script>
-</body>
-</html>
+  );
+}
