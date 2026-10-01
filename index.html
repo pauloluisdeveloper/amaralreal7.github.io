@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nubank</title>
     
-    <!-- Configuração PWA Otimizada -->
+    <!-- Configuração PWA / Ícone e Nome na Tela Inicial -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nubank">
-    <meta name="application-name" content="Nubank">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Ícone Oficial do Nubank -->
+    <!-- Ícone Oficial do Nubank na Tela Inicial -->
     <link rel="apple-touch-icon" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
     <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg">
 
@@ -22,7 +21,6 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -33,10 +31,10 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            padding: env(safe-area-inset-top, 20px) 15px env(safe-area-inset-bottom, 20px) 15px;
+            padding: 15px;
         }
 
-        /* Card VIP Compacto, Fundo Totalmente Preto */
+        /* Card VIP Compacto, Fundo Totalmente Preto (Black) e sem brilho roxo */
         .mobile-container {
             width: 100%;
             max-width: 360px;
@@ -49,7 +47,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.9);
             overflow: hidden;
             padding: 24px;
-            margin-top: env(safe-area-inset-top, 0px);
         }
 
         /* Top Bar com Logo e Nome Nubank */
@@ -75,7 +72,6 @@
             align-items: center;
             justify-content: center;
             background-color: #820AD1;
-            flex-shrink: 0;
         }
 
         .nu-logo-box img {
@@ -91,7 +87,7 @@
             color: #fff;
         }
 
-        /* Botão de Atualizar em Tempo Real (Bula o Cache do GitHub) */
+        /* Botão de Atualizar em Tempo Real (Discreto e Moderno no Topo) */
         .btn-reload {
             background-color: #121212;
             border: 1px solid #262626;
@@ -116,11 +112,6 @@
             width: 16px;
             height: 16px;
             fill: currentColor;
-            transition: transform 0.4s ease;
-        }
-
-        .btn-reload.rotating svg {
-            transform: rotate(360deg);
         }
 
         /* Content Area */
@@ -215,7 +206,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo (Perfeita, limpa e estável) */
+        /* Notificação Visual no Topo */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -238,7 +229,7 @@
         }
 
         #bank-notification.show {
-            top: max(20px, env(safe-area-inset-top, 20px));
+            top: 20px;
         }
 
         .notif-icon {
@@ -297,92 +288,6 @@
             font-weight: 600;
             color: #fff;
         }
-
-        /* Modal VIP Personalizado */
-        #vip-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #vip-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .vip-modal-card {
-            width: 85%;
-            max-width: 310px;
-            background-color: #0c0c0c;
-            border: 1px solid #222;
-            border-radius: 22px;
-            padding: 22px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #vip-modal-overlay.active .vip-modal-card {
-            transform: scale(1);
-        }
-
-        .vip-modal-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background-color: #820AD1;
-            margin: 0 auto 14px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(130, 10, 209, 0.4);
-        }
-
-        .vip-modal-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .vip-modal-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-
-        .vip-modal-desc {
-            font-size: 0.8rem;
-            color: #999;
-            line-height: 1.4;
-            margin-bottom: 18px;
-        }
-
-        .vip-modal-btn {
-            background: linear-gradient(135deg, #820AD1 0%, #6805a8 100%);
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
-        }
     </style>
 </head>
 <body>
@@ -396,8 +301,8 @@
                 </div>
                 <div class="title-app">Nubank</div>
             </div>
-            <!-- Botão de Atualizar Instantâneo (Bula o cache do GitHub Pages) -->
-            <button class="btn-reload" id="reloadBtn" onclick="atualizarSistemaInstantaneo()" title="Atualizar Sistema">
+            <!-- Botão de Atualizar em Tempo Real -->
+            <button class="btn-reload" onclick="atualizarSistema()" title="Atualizar Sistema">
                 <svg viewBox="0 0 24 24">
                     <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
@@ -420,14 +325,14 @@
                 <span>Gerar Notificação Pix</span>
             </button>
             
-            <button class="btn-white-vip" onclick="ativarNotificacoesVip()">
+            <button class="btn-white-vip" onclick="pedirPermissaoNotificacao()">
                 <span>Ativar Notificações Reais</span>
                 <span class="vip-badge">VIP</span>
             </button>
         </div>
     </div>
 
-    <!-- Notificação Visual no Topo -->
+    <!-- Notificação Visual Interna no Topo -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -441,80 +346,61 @@
         </div>
     </div>
 
-    <!-- Modal VIP Personalizado -->
-    <div id="vip-modal-overlay">
-        <div class="vip-modal-card">
-            <div class="vip-modal-icon">
-                <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank">
-            </div>
-            <div class="vip-modal-title" id="vipModalTitle">Notificações VIP</div>
-            <div class="vip-modal-desc" id="vipModalDesc">Sistema de alertas sincronizado com sucesso.</div>
-            <button class="vip-modal-btn" onclick="fecharModalVip()">Entendido</button>
-        </div>
-    </div>
-
     <script>
-        // Função anti-delay do GitHub: Atualiza a página instantaneamente ignorando o cache
-        function atualizarSistemaInstantaneo() {
-            const btn = document.getElementById('reloadBtn');
-            btn.classList.add('rotating');
-
-            setTimeout(() => {
-                const urlAtual = window.location.href.split('?')[0];
-                const timestampBypass = '?v=' + new Date().getTime();
-                window.location.href = urlAtual + timestampBypass;
-            }, 300);
+        // Função para atualizar o aplicativo em tempo real limpando cache
+        function atualizarSistema() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+            }
+            window.location.reload(true);
         }
 
-        // Mostrar Modal VIP customizado
-        function mostrarModalVip(titulo, descricao) {
-            document.getElementById('vipModalTitle').innerText = titulo;
-            document.getElementById('vipModalDesc').innerText = descricao;
-            document.getElementById('vip-modal-overlay').classList.add('active');
-        }
-
-        function fecharModalVip() {
-            document.getElementById('vip-modal-overlay').classList.remove('active');
-        }
-
-        // Ativar Alertas VIP
-        function ativarNotificacoesVip() {
-            mostrarModalVip("Notificações VIP Ativadas", "O sistema de alertas em tempo real do Nubank está configurado e pronto para uso.");
-        }
-
-        // Função de disparo garantida e blindada contra falhas
-        function dispararNotificacao() {
-            const nomeInput = document.getElementById('nomePagador');
-            const valorInput = document.getElementById('valorPix');
-            
-            const nome = nomeInput ? nomeInput.value : "Carlos Eduardo";
-            const valor = valorInput ? valorInput.value : "250,00";
-
-            // Atualiza o texto com segurança total
-            const textElement = document.getElementById('notifBodyText');
-            if (textElement) {
-                textElement.innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
+        // Solicitar Permissão Real do Sistema Operacional
+        function pedirPermissaoNotificacao() {
+            if (!("Notification" in window)) {
+                alert("Este navegador não suporta notificações nativas.");
+                return;
             }
 
-            // Aciona a barra visual superior
-            const notif = document.getElementById('bank-notification');
-            if (notif) {
-                notif.classList.add('show');
-            }
-
-            // Vibração de feedback físico
-            if ("vibrate" in navigator) {
-                try {
-                    navigator.vibrate(60);
-                } catch(err) {}
-            }
-
-            // Recolhe a notificação após alguns segundos
-            setTimeout(() => {
-                if (notif) {
-                    notif.classList.remove('show');
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("Notificações reais do Nubank ativadas com sucesso!");
+                } else {
+                    alert("Permissão negada nas configurações.");
                 }
-            }, 4500);
+            });
+        }
+
+        // Disparar Notificação (Real do Sistema + Visual Interna)
+        function dispararNotificacao() {
+            const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
+            const valor = document.getElementById('valorPix').value || "250,00";
+
+            // 1. Notificação Real na Tela de Bloqueio (Nome padrão do sistema: Nubank)
+            if ("Notification" in window && Notification.permission === "granted") {
+                try {
+                    new Notification("Nubank", {
+                        body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
+                        tag: 'pix-nubank'
+                    });
+                } catch (e) {
+                    console.log("Erro:", e);
+                }
+            }
+
+            // 2. Notificação Visual Interna
+            document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
+
+            const notif = document.getElementById('bank-notification');
+            notif.classList.add('show');
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 4000);
         }
     </script>
 </body>
