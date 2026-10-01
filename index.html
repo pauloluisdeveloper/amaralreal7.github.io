@@ -22,6 +22,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -90,7 +91,7 @@
             color: #fff;
         }
 
-        /* Botão de Atualizar em Tempo Real */
+        /* Botão de Atualizar em Tempo Real (Sem piscar) */
         .btn-reload {
             background-color: #121212;
             border: 1px solid #262626;
@@ -115,6 +116,11 @@
             width: 16px;
             height: 16px;
             fill: currentColor;
+            transition: transform 0.4s ease;
+        }
+
+        .btn-reload.rotating svg {
+            transform: rotate(360deg);
         }
 
         /* Content Area */
@@ -209,7 +215,7 @@
             text-transform: uppercase;
         }
 
-        /* Notificação Visual no Topo (Design Perfeito e Limpo) */
+        /* Notificação Visual no Topo */
         #bank-notification {
             position: fixed;
             top: -120px;
@@ -390,8 +396,8 @@
                 </div>
                 <div class="title-app">Nubank</div>
             </div>
-            <!-- Botão de Atualizar em Tempo Real -->
-            <button class="btn-reload" onclick="atualizarSistema()" title="Atualizar Sistema">
+            <!-- Botão de Atualizar em Tempo Real Sem Piscar -->
+            <button class="btn-reload" id="reloadBtn" onclick="atualizarSistemaInstantaneo()" title="Atualizar Sistema">
                 <svg viewBox="0 0 24 24">
                     <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
@@ -414,14 +420,14 @@
                 <span>Gerar Notificação Pix</span>
             </button>
             
-            <button class="btn-white-vip" onclick="ativarNotificacoesVip()">
+            <button class="btn-white-vip" onclick="pedirPermissaoNotificacao()">
                 <span>Ativar Notificações Reais</span>
                 <span class="vip-badge">VIP</span>
             </button>
         </div>
     </div>
 
-    <!-- Notificação Visual Interna no Topo (Substitui com perfeição a nativa sem bugs de texto) -->
+    <!-- Notificação Visual no Topo -->
     <div id="bank-notification">
         <div class="notif-icon">
             <img src="https://i.postimg.cc/ctx6JqZ2/IMG-2108.jpg" alt="Nubank Logo">
@@ -448,16 +454,17 @@
     </div>
 
     <script>
-        // Função para atualizar o aplicativo em tempo real limpando cache
-        function atualizarSistema() {
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => {
-                        caches.delete(name);
-                    });
-                });
-            }
-            window.location.reload(true);
+        // Função anti-delay do GitHub / Cache: Força recarregamento instantâneo via timestamp dinâmico
+        function atualizarSistemaInstantaneo() {
+            const btn = document.getElementById('reloadBtn');
+            btn.classList.add('rotating');
+
+            setTimeout(() => {
+                // Adiciona um parâmetro de tempo único na URL para burlar o cache do GitHub Pages na hora
+                const urlAtual = window.location.href.split('?')[0];
+                const timestampBypass = '?v=' + new Date().getTime();
+                window.location.href = urlAtual + timestampBypass;
+            }, 300);
         }
 
         // Mostrar Modal VIP customizado
@@ -471,25 +478,57 @@
             document.getElementById('vip-modal-overlay').classList.remove('active');
         }
 
-        // Ativar Sistema de Notificações VIP
-        function ativarNotificacoesVip() {
-            mostrarModalVip("Notificações VIP Ativadas", "As notificações em tempo real do Nubank foram configuradas com sucesso em seu dispositivo.");
+        // Solicitar Permissão Real do Sistema
+        function pedirPermissaoNotificacao() {
+            if (!("Notification" in window)) {
+                mostrarModalVip("Aviso", "Este dispositivo não suporta notificações nativas.");
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    mostrarModalVip("Sucesso VIP", "Notificações reais do Nubank ativadas com sucesso!");
+                } else {
+                    mostrarModalVip("Permissão Negada", "Ative as notificações nas configurações do seu celular.");
+                }
+            });
         }
 
-        // Disparar Notificação Visual Limpa e Profissional
+        // Disparar Notificação (Real do Sistema sem o erro "from" + Visual Interna de Alta Performance)
         function dispararNotificacao() {
             const nome = document.getElementById('nomePagador').value || "Carlos Eduardo";
             const valor = document.getElementById('valorPix').value || "250,00";
 
-            // Atualiza o texto do banner visual superior com o nome e valor exatos
+            // 1. Notificação Nativa do Sistema Operacional (Ajustada com título limpo)
+            if ("Notification" in window && Notification.permission === "granted") {
+                try {
+                    // Usando options limpas para evitar que o iOS insira subtítulos indesejados
+                    const options = {
+                        body: `Você recebeu um Pix de R$ ${valor} de ${nome}`,
+                        tag: 'pix-nubank',
+                        renotify: true
+                    };
+                    
+                    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.ready.then(registration => {
+                            registration.showNotification("Nubank", options);
+                        });
+                    } else {
+                        new Notification("Nubank", options);
+                    }
+                } catch (e) {
+                    console.log("Erro na notificação real:", e);
+                }
+            }
+
+            // 2. Notificação Visual Interna no Topo (Garantindo feedback visual imediato)
             document.getElementById('notifBodyText').innerHTML = `Você recebeu um Pix de <b>R$ ${valor}</b> de ${nome}`;
 
             const notif = document.getElementById('bank-notification');
             notif.classList.add('show');
 
-            // Vibração discreta se suportada pelo aparelho
             if ("vibrate" in navigator) {
-                navigator.vibrate(50);
+                navigator.vibrate(60);
             }
 
             setTimeout(() => {
