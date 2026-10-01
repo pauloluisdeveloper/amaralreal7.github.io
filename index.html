@@ -1,13 +1,3 @@
-Para fazer exatamente o que você quer — **gerar o Pix Copia e Cola e o QR Code direto dentro do seu aplicativo** e deixar o sistema monitorando o pagamento em tempo real para liberar a Key automático — nós vamos modificar o modal do app.
-
-Vou reescrever o código do seu projeto para que:
-
-1. No lugar do botão verde de redirecionamento externo, o modal mostre a **Chave Pix (Copia e Cola)** e o **QR Code** gerados na hora para o usuário escanear ou copiar.
-2. O aplicativo fique escutando o **Webhook da InfinitePay** que você cadastrou no painel para detectar o pagamento instantaneamente, gerar a Key e liberar o acesso na tela sem que o usuário precise fazer mais nada.
-
-Aqui está o **código completo e atualizado** ajustado com o fluxo de Pix nativo no app:
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
